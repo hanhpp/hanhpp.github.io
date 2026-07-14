@@ -1,0 +1,117 @@
+/* Custom design layer on top of PaperMod.
+   Palette, type, and component treatment adapted from the visual language
+   researched at blog.hieunt.me (see .claude/skills/write-blog-post). */
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Source+Code+Pro:wght@400;500;600&display=swap");
+
+:root {
+    --accent: #6d28d9;
+    --accent-hover: #7c3aed;
+    --accent-bg: #f3e8ff;
+    --accent-border: #d8b4fe;
+    --code-chip-bg: #fef2f2;
+    --code-chip-text: #dc2626;
+    --code-chip-border: #fecaca;
+}
+
+:root[data-theme="dark"] {
+    --accent: #d8b4fe;
+    --accent-hover: #c4b5fd;
+    --accent-bg: #2d1b4e;
+    --accent-border: #4c1d95;
+    --code-chip-bg: #2a1414;
+    --code-chip-text: #fca5a5;
+    --code-chip-border: #7f1d1d;
+}
+
+/* Headings: heavier weight, tighter tracking, distinct display font */
+.post-title,
+.entry-header h2,
+.first-entry .entry-header h1,
+.md-content h1,
+.md-content h2,
+.md-content h3,
+.md-content h4 {
+    font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.md-content h2 {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.3em;
+}
+
+/* Links + accent color throughout */
+.md-content a:not(.anchor) {
+    color: var(--accent);
+    text-decoration-color: var(--accent-border);
+}
+
+.md-content a:not(.anchor):hover {
+    color: var(--accent-hover);
+}
+
+.post-tags a:hover,
+.paginav a:hover {
+    color: var(--accent);
+}
+
+/* Tags rendered as monospace pills, like source identifiers */
+.post-tags a {
+    font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent);
+    background: var(--accent-bg);
+    border-color: var(--accent-border);
+}
+
+/* Inline code as a soft, bordered chip (not a full code-bg block) */
+.post-content code,
+.md-content :not(pre) > code {
+    background: var(--code-chip-bg);
+    color: var(--code-chip-text);
+    border: 1px solid var(--code-chip-border);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+    font-size: 0.85em;
+    font-weight: 500;
+}
+
+.md-content pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    color: inherit;
+    font-weight: 400;
+}
+
+/* Blockquotes as a callout with an accent rail */
+.md-content blockquote {
+    border-left: 3px solid var(--accent);
+    color: var(--secondary);
+    font-style: italic;
+    padding: 0.4em 0 0.4em 1.2em;
+    margin: 1.5em 0;
+}
+
+/* Figure captions: centered, italic, quiet */
+.md-content figure > figcaption,
+.md-content figure > figcaption > p {
+    text-align: center;
+    font-style: italic;
+    font-size: 0.85em;
+    color: var(--secondary);
+}
+
+/* Tables: clearer header row */
+.md-content table th {
+    background: var(--code-bg);
+    font-weight: 700;
+}
+
+/* Post meta divider dot already used by PaperMod; just tint the accent bits */
+.post-meta a:hover {
+    color: var(--accent);
+}
