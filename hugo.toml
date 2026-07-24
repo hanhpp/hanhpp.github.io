@@ -24,6 +24,19 @@ pygmentsUseClasses = true
   ShowCodeCopyButtons = true
   ShowToc = true
   disableSpecial1stPost = false
+  comments = true
+
+  # giscus (GitHub Discussions-backed comments, with reactions doubling as a
+  # like/clap counter). Comments stay hidden until these are filled in --
+  # see the setup steps in layouts/_partials/comments.html.
+  [params.giscus]
+    repo = "hanhpp/hanhpp.github.io"
+    repoId = "MDEwOlJlcG9zaXRvcnk2NTgwODM1OA=="
+    category = "Announcements"
+    categoryId = "DIC_kwDOA-wn5s4DBt8q"
+    mapping = "pathname"
+    inputPosition = "bottom"
+    lang = "en"
 
   [params.homeInfoParams]
     Title = "Hi there \U0001F44B"
