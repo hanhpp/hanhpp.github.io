@@ -45,6 +45,9 @@ pygmentsUseClasses = true
   [[params.socialIcons]]
     name = "github"
     url = "https://github.com/hanhpp"
+  [[params.socialIcons]]
+    name = "linkedin"
+    url = "https://www.linkedin.com/in/hanhphamphuoc/"
 
 [menu]
   [[menu.main]]
@@ -57,8 +60,21 @@ pygmentsUseClasses = true
     name = 'Tags'
     url = '/tags/'
     weight = 20
+  [[menu.main]]
+    identifier = 'about'
+    name = 'About'
+    url = '/about/'
+    weight = 30
+  [[menu.main]]
+    identifier = 'contact'
+    name = 'Contact'
+    url = '/contact/'
+    weight = 40
 
 [markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
   [markup.highlight]
     noClasses = false
     codeFences = true
