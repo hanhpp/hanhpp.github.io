@@ -115,3 +115,28 @@
 .post-meta a:hover {
     color: var(--accent);
 }
+
+/* Homepage greeting: blinking typewriter cursor (see extend_footer.html) */
+.typewriter-cursor {
+    display: inline-block;
+    margin-left: 2px;
+    font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
+    color: var(--accent);
+    animation: typewriter-blink 1s step-end infinite;
+}
+
+@keyframes typewriter-blink {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .typewriter-cursor {
+        animation: none;
+    }
+}

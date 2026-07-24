@@ -1,0 +1,36 @@
+{{- /* Project override of the theme's extend_footer.html hook. */ -}}
+{{- if .IsHome }}
+<script>
+(function () {
+    var heading = document.querySelector(".home-info .entry-header h1");
+    if (!heading) return;
+
+    var fullText = heading.textContent.trim();
+    var chars = Array.from(fullText); // Array.from splits by code point, so emoji stay intact.
+
+    var cursor = document.createElement("span");
+    cursor.className = "typewriter-cursor";
+    cursor.setAttribute("aria-hidden", "true");
+    cursor.textContent = "▋"; // ▋
+
+    var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) {
+        heading.appendChild(cursor);
+        return;
+    }
+
+    heading.textContent = "";
+    heading.appendChild(cursor);
+
+    var i = 0;
+    var typeSpeedMs = 70;
+    (function typeNext() {
+        if (i < chars.length) {
+            cursor.insertAdjacentText("beforebegin", chars[i]);
+            i++;
+            setTimeout(typeNext, typeSpeedMs);
+        }
+    })();
+})();
+</script>
+{{- end }}
