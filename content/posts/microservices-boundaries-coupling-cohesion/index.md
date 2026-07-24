@@ -119,7 +119,10 @@ the other setting `PICKING`/`SHIPPED`. Nothing stops an invalid transition
 like `PLACED → SHIPPED` from slipping through, because neither service has
 a complete view of what's allowed. The fix is to give the state machine a
 single owner: an `Order` service that both callers *request* changes from,
-and that can reject a request that violates its own rules.
+and that can reject a request that violates its own rules. For the
+practical patterns of how to structure data when services can't share a
+database — API composition, CQRS, event sourcing — see
+[database per service]({{< ref "microservices-database-per-service" >}}).
 
 > If a "service" is really just a thin wrapper over database CRUD — every
 > request maps straight to an update, no rules applied — that's a sign the
