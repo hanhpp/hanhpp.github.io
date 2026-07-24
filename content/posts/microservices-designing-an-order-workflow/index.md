@@ -6,7 +6,7 @@ tags: ["microservices", "architecture", "distributed-systems"]
 summary: "Boundaries, communication styles, technology, and sagas all sound reasonable in isolation. Here's what it looks like to actually apply all four decisions to one real workflow, in order."
 ---
 
-We've spent four posts building up a toolkit:
+We've spent five posts building up a toolkit:
 [boundaries via coupling and cohesion]({{< ref "microservices-boundaries-coupling-cohesion" >}}),
 [communication styles]({{< ref "microservices-five-ways-to-talk" >}}),
 [the technology to implement them]({{< ref "microservices-picking-communication-tech" >}}),

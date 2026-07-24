@@ -6,6 +6,11 @@ tags: ["microservices", "architecture", "distributed-systems"]
 summary: "Before you draw a single service boundary, you need a vocabulary for why some splits age well and others turn into a distributed monolith. Coupling and cohesion are that vocabulary."
 ---
 
+This is part two of a series on microservices architecture. If you're not
+sure whether microservices are the right call for your team yet, start with
+[the decision checklist]({{< ref "should-you-even-use-microservices" >}})
+before reading further.
+
 Say you're building the backend for an online CD retailer — we'll call it
 MusicCorp, and we'll keep coming back to it in this series. Orders need
 payment taken, stock reserved, packages shipped, loyalty points awarded.
