@@ -85,7 +85,10 @@ you're done. Running a microservice architecture locally means Docker Compose
 with fifteen containers, or a shared staging environment that's always
 half-broken because someone else's changes broke the inter-service wiring.
 You can paper over this with a good developer platform, but that platform is
-itself a significant engineering investment.
+itself a significant engineering investment. If you want the practical
+playbook for making this work — Docker Compose profiles, service
+virtualization, the layered testing strategy — see
+[local dev without Docker Compose hell]({{< ref "microservices-local-dev-without-docker-compose-hell" >}}).
 
 ## The checklist: six questions before you split
 
