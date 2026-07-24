@@ -71,7 +71,10 @@ every other service it talks to can handle the new contract. Versioning,
 backward compatibility, and coordinated rollouts become your problem. If
 Service A sends a field that Service B used to ignore but now treats as
 required, you've just broken production in a way that won't show up until
-the right combination of requests hits the new code path.
+the right combination of requests hits the new code path. If you want the
+playbook for making independent deploys actually work — rolling, blue-green,
+canary, feature flags, and the CI/CD structure that ties them together — see
+[deploying without the fear]({{< ref "microservices-deploying-without-the-fear" >}}).
 
 **Simple onboarding.** A new developer can read an entire monolith's codebase
 in a week. A new developer looking at a microservice architecture sees an
