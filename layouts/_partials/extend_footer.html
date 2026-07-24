@@ -6,12 +6,12 @@
     if (!heading) return;
 
     var fullText = heading.textContent.trim();
-    var chars = Array.from(fullText); // Array.from splits by code point, so emoji stay intact.
+    var chars = Array.from(fullText);
 
     var cursor = document.createElement("span");
     cursor.className = "typewriter-cursor";
     cursor.setAttribute("aria-hidden", "true");
-    cursor.textContent = "▋"; // ▋
+    cursor.textContent = "▋";
 
     var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduceMotion) {
@@ -34,3 +34,25 @@
 })();
 </script>
 {{- end }}
+
+{{- /* Page transition: fade out on navigation click, fade in on load */ -}}
+<script>
+(function () {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!document.startViewTransition) return;
+
+    document.addEventListener("click", function (e) {
+        var link = e.target.closest("a[href]");
+        if (!link) return;
+        var url = new URL(link.href, location.origin);
+        if (url.origin !== location.origin) return;
+        if (url.pathname === location.pathname) return;
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+        e.preventDefault();
+        document.startViewTransition(function () {
+            window.location.href = link.href;
+        });
+    });
+})();
+</script>

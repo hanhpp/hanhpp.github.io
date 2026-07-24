@@ -1,6 +1,7 @@
 /* Custom design layer on top of PaperMod.
    Palette, type, and component treatment adapted from the visual language
-   researched at blog.hieunt.me (see .claude/skills/write-blog-post). */
+   researched at blog.hieunt.me (see .claude/skills/write-blog-post).
+   Smoothness layer: view transitions, hover effects, scroll behavior. */
 
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Source+Code+Pro:wght@400;500;600&display=swap");
 
@@ -24,7 +25,46 @@
     --code-chip-border: #7f1d1d;
 }
 
-/* Headings: heavier weight, tighter tracking, distinct display font */
+/* ── Smooth scrolling ── */
+html {
+    scroll-behavior: smooth;
+}
+
+/* ── View Transitions ── */
+@view-transition {
+    navigation: auto;
+}
+
+::view-transition-old(root) {
+    animation: fade-out 0.2s ease-in;
+}
+
+::view-transition-new(root) {
+    animation: fade-in 0.25s ease-out;
+}
+
+@keyframes fade-out {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(-6px); }
+}
+
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Fallback for browsers without View Transitions ── */
+@supports not (view-transition-name: root) {
+    .post-entry, .entry-content, .page-content {
+        animation: page-fade-in 0.3s ease-out;
+    }
+    @keyframes page-fade-in {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+}
+
+/* ── Headings: heavier weight, tighter tracking, distinct display font ── */
 .post-title,
 .entry-header h2,
 .first-entry .entry-header h1,
@@ -42,14 +82,22 @@
     padding-bottom: 0.3em;
 }
 
-/* Links + accent color throughout */
+/* ── Links + accent color ── */
 .md-content a:not(.anchor) {
     color: var(--accent);
     text-decoration-color: var(--accent-border);
+    transition: color 0.15s ease, text-decoration-color 0.15s ease;
 }
 
 .md-content a:not(.anchor):hover {
     color: var(--accent-hover);
+}
+
+/* ── Navigation links: smooth hover ── */
+.header-main nav a,
+.header-main .menu a,
+.header .menu li a {
+    transition: color 0.15s ease, opacity 0.15s ease;
 }
 
 .post-tags a:hover,
@@ -57,7 +105,7 @@
     color: var(--accent);
 }
 
-/* Tags rendered as monospace pills, like source identifiers */
+/* ── Tags as monospace pills ── */
 .post-tags a {
     font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
     font-size: 13px;
@@ -65,9 +113,10 @@
     color: var(--accent);
     background: var(--accent-bg);
     border-color: var(--accent-border);
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
-/* Inline code as a soft, bordered chip (not a full code-bg block) */
+/* ── Inline code chip ── */
 .post-content code,
 .md-content :not(pre) > code {
     background: var(--code-chip-bg);
@@ -87,7 +136,7 @@
     font-weight: 400;
 }
 
-/* Blockquotes as a callout with an accent rail */
+/* ── Blockquotes as callouts ── */
 .md-content blockquote {
     border-left: 3px solid var(--accent);
     color: var(--secondary);
@@ -96,7 +145,7 @@
     margin: 1.5em 0;
 }
 
-/* Figure captions: centered, italic, quiet */
+/* ── Figure captions ── */
 .md-content figure > figcaption,
 .md-content figure > figcaption > p {
     text-align: center;
@@ -105,18 +154,43 @@
     color: var(--secondary);
 }
 
-/* Tables: clearer header row */
+/* ── Tables ── */
 .md-content table th {
     background: var(--code-bg);
     font-weight: 700;
 }
 
-/* Post meta divider dot already used by PaperMod; just tint the accent bits */
+/* ── Post meta ── */
 .post-meta a:hover {
     color: var(--accent);
 }
 
-/* Homepage greeting: blinking typewriter cursor (see extend_footer.html) */
+/* ── Post cards: subtle hover lift ── */
+.post-entry {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 8px;
+}
+
+.post-entry:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(109, 40, 217, 0.08);
+}
+
+:root[data-theme="dark"] .post-entry:hover {
+    box-shadow: 0 4px 16px rgba(168, 130, 255, 0.08);
+}
+
+/* ── Social icons: smooth hover ── */
+.social-icons a {
+    transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.social-icons a:hover {
+    opacity: 0.7;
+    transform: scale(1.1);
+}
+
+/* ── Homepage greeting: typewriter cursor ── */
 .typewriter-cursor {
     display: inline-block;
     margin-left: 2px;
@@ -126,17 +200,85 @@
 }
 
 @keyframes typewriter-blink {
-    0%,
-    100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0;
-    }
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .typewriter-cursor {
+    .typewriter-cursor { animation: none; }
+    .post-entry:hover  { transform: none; box-shadow: none; }
+    html               { scroll-behavior: auto; }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
         animation: none;
     }
+}
+
+/* ── Contact page: canvas container ── */
+.quantum-canvas-wrap {
+    width: 100%;
+    height: 260px;
+    position: relative;
+    margin-bottom: 2rem;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--code-bg);
+}
+
+.quantum-canvas-wrap canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* ── Contact links: clean list ── */
+.contact-links {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0;
+}
+
+.contact-links li {
+    margin-bottom: 0.75rem;
+    font-size: 1.05rem;
+}
+
+.contact-links a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent-border);
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.contact-links a:hover {
+    color: var(--accent-hover);
+    border-color: var(--accent-hover);
+}
+
+.contact-links .label {
+    font-family: "Source Code Pro", ui-monospace, monospace;
+    font-weight: 600;
+    color: var(--secondary);
+    margin-right: 0.5rem;
+    font-size: 0.9em;
+}
+
+/* ── About page ── */
+.about-interests {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+}
+
+.about-interests .tag {
+    font-family: "Source Code Pro", ui-monospace, monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent);
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-radius: 20px;
+    padding: 0.3em 0.8em;
 }
