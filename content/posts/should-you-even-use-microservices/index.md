@@ -61,7 +61,9 @@ reconstruct a timeline that spans multiple processes. At 2 AM. With
 incomplete logs because one service was deployed with a logging level that's
 too quiet. Distributed tracing tools like OpenTelemetry help, but they're
 additional infrastructure you now have to run, configure, and teach your
-team to use.
+team to use. If you want to see what this debugging experience actually
+looks like — and what tooling makes it survivable — see
+[debugging microservices]({{< ref "debugging-microservices-where-did-that-request-go" >}}).
 
 **One deploy target.** "Ship it" in a monolith means pushing one thing. In a
 microservices world, "ship it" means deploying one service and praying that
@@ -139,8 +141,10 @@ system keeps running. Before you adopt microservices, you need:
 
 If you don't have these yet, building them as part of a microservices
 migration is like learning to swim by jumping into the ocean. Build the
-observability stack first. If you can't justify the observability investment
-on its own, you probably don't need microservices either.
+observability stack first — if you're not sure where to start, see
+[debugging microservices]({{< ref "debugging-microservices-where-did-that-request-go" >}})
+for the minimum viable setup. If you can't justify the observability
+investment on its own, you probably don't need microservices either.
 
 ### 6. Are you solving a *real* scaling problem, or a *theoretical* one?
 
