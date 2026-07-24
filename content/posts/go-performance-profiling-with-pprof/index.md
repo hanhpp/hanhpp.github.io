@@ -277,3 +277,8 @@ you exactly where the problem was — no guessing required.
 running services with zero code changes (via the HTTP endpoint), and it
 takes thirty seconds to collect. The next time something is slow, reach for
 the profile before reaching for the keyboard.
+
+If you're interested in seeing how profiling works at a lower level —
+reading binary output, tracing execution without source code — check out
+the [reverse engineering series]({{< ref "how-i-started-learning-reverse-engineering" >}}), which covers Ghidra, GDB, and binary
+analysis.
