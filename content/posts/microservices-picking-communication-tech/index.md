@@ -171,6 +171,10 @@ a schema change now means redeploying every consumer of that library, which
 is exactly the lockstep-release problem microservices are supposed to
 avoid. If you want a client library at all, keep the consumer in control of
 *when* they upgrade it, the way public SDKs (AWS's, for instance) do it.
+And for the broader question of how to evolve APIs without breaking running
+consumers — the expand-contract pattern, schema evolution with protobuf, and
+consumer-driven contracts — see
+[versioning without breaking everyone]({{< ref "microservices-versioning-without-breaking-everyone" >}}).
 
 ---
 
