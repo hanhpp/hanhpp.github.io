@@ -1,0 +1,53 @@
+{{- /* Project override of the theme's comments.html stub: wires up giscus. */ -}}
+{{- /* Hugo lowercases TOML keys on load, so params written as `repoId` in
+       hugo.toml surface here as `.repoid` -- accessors below use the
+       lowercased form deliberately, not a typo. */ -}}
+{{- with site.Params.giscus }}
+{{- if and .repo .repoid .categoryid }}
+<div id="giscus-comments"></div>
+<script>
+(function () {
+    function currentGiscusTheme() {
+        return document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+    }
+
+    var script = document.createElement("script");
+    script.src = "https://giscus.app/client.js";
+    script.setAttribute("data-repo", "{{ .repo }}");
+    script.setAttribute("data-repo-id", "{{ .repoid }}");
+    script.setAttribute("data-category", "{{ .category | default "Comments" }}");
+    script.setAttribute("data-category-id", "{{ .categoryid }}");
+    script.setAttribute("data-mapping", "{{ .mapping | default "pathname" }}");
+    script.setAttribute("data-strict", "0");
+    script.setAttribute("data-reactions-enabled", "1"); {{- /* doubles as the post's "like" count */}}
+    script.setAttribute("data-emit-metadata", "0");
+    script.setAttribute("data-input-position", "{{ .inputposition | default "bottom" }}");
+    script.setAttribute("data-theme", currentGiscusTheme());
+    script.setAttribute("data-lang", "{{ .lang | default "en" }}");
+    script.setAttribute("crossorigin", "anonymous");
+    script.async = true;
+    document.getElementById("giscus-comments").appendChild(script);
+
+    // Keep giscus's iframe theme in sync with PaperMod's own light/dark toggle.
+    var toggle = document.getElementById("theme-toggle");
+    if (toggle) {
+        toggle.addEventListener("click", function () {
+            setTimeout(function () {
+                var iframe = document.querySelector("iframe.giscus-frame");
+                if (!iframe) return;
+                iframe.contentWindow.postMessage(
+                    { giscus: { setConfig: { theme: currentGiscusTheme() } } },
+                    "https://giscus.app"
+                );
+            }, 0);
+        });
+    }
+})();
+</script>
+{{- else }}
+{{- /* Nothing to show a visitor here -- go/html's template escaper strips
+       literal HTML comments from output entirely, so there's no point
+       trying to surface setup instructions this way. See the [params.giscus]
+       block in hugo.toml for the one-time giscus setup steps instead. */}}
+{{- end }}
+{{- end }}

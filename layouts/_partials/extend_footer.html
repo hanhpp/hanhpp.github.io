@@ -1,0 +1,68 @@
+{{- /* Project override of the theme's extend_footer.html hook. */ -}}
+
+{{- /* Cloudflare Web Analytics — production builds of the GitHub Pages
+       domain only. This repo also builds in parallel on Vercel (see
+       vercel.json, which overrides baseURL to the vercel.app domain at
+       build time) — gating on .Site.BaseURL here, not just hugo.IsProduction,
+       keeps Vercel traffic out of the hanhpp.github.io analytics numbers. */ -}}
+{{- if and hugo.IsProduction (strings.Contains .Site.BaseURL "hanhpp.github.io") }}
+<script defer type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ac11edc7cb41484d9c6f76e81968b36b"}'></script>
+{{- end }}
+
+{{- if .IsHome }}
+<script>
+(function () {
+    var heading = document.querySelector(".home-info .entry-header h1");
+    if (!heading) return;
+
+    var fullText = heading.textContent.trim();
+    var chars = Array.from(fullText);
+
+    var cursor = document.createElement("span");
+    cursor.className = "typewriter-cursor";
+    cursor.setAttribute("aria-hidden", "true");
+    cursor.textContent = "▋";
+
+    var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) {
+        heading.appendChild(cursor);
+        return;
+    }
+
+    heading.textContent = "";
+    heading.appendChild(cursor);
+
+    var i = 0;
+    var typeSpeedMs = 70;
+    (function typeNext() {
+        if (i < chars.length) {
+            cursor.insertAdjacentText("beforebegin", chars[i]);
+            i++;
+            setTimeout(typeNext, typeSpeedMs);
+        }
+    })();
+})();
+</script>
+{{- end }}
+
+{{- /* Page transition: fade out on navigation click, fade in on load */ -}}
+<script>
+(function () {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!document.startViewTransition) return;
+
+    document.addEventListener("click", function (e) {
+        var link = e.target.closest("a[href]");
+        if (!link) return;
+        var url = new URL(link.href, location.origin);
+        if (url.origin !== location.origin) return;
+        if (url.pathname === location.pathname) return;
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+        e.preventDefault();
+        document.startViewTransition(function () {
+            window.location.href = link.href;
+        });
+    });
+})();
+</script>
