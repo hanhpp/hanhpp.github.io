@@ -288,6 +288,10 @@ microservice:
 - **Distributed tracing** — OpenTelemetry with Jaeger or Tempo. Start with
   auto-instrumentation (the Go SDK instruments `net/http` automatically)
   and add manual spans for the business-critical paths.
+- **CPU and memory profiling** — Go's built-in `pprof` tool, exposed via a
+  debug endpoint. When you've found *which* service is slow but not *why*,
+  the profile tells you exactly which function is burning cycles. See
+  [Go performance profiling with pprof]({{< ref "go-performance-profiling-with-pprof" >}}).
 
 None of this is optional infrastructure. It's the equivalent of having a
 debugger in your language — you don't ship a product without one, and you
