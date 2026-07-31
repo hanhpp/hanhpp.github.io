@@ -43,13 +43,29 @@ forces you to notice an assumption you didn't know you were making.
 
 The technique that actually addresses this is unglamorous: get a second,
 independent look — one that wasn't part of producing the answer and isn't
-primed to agree with it.
+primed to agree with it. Concretely, that means starting a **fresh**
+session/context — not continuing the one that wrote the fix — and handing
+it something like this:
 
 ```
-Given: the original bug report, and the diff that supposedly fixes it.
-Not given: any of the reasoning that produced the diff.
-Task: find a reason this fix is wrong or incomplete. Don't confirm it's
-correct -- try to break it.
+You are reviewing a proposed fix, not writing one. You were not involved
+in producing it and don't know why it was written this way.
+
+Original problem:
+<paste the bug report / requirement / failing test, verbatim>
+
+Proposed fix:
+<paste the diff or final code, verbatim -- not a summary of it>
+
+Your job is to find a reason this fix is wrong, incomplete, or solves a
+different problem than the one described above. Do not confirm it's
+correct. Specifically check:
+- Does it address the root cause, or just the reported symptom?
+- What input/case would still break, given this fix?
+- Does it introduce a new problem the original code didn't have?
+
+If you genuinely can't find a problem after actually trying, say so
+explicitly and state what you checked -- don't default to "looks good."
 ```
 
 The framing matters as much as the mechanism. "Check this is right" and
@@ -68,6 +84,45 @@ original framing along with it — you get agreement, not verification.
 > system unless you deliberately split them, so it's easy to skip this step
 > without noticing you skipped it — there's no separate person you forgot to
 > loop in, just a self-assessment that quietly stood in for one.
+
+## Make it something you don't have to retype
+
+Pasting that prompt in by hand every time is how this habit quietly stops
+happening the moment you're in a hurry. If your assistant supports custom
+instructions or reusable skills/rules files — most agentic tools do, in one
+form or another — turn it into one of those instead of a habit you have to
+remember:
+
+```markdown
+---
+name: adversarial-verify
+description: Independently check a proposed fix or finding. Use before
+  accepting any non-trivial change as done, especially one you produced
+  yourself in an earlier session.
+---
+
+## Rule
+Never review work in the same context that produced it. Start fresh.
+
+## Inputs to provide
+- The original problem/requirement, verbatim
+- The proposed fix/diff/finding, verbatim
+- Nothing else -- no summary of the reasoning, no "this should be correct"
+
+## What to do
+Try to find a reason this is wrong or incomplete. Do not confirm it's
+correct as your default. Check specifically: does it address the root
+cause or just the symptom, what case would still break it, and does it
+introduce a new problem.
+
+## Output
+State a verdict (confirmed / still broken / unclear) and *why*, not just
+"looks fine." An unexamined "looks fine" is not an acceptable output.
+```
+
+Having it as a named, reusable thing changes the odds it actually gets
+used — it turns "I should probably double-check this" into a single
+command, which is the difference between a principle and a habit.
 
 ## What this doesn't solve
 
