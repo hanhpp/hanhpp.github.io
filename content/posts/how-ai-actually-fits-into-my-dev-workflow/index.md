@@ -1,6 +1,6 @@
 ---
 title: "Agentic Coding Assistants, and Why I Don't Let Them Grade Their Own Work"
-date: 2026-07-31T16:00:00+07:00
+date: 2026-07-31T10:00:00+07:00
 draft: false
 tags: ["ai", "workflow"]
 summary: "\"Agentic\" gets thrown around loosely, but it means something specific: an assistant that decides its own next step instead of waiting for yours. That's also exactly why you can't trust it to tell you when it's done a good job — here's the verification habit that fixes that."
