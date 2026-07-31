@@ -1,8 +1,11 @@
 {{- /* Project override of the theme's extend_footer.html hook. */ -}}
 
-{{- /* Cloudflare Web Analytics — production only, so local `hugo server`
-       runs and drafts don't pollute view counts. */ -}}
-{{- if hugo.IsProduction }}
+{{- /* Cloudflare Web Analytics — production builds of the GitHub Pages
+       domain only. This repo also builds in parallel on Vercel (see
+       vercel.json, which overrides baseURL to the vercel.app domain at
+       build time) — gating on .Site.BaseURL here, not just hugo.IsProduction,
+       keeps Vercel traffic out of the hanhpp.github.io analytics numbers. */ -}}
+{{- if and hugo.IsProduction (strings.Contains .Site.BaseURL "hanhpp.github.io") }}
 <script defer type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ac11edc7cb41484d9c6f76e81968b36b"}'></script>
 {{- end }}
 
