@@ -1,4 +1,11 @@
 {{- /* Project override of the theme's extend_footer.html hook. */ -}}
+
+{{- /* Cloudflare Web Analytics — production only, so local `hugo server`
+       runs and drafts don't pollute view counts. */ -}}
+{{- if hugo.IsProduction }}
+<script defer type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ac11edc7cb41484d9c6f76e81968b36b"}'></script>
+{{- end }}
+
 {{- if .IsHome }}
 <script>
 (function () {
