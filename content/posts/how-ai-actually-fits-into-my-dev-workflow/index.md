@@ -1,129 +1,87 @@
 ---
-title: "How AI Actually Fits Into My Dev Workflow (Not the Hype Version)"
+title: "Agentic Coding Assistants, and Why I Don't Let Them Grade Their Own Work"
 date: 2026-07-31T16:00:00+07:00
 draft: false
 tags: ["ai", "workflow"]
-summary: "Everyone's either declaring AI will replace programming or dismissing it as autocomplete with extra steps. Neither matches a year of actually using it daily — here's the boring, unglamorous system that's stuck, and the two mistakes that taught me why it needed to exist."
+summary: "\"Agentic\" gets thrown around loosely, but it means something specific: an assistant that decides its own next step instead of waiting for yours. That's also exactly why you can't trust it to tell you when it's done a good job — here's the verification habit that fixes that."
 ---
 
-For the first few months, I used AI coding tools the way I think most people
-do: open a chat, describe the problem, paste in some code, get an answer,
-close the tab. It worked well enough that I kept doing it, and badly enough
-that I didn't notice how much time I was losing to it. Every session started
-from zero. I re-explained the same project structure, the same conventions,
-the same "no, don't do it that way, we tried that" a dozen times a week. The
-tool was smart. The setup around it was not.
+Most people's mental model of an AI coding tool is still autocomplete with
+better manners: you type a prompt, it types an answer, you read the answer
+and decide what to do with it. An **agentic** assistant is a different shape
+of tool. Instead of one prompt in, one answer out, it decides its own next
+step — reads a file to check something, runs a command, looks at the
+result, changes its plan, tries something else — across as many steps as
+the task actually needs, without you specifying each one. The unit of work
+stops being "a reply" and becomes "a completed task."
 
-What actually changed my workflow wasn't a smarter model — it was treating
-the whole thing less like a chat and more like a system with state, memory,
-and division of labor. That's the boring part nobody puts in the demo video,
-and it's the part that's actually stuck.
+That's the useful part. It's also the part that creates a problem nobody
+mentions in the pitch: if the same continuous run of reasoning both does the
+work *and* decides whether the work is good, you've built a system with no
+actual check in it. It can be wrong and confident about being right, for the
+same underlying reason — it never left its own train of thought.
 
-## Chat is a terrible unit of work
+## What "agentic" looks like in practice
 
-The failure mode of pure chat-based prompting isn't that the AI gets things
-wrong — it's that *you* become the persistent memory. Every non-trivial
-project has a pile of context that doesn't fit in a prompt: which
-conventions this codebase follows and why, which approaches got tried and
-abandoned, what the person you're working with actually cares about versus
-what they'll tolerate. Re-supplying that by hand, every session, doesn't
-scale past a couple of weeks before you start skipping it — and the moment
-you skip it, you get answers that are locally correct and globally wrong:
-technically working code that violates a convention you explained three
-sessions ago and never wrote down.
+Concretely: instead of asking "how would I fix this bug?" and pasting the
+answer in yourself, you point an agentic assistant at the actual problem —
+"this fails under X, find out why and fix it" — and it goes and reads the
+relevant code, forms a hypothesis, maybe runs the failing case to confirm
+it, makes the change, and runs the tests to check. Each of those is a
+decision it made about what to do next, not a step you told it to take. The
+value is real: it can hold a much longer chain of "check, then act, then
+check again" than pasting snippets back and forth ever allowed.
 
-The fix wasn't "be more disciplined about prompting." It was moving that
-context out of my head and the chat window and into something that persists
-on its own.
+The cost is that all of that now happens inside one continuous context. The
+hypothesis, the fix, and the "yep, looks right" are all produced by the same
+run of reasoning, which means they share the same blind spots by
+construction. An agent that misunderstood the bug will just as fluently
+misjudge its own fix as correct — nothing about "checking your own work"
+forces you to notice an assumption you didn't know you were making.
 
-## Playbooks instead of prompts
+## The fix: don't ask it to grade its own homework
 
-The single highest-leverage change was writing down repeated procedures as
-standalone, reusable instructions instead of re-typing them into a prompt
-each time. Not a prompt template — an actual file, checked into the project,
-that says: here's when to use this, here's the procedure, here's the output
-format, here's the mistakes people (and the AI) tend to make doing this.
+The technique that actually addresses this is unglamorous: get a second,
+independent look — one that wasn't part of producing the answer and isn't
+primed to agree with it.
 
-```markdown
----
-name: deploy-checklist
-description: Verify a release is safe to ship before merging to main.
----
-
-## When to run this
-Before merging any PR that touches the deploy pipeline or migration files.
-
-## Procedure
-1. ...
+```
+Given: the original bug report, and the diff that supposedly fixes it.
+Not given: any of the reasoning that produced the diff.
+Task: find a reason this fix is wrong or incomplete. Don't confirm it's
+correct -- try to break it.
 ```
 
-The value isn't that the AI "remembers" the file — it's that the procedure
-itself gets debugged over time, the same way you'd refactor a piece of code
-you keep copy-pasting. The third time a playbook produces a wrong result,
-you fix the playbook, not the individual conversation. That's a fundamentally
-different failure-correction loop than "explain it better next time," and it
-compounds — six months in, the playbooks encode a lot of hard-won judgment
-that would otherwise live only in my head, or nowhere at all.
+The framing matters as much as the mechanism. "Check this is right" and
+"try to find what's wrong with this" produce noticeably different scrutiny
+from the same underlying model, on the same input — one invites a skim and
+a nod, the other invites someone to actually go looking. Handing the second
+pass *only* the inputs and the final result, not the trail of reasoning that
+got there, is what makes it independent rather than a second read of the
+same argument. Give it the reasoning too, and it tends to inherit the
+original framing along with it — you get agreement, not verification.
 
-## Delegating instead of doing everything in one thread
+> This isn't specific to AI — it's the same reason a human code reviewer who
+> only skims for "does this look reasonable" catches far less than one
+> explicitly asked to find a problem. What's different with an agentic
+> assistant is that the "author" and the "reviewer" are trivially the same
+> system unless you deliberately split them, so it's easy to skip this step
+> without noticing you skipped it — there's no separate person you forgot to
+> loop in, just a self-assessment that quietly stood in for one.
 
-The second change was learning to hand off self-contained chunks of work to
-a separate worker instead of doing everything serially in the main
-conversation. Research that doesn't need my judgment in the loop — reading
-through a large codebase to answer a specific question, drafting a first
-pass at something with a clear spec — goes to a background task that reports
-back when it's done, rather than burning the main thread's attention (and,
-practically, its context budget) on work that doesn't need synchronous
-back-and-forth.
+## What this doesn't solve
 
-> The instinct is to keep everything in one long conversation because
-> switching feels like overhead. In practice, a single thread that's carried
-> six different sub-tasks is worse at all of them than six short, focused
-> ones would have been — it's dragging around context none of the later
-> tasks need, and that's exactly the kind of thing that causes a confidently
-> wrong answer instead of an honest "I don't have enough information."
+Adversarial verification catches a specific failure mode — confident,
+self-consistent wrongness — not everything. A second pass that's given a
+bad spec, or that shares the first pass's actual blind spot rather than just
+its conclusion, will still miss it. It's a check on the work, not a
+replacement for understanding the change well enough to know what "correct"
+even means here. The decision about whether a fix is *actually* the right
+fix, versus merely a fix that survives an adversarial pass, still has to
+land somewhere — and that somewhere is still you.
 
-This only works if the handoff is actually self-contained — the same
-discipline as writing a good ticket for a human: state the goal, the
-relevant background, and what "done" looks like, rather than assuming shared
-context that isn't there.
-
-## Memory has to be a system, not a vibe
-
-The part that took longest to get right was persistent memory across
-sessions — not re-deriving the same facts about a project every time, and
-not just trusting that "the AI will remember" (it won't, and pretending
-otherwise is how you end up debugging a decision that was actually made and
-reverted three weeks ago). What worked was treating memory the same way I'd
-treat any other piece of state: write it down explicitly, in a form that's
-readable later, and — critically — actually reconcile it when the source of
-truth and the copy of it disagree.
-
-I learned that last part the hard way. I had a workflow that mirrored a
-"live" memory store into a version-controlled copy, and on a machine where
-the live store had never been populated, the sync did exactly what it was
-told: treated the live store as authoritative and overwrote the mirror with
-it — which on that machine meant wiping out weeks of accumulated notes,
-in one command, because the two copies had quietly drifted out of sync with
-each other. Nothing was unrecoverable (it hadn't been pushed anywhere yet),
-but it was a good reminder that automation doing exactly what you told it to
-do is not the same as automation doing what you meant.
-
-## The part that doesn't change: verification is still on you
-
-None of this replaces checking the work. If anything, the more autonomy I
-hand off — playbooks running unattended, background tasks reporting back
-hours later — the more deliberate I've had to get about *where* verification
-happens. The rule I keep coming back to: a plausible-sounding answer is not
-a verified one, and the further removed I am from the actual work (a
-background task instead of a live conversation, a playbook instead of a
-one-off request), the more explicit the verification step needs to be
-before I trust the output. That's not a limitation of the tooling — it's
-just what "delegation" has always meant, with or without AI in the loop.
-
-None of this is exotic. It's project management applied to a collaborator
-that happens not to be human — write things down, hand off clearly-scoped
-work, keep a record that survives past your own memory of the conversation.
-The surprising part wasn't that any of it worked; it's that so much of the
-actual gain came from the unglamorous parts and not from the model getting
-smarter underneath it.
+What changed for me isn't that I trust agentic tools more now. It's that I
+stopped treating "it said it works" as evidence of anything, and started
+treating a second, independently-framed check as the actual unit of
+confidence — the same discipline I'd want from any collaborator whose
+reasoning I can't fully see into.
