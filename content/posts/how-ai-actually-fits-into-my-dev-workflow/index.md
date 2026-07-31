@@ -124,6 +124,45 @@ Having it as a named, reusable thing changes the odds it actually gets
 used — it turns "I should probably double-check this" into a single
 command, which is the difference between a principle and a habit.
 
+## Working while you're not watching
+
+The same thing that makes an agentic assistant able to check its own next
+step also makes it able to run for a long time without you in the loop at
+all — hours, or overnight. That's a genuinely different mode from
+interactive back-and-forth, and it fails in different ways if you just
+hand over a vague goal and walk off.
+
+What actually makes an unattended run trustworthy:
+
+- **Every task is self-contained.** No step should assume you're around to
+  clarify. If a brief needs a follow-up question to make sense, that's a
+  sign it wasn't ready to run unattended yet — fix the brief, don't count on
+  being there to answer.
+- **Work is split into independent units, not one long dependent chain.**
+  A multi-hour run structured as ten separate, self-contained tasks
+  survives one of them going sideways. A single unbroken chain doesn't —
+  one wrong turn early on just compounds for the next nine hours with
+  nobody there to notice.
+- **A blocked task says so and stops, instead of guessing.** The failure
+  mode to design against isn't "it crashed" — a crash is at least visible.
+  It's the task that hits genuine ambiguity, picks an interpretation
+  without flagging it, and keeps going as if that were obviously correct.
+- **Everything gets written down as it happens, not reconstructed after.**
+  You weren't there to see it unfold, so the only thing you have to review
+  in the morning is whatever record it left — a final "done" with no trail
+  is worthless, since there's no way to tell a real result from a confident
+  guess after the fact.
+
+That last point is why the adversarial check from earlier isn't optional
+for unattended work — it's the whole ballgame. Everything a live session
+produces, you at least skim as it happens; you develop a rough sense of
+"this seems off" in real time even before any formal check. An overnight
+run gives you none of that. The independent, primed-to-find-problems pass
+is the only thing standing between "it ran all night" and "it ran all
+night and produced something real" — treat a big pile of unattended output
+as more in need of adversarial review, not less, exactly because nobody
+watched it happen.
+
 ## What this doesn't solve
 
 Adversarial verification catches a specific failure mode — confident,
