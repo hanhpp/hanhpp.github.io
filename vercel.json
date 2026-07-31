@@ -1,0 +1,9 @@
+{
+  "buildCommand": "hugo --gc --minify --baseURL \"https://${VERCEL_PROJECT_PRODUCTION_URL:-$VERCEL_URL}/\"",
+  "outputDirectory": "public",
+  "build": {
+    "env": {
+      "HUGO_VERSION": "0.164.0"
+    }
+  }
+}
