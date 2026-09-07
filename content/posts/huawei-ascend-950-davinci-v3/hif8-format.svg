@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 578" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <rect x="1" y="1" width="958" height="576" rx="14" fill="#ffffff" stroke="#e5e5e7"/>
+  <text x="36" y="44" font-size="17" font-weight="600" fill="#1d1d1f">HiF8: an 8-bit float with (almost) FP16's range</text>
+  <text x="36" y="66" font-size="12" fill="#555555">Huawei's answer to FP8's wasted bit: a variable-width exponent that trades mantissa precision for range as magnitude shrinks</text>
+
+  <!-- Panel A -->
+  <text x="60" y="108" font-size="13" font-weight="600" fill="#1d1d1f">Bit anatomy: 8 bits, three fields</text>
+  <g>
+    <rect x="60" y="124" width="34" height="38" rx="4" fill="#ffffff" stroke="#86868b"/>
+    <rect x="98" y="124" width="34" height="38" rx="4" fill="#6d28d9" fill-opacity="0.45" stroke="#6d28d9"/>
+    <rect x="136" y="124" width="34" height="38" rx="4" fill="#6d28d9" fill-opacity="0.45" stroke="#6d28d9"/>
+    <rect x="174" y="124" width="34" height="38" rx="4" fill="#f3e8ff" stroke="#d8b4fe"/>
+    <rect x="212" y="124" width="34" height="38" rx="4" fill="#f3e8ff" stroke="#d8b4fe"/>
+    <rect x="250" y="124" width="34" height="38" rx="4" fill="#f3e8ff" stroke="#6d28d9" stroke-width="1.4"/>
+    <rect x="288" y="124" width="34" height="38" rx="4" fill="#f3e8ff" stroke="#6d28d9" stroke-width="1.4"/>
+    <rect x="326" y="124" width="34" height="38" rx="4" fill="#f3e8ff" stroke="#6d28d9" stroke-width="1.4"/>
+  </g>
+  <g font-size="9.5" fill="#86868b" text-anchor="middle">
+    <text x="77" y="178">sign</text>
+    <text x="134" y="178">prefix "Dot"</text>
+    <text x="210" y="178">exponent 1–4 b</text>
+    <text x="312" y="178">mantissa (rest)</text>
+  </g>
+
+  <g font-size="10.8" fill="#1d1d1f">
+    <text x="60" y="210">• Prefix selects the exponent width and a denormal flag;</text>
+    <text x="74" y="228">  no wasted bit patterns across the 256 codes</text>
+    <text x="60" y="252">• Exponent is sign-magnitude with one hidden bit, so the</text>
+    <text x="74" y="270">  ranges of different widths never overlap (lossless coding)</text>
+    <text x="60" y="294">• Subnormals stretch the bottom of the range: 38 binades</text>
+    <text x="74" y="312">  total, vs 18 for FP8 E4M3 and 40 for FP16</text>
+  </g>
+
+  <text x="60" y="348" font-size="12" font-weight="600" fill="#1d1d1f">Mantissa width tapers with magnitude</text>
+  <g font-size="10" fill="#555555">
+    <text x="60" y="374">7 binades near |x| ≈ 1 → 3-bit mantissa</text>
+    <text x="60" y="398">8 mid binades → 2-bit mantissa</text>
+    <text x="60" y="422">16 tail binades → 1-bit mantissa</text>
+  </g>
+  <g>
+    <g fill="#6d28d9">
+      <rect x="270" y="364" width="10" height="12" rx="2"/><rect x="282" y="364" width="10" height="12" rx="2"/><rect x="294" y="364" width="10" height="12" rx="2"/><rect x="306" y="364" width="10" height="12" rx="2"/><rect x="318" y="364" width="10" height="12" rx="2"/><rect x="330" y="364" width="10" height="12" rx="2"/><rect x="342" y="364" width="10" height="12" rx="2"/>
+    </g>
+    <g fill="#6d28d9" fill-opacity="0.55">
+      <rect x="270" y="388" width="10" height="12" rx="2"/><rect x="282" y="388" width="10" height="12" rx="2"/><rect x="294" y="388" width="10" height="12" rx="2"/><rect x="306" y="388" width="10" height="12" rx="2"/><rect x="318" y="388" width="10" height="12" rx="2"/><rect x="330" y="388" width="10" height="12" rx="2"/><rect x="342" y="388" width="10" height="12" rx="2"/><rect x="354" y="388" width="10" height="12" rx="2"/>
+    </g>
+    <g fill="#d8b4fe">
+      <rect x="270" y="412" width="10" height="12" rx="2"/><rect x="282" y="412" width="10" height="12" rx="2"/><rect x="294" y="412" width="10" height="12" rx="2"/><rect x="306" y="412" width="10" height="12" rx="2"/><rect x="318" y="412" width="10" height="12" rx="2"/><rect x="330" y="412" width="10" height="12" rx="2"/><rect x="342" y="412" width="10" height="12" rx="2"/><rect x="354" y="412" width="10" height="12" rx="2"/><rect x="366" y="412" width="10" height="12" rx="2"/><rect x="378" y="412" width="10" height="12" rx="2"/><rect x="390" y="412" width="10" height="12" rx="2"/><rect x="402" y="412" width="10" height="12" rx="2"/><rect x="414" y="412" width="10" height="12" rx="2"/><rect x="426" y="412" width="10" height="12" rx="2"/><rect x="438" y="412" width="10" height="12" rx="2"/><rect x="450" y="412" width="10" height="12" rx="2"/>
+    </g>
+  </g>
+
+  <!-- Panel B -->
+  <text x="520" y="108" font-size="13" font-weight="600" fill="#1d1d1f">Combined exponent coverage (log₂ axis)</text>
+  <g stroke="#f0f0f2" stroke-width="1">
+    <line x1="544" y1="150" x2="544" y2="310"/><line x1="616" y1="150" x2="616" y2="310"/><line x1="688" y1="150" x2="688" y2="310"/><line x1="760" y1="150" x2="760" y2="310"/><line x1="832" y1="150" x2="832" y2="310"/><line x1="884" y1="150" x2="884" y2="310"/>
+  </g>
+  <g font-size="9" fill="#86868b" text-anchor="middle">
+    <text x="544" y="142">−24</text><text x="616" y="142">−16</text><text x="688" y="142">−8</text><text x="760" y="142">0</text><text x="832" y="142">8</text><text x="884" y="142">16</text>
+  </g>
+
+  <text x="520" y="170" font-size="11" fill="#1d1d1f">FP8 E4M3: 18 exponents</text>
+  <rect x="733" y="176" width="107" height="24" rx="4" fill="#d8b4fe" fill-opacity="0.7"/>
+  <text x="729" y="192" font-size="9.5" fill="#555555" text-anchor="end" font-family="ui-monospace, 'Source Code Pro', monospace">2⁻⁹</text>
+  <text x="846" y="192" font-size="9.5" fill="#555555" font-family="ui-monospace, 'Source Code Pro', monospace">2⁸</text>
+
+  <text x="520" y="230" font-size="11" fill="#6d28d9" font-weight="600">HiF8: 38 exponents</text>
+  <rect x="625" y="236" width="259" height="24" rx="4" fill="#6d28d9"/>
+  <text x="621" y="252" font-size="9.5" fill="#555555" text-anchor="end" font-family="ui-monospace, 'Source Code Pro', monospace">2⁻²²</text>
+  <text x="890" y="252" font-size="9.5" fill="#555555" font-family="ui-monospace, 'Source Code Pro', monospace">2¹⁵</text>
+
+  <text x="520" y="290" font-size="11" fill="#1d1d1f">FP16: 40 exponents</text>
+  <rect x="607" y="296" width="277" height="24" rx="4" fill="#86868b" fill-opacity="0.45"/>
+  <text x="603" y="312" font-size="9.5" fill="#555555" text-anchor="end" font-family="ui-monospace, 'Source Code Pro', monospace">2⁻²⁴</text>
+  <text x="890" y="312" font-size="9.5" fill="#555555" font-family="ui-monospace, 'Source Code Pro', monospace">2¹⁵</text>
+
+  <g font-size="10.8" fill="#1d1d1f">
+    <text x="520" y="352">• MXFP8 / MXFP4 buy range with a shared 8-bit E8M0</text>
+    <text x="534" y="370">  scale factor per 32-element block</text>
+    <text x="520" y="394">• HiF8 needs no scale factor: the range is in the encoding</text>
+    <text x="520" y="418">• Claimed result: forward and backward passes can both</text>
+    <text x="534" y="436">  stay in 8 bits, at FP8-class efficiency</text>
+  </g>
+
+  <!-- stat chips -->
+  <g>
+    <rect x="36" y="460" width="280" height="58" rx="10" fill="#f3e8ff" stroke="#d8b4fe"/>
+    <text x="52" y="488" font-size="20" fill="#6d28d9" font-weight="600" font-family="ui-monospace, 'Source Code Pro', monospace">38</text>
+    <text x="52" y="506" font-size="10" fill="#555555">combined exponents: 2.1× E4M3's 18</text>
+    <rect x="340" y="460" width="280" height="58" rx="10" fill="#f3e8ff" stroke="#d8b4fe"/>
+    <text x="356" y="488" font-size="20" fill="#6d28d9" font-weight="600" font-family="ui-monospace, 'Source Code Pro', monospace">2⁻²²</text>
+    <text x="356" y="506" font-size="10" fill="#555555">bottom of range, vs E4M3's 2⁻⁹</text>
+    <rect x="644" y="460" width="280" height="58" rx="10" fill="#f3e8ff" stroke="#d8b4fe"/>
+    <text x="660" y="488" font-size="20" fill="#6d28d9" font-weight="600" font-family="ui-monospace, 'Source Code Pro', monospace">0 b</text>
+    <text x="660" y="506" font-size="10" fill="#555555">extra scale bits, vs MXFP8's 8-bit factor</text>
+  </g>
+
+  <text x="36" y="552" font-size="10.5" fill="#86868b">Sources: "Ascend HiFloat8 Format for Deep Learning" (arXiv:2409.16626, 2024); Ascend 950 NPU Architecture White Paper (2026); FP8 E4M3 per "FP8 Formats for Deep Learning" (arXiv:2209.05433).</text>
+</svg>

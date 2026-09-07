@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 620" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <defs>
+    <marker id="ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6d28d9"/>
+    </marker>
+  </defs>
+
+  <rect x="1" y="1" width="958" height="618" rx="14" fill="#ffffff" stroke="#e5e5e7"/>
+  <text x="36" y="44" font-size="17" font-weight="600" fill="#1d1d1f">One fabric, three scales</text>
+  <text x="36" y="66" font-size="12" fill="#555555">The same Unified Bus semantics (sync memory, async copies, collectives) run from one package to an 8,192-chip SuperPoD</text>
+
+  <!-- Col A: package -->
+  <text x="60" y="126" font-size="11" fill="#6d28d9" font-weight="600" letter-spacing="1.5" font-family="ui-monospace, 'Source Code Pro', monospace">PACKAGE</text>
+  <rect x="90" y="150" width="180" height="120" rx="10" fill="#ffffff" stroke="#d8b4fe"/>
+  <rect x="100" y="160" width="160" height="18" rx="4" fill="#f3e8ff" stroke="#d8b4fe"/>
+  <rect x="100" y="188" width="74" height="56" rx="4" fill="#6d28d9" fill-opacity="0.25" stroke="#6d28d9"/>
+  <rect x="186" y="188" width="74" height="56" rx="4" fill="#6d28d9" fill-opacity="0.25" stroke="#6d28d9"/>
+  <rect x="100" y="246" width="160" height="18" rx="4" fill="#f3e8ff" stroke="#d8b4fe"/>
+  <text x="180" y="292" font-size="10.5" fill="#1d1d1f" text-anchor="middle">2 AI dies + 2 IO dies + HBM</text>
+  <text x="180" y="310" font-size="10.5" fill="#555555" text-anchor="middle" font-family="ui-monospace, 'Source Code Pro', monospace">UB out: 2.0 TB/s bidirectional</text>
+
+  <line x1="288" y1="210" x2="348" y2="210" stroke="#6d28d9" stroke-width="2" marker-end="url(#ar3)"/>
+  <text x="318" y="200" font-size="10.5" fill="#6d28d9" text-anchor="middle" font-family="ui-monospace, 'Source Code Pro', monospace">UB</text>
+
+  <!-- Col B: rack superpod -->
+  <text x="360" y="126" font-size="11" fill="#6d28d9" font-weight="600" letter-spacing="1.5" font-family="ui-monospace, 'Source Code Pro', monospace">RACK SUPERPOD</text>
+  <rect x="390" y="150" width="180" height="22" rx="5" fill="#f3e8ff" stroke="#d8b4fe"/>
+  <text x="480" y="165" font-size="10" fill="#6d28d9" text-anchor="middle" font-family="ui-monospace, 'Source Code Pro', monospace">UB Switch</text>
+  <g stroke="#c4b5fd" stroke-width="1">
+    <line x1="398" y1="172" x2="398" y2="192"/><line x1="421" y1="172" x2="421" y2="192"/><line x1="443" y1="172" x2="443" y2="192"/><line x1="466" y1="172" x2="466" y2="192"/><line x1="488" y1="172" x2="488" y2="192"/><line x1="511" y1="172" x2="511" y2="192"/><line x1="533" y1="172" x2="533" y2="192"/><line x1="556" y1="172" x2="556" y2="192"/>
+  </g>
+  <g fill="#6d28d9" fill-opacity="0.25" stroke="#6d28d9" stroke-width="0.8">
+    <rect x="390" y="192" width="16" height="18" rx="3"/><rect x="413" y="192" width="16" height="18" rx="3"/><rect x="435" y="192" width="16" height="18" rx="3"/><rect x="458" y="192" width="16" height="18" rx="3"/><rect x="480" y="192" width="16" height="18" rx="3"/><rect x="503" y="192" width="16" height="18" rx="3"/><rect x="525" y="192" width="16" height="18" rx="3"/><rect x="548" y="192" width="16" height="18" rx="3"/>
+    <rect x="390" y="216" width="16" height="18" rx="3"/><rect x="413" y="216" width="16" height="18" rx="3"/><rect x="435" y="216" width="16" height="18" rx="3"/><rect x="458" y="216" width="16" height="18" rx="3"/><rect x="480" y="216" width="16" height="18" rx="3"/><rect x="503" y="216" width="16" height="18" rx="3"/><rect x="525" y="216" width="16" height="18" rx="3"/><rect x="548" y="216" width="16" height="18" rx="3"/>
+  </g>
+  <g stroke="#c4b5fd" stroke-width="1">
+    <line x1="398" y1="234" x2="398" y2="254"/><line x1="421" y1="234" x2="421" y2="254"/><line x1="443" y1="234" x2="443" y2="254"/><line x1="466" y1="234" x2="466" y2="254"/><line x1="488" y1="234" x2="488" y2="254"/><line x1="511" y1="234" x2="511" y2="254"/><line x1="533" y1="234" x2="533" y2="254"/><line x1="556" y1="234" x2="556" y2="254"/>
+  </g>
+  <rect x="390" y="254" width="180" height="22" rx="5" fill="#f3e8ff" stroke="#d8b4fe"/>
+  <text x="480" y="269" font-size="10" fill="#6d28d9" text-anchor="middle" font-family="ui-monospace, 'Source Code Pro', monospace">UB Switch</text>
+  <text x="480" y="296" font-size="10.5" fill="#1d1d1f" text-anchor="middle">full-mesh + Clos · one Load/Store domain</text>
+  <text x="480" y="314" font-size="10.5" fill="#555555" text-anchor="middle">previous gen ran 384 chips (CloudMatrix 384)</text>
+
+  <line x1="600" y1="210" x2="660" y2="210" stroke="#6d28d9" stroke-width="2" marker-end="url(#ar3)"/>
+  <text x="630" y="200" font-size="10.5" fill="#6d28d9" text-anchor="middle" font-family="ui-monospace, 'Source Code Pro', monospace">tiers</text>
+
+  <!-- Col C: atlas 950 -->
+  <text x="672" y="126" font-size="11" fill="#6d28d9" font-weight="600" letter-spacing="1.5" font-family="ui-monospace, 'Source Code Pro', monospace">ATLAS 950 SUPERPOD</text>
+  <rect x="740" y="150" width="120" height="20" rx="5" fill="#f3e8ff" stroke="#d8b4fe"/>
+  <rect x="690" y="184" width="90" height="20" rx="5" fill="#f3e8ff" stroke="#d8b4fe"/>
+  <rect x="820" y="184" width="90" height="20" rx="5" fill="#f3e8ff" stroke="#d8b4fe"/>
+  <g stroke="#c4b5fd" stroke-width="1">
+    <line x1="800" y1="170" x2="735" y2="184"/><line x1="800" y1="170" x2="865" y2="184"/>
+    <line x1="735" y1="204" x2="700" y2="226"/><line x1="735" y1="204" x2="785" y2="226"/><line x1="865" y1="204" x2="860" y2="226"/>
+  </g>
+  <rect x="676" y="226" width="50" height="18" rx="5" fill="#f3e8ff" stroke="#d8b4fe"/>
+  <rect x="756" y="226" width="50" height="18" rx="5" fill="#f3e8ff" stroke="#d8b4fe"/>
+  <rect x="836" y="226" width="50" height="18" rx="5" fill="#f3e8ff" stroke="#d8b4fe"/>
+  <g stroke="#c4b5fd" stroke-width="1">
+    <line x1="701" y1="244" x2="701" y2="262"/><line x1="781" y1="244" x2="781" y2="262"/><line x1="861" y1="244" x2="861" y2="262"/>
+  </g>
+  <g fill="#6d28d9" fill-opacity="0.25" stroke="#6d28d9" stroke-width="0.8">
+    <rect x="672" y="262" width="14" height="14" rx="2"/><rect x="690" y="262" width="14" height="14" rx="2"/><rect x="708" y="262" width="14" height="14" rx="2"/><rect x="726" y="262" width="14" height="14" rx="2"/><rect x="744" y="262" width="14" height="14" rx="2"/><rect x="762" y="262" width="14" height="14" rx="2"/><rect x="780" y="262" width="14" height="14" rx="2"/><rect x="798" y="262" width="14" height="14" rx="2"/><rect x="816" y="262" width="14" height="14" rx="2"/><rect x="834" y="262" width="14" height="14" rx="2"/><rect x="852" y="262" width="14" height="14" rx="2"/><rect x="870" y="262" width="14" height="14" rx="2"/>
+    <rect x="672" y="280" width="14" height="14" rx="2"/><rect x="690" y="280" width="14" height="14" rx="2"/><rect x="708" y="280" width="14" height="14" rx="2"/><rect x="726" y="280" width="14" height="14" rx="2"/><rect x="744" y="280" width="14" height="14" rx="2"/><rect x="762" y="280" width="14" height="14" rx="2"/><rect x="780" y="280" width="14" height="14" rx="2"/><rect x="798" y="280" width="14" height="14" rx="2"/><rect x="816" y="280" width="14" height="14" rx="2"/><rect x="834" y="280" width="14" height="14" rx="2"/><rect x="852" y="280" width="14" height="14" rx="2"/><rect x="870" y="280" width="14" height="14" rx="2"/>
+    <rect x="672" y="298" width="14" height="14" rx="2"/><rect x="690" y="298" width="14" height="14" rx="2"/><rect x="708" y="298" width="14" height="14" rx="2"/><rect x="726" y="298" width="14" height="14" rx="2"/><rect x="744" y="298" width="14" height="14" rx="2"/><rect x="762" y="298" width="14" height="14" rx="2"/><rect x="780" y="298" width="14" height="14" rx="2"/><rect x="798" y="298" width="14" height="14" rx="2"/><rect x="816" y="298" width="14" height="14" rx="2"/><rect x="834" y="298" width="14" height="14" rx="2"/><rect x="852" y="298" width="14" height="14" rx="2"/><rect x="870" y="298" width="14" height="14" rx="2"/>
+  </g>
+  <text x="800" y="336" font-size="10.5" fill="#1d1d1f" text-anchor="middle">8,192 chips · Clos over UB Switches</text>
+  <text x="800" y="354" font-size="10.5" fill="#555555" text-anchor="middle">8 EFLOPS FP8 · 16 EFLOPS FP4 (keynote, 2025)</text>
+
+  <!-- callouts -->
+  <rect x="60" y="400" width="430" height="140" rx="12" fill="#faf7ff" stroke="#d8b4fe"/>
+  <text x="80" y="428" font-size="11.5" fill="#6d28d9" font-weight="600" letter-spacing="1" font-family="ui-monospace, 'Source Code Pro', monospace">PD SEPARATION, HARDWARE-NATIVE</text>
+  <g font-size="10.8" fill="#1d1d1f">
+    <text x="80" y="454">• Prefill is compute-bound; decode is memory-bound</text>
+    <text x="94" y="472">  (Splitwise ISCA'24, DistServe OSDI'24)</text>
+    <text x="80" y="496">• CloudMatrix-Infer scales the two pools independently</text>
+    <text x="94" y="514">  over one UB fabric, up to EP320 expert parallelism</text>
+    <text x="80" y="534">• DeepSeek-R1 on CM384: 6,688 tok/s prefill · 1,943 tok/s decode / NPU</text>
+  </g>
+
+  <rect x="520" y="400" width="380" height="140" rx="12" fill="#faf7ff" stroke="#d8b4fe"/>
+  <text x="540" y="428" font-size="11.5" fill="#6d28d9" font-weight="600" letter-spacing="1" font-family="ui-monospace, 'Source Code Pro', monospace">ONE FABRIC, THREE SEMANTICS</text>
+  <g font-size="10.8" fill="#1d1d1f">
+    <text x="540" y="454">• UB Memory: sync Load/Store/Atomic across</text>
+    <text x="554" y="472">  a shared space of up to 128 TB</text>
+    <text x="540" y="496">• URMA: async copies over RTP (reliable) or</text>
+    <text x="554" y="514">  CTP (light) transport</text>
+    <text x="540" y="534">• UBoE: UB over standard Ethernet switches</text>
+  </g>
+
+  <text x="36" y="584" font-size="10.5" fill="#86868b">Scale-up domain comparison: NVIDIA NVL72 = 72 GPUs · Atlas 950 SuperPoD = 8,192 NPUs (Huawei keynote, Sep 2025). Clusters beyond the SuperPoD scale past 128K cards.</text>
+</svg>

@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 612" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <defs>
+    <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6d28d9"/>
+    </marker>
+  </defs>
+
+  <rect x="1" y="1" width="958" height="610" rx="14" fill="#ffffff" stroke="#e5e5e7"/>
+  <text x="36" y="44" font-size="17" font-weight="600" fill="#1d1d1f">Inside one AI subsystem: DaVinci v3</text>
+  <text x="36" y="66" font-size="12" fill="#555555">The tile that repeats across the AI dies: 36× per 950DT package (32× per 950PR), each one 1 Cube Core + 2 Vector Cores</text>
+
+  <rect x="40" y="88" width="880" height="486" rx="14" fill="#faf7ff" stroke="#d8b4fe"/>
+
+  <!-- Cube column -->
+  <rect x="70" y="112" width="260" height="34" rx="8" fill="#6d28d9"/>
+  <text x="200" y="134" font-size="12.5" fill="#ffffff" text-anchor="middle" font-weight="600" font-family="ui-monospace, 'Source Code Pro', monospace">CUBE CORE (AIC)</text>
+
+  <rect x="70" y="162" width="260" height="32" rx="6" fill="#f3e8ff" stroke="#d8b4fe"/>
+  <text x="200" y="182" font-size="11" fill="#1d1d1f" text-anchor="middle" font-family="ui-monospace, 'Source Code Pro', monospace">L1 Buffer · 512 KB</text>
+
+  <rect x="70" y="210" width="125" height="32" rx="6" fill="#f3e8ff" stroke="#d8b4fe"/>
+  <text x="132" y="230" font-size="10.5" fill="#1d1d1f" text-anchor="middle" font-family="ui-monospace, 'Source Code Pro', monospace">L0A · 64 KB</text>
+  <rect x="205" y="210" width="125" height="32" rx="6" fill="#f3e8ff" stroke="#d8b4fe"/>
+  <text x="267" y="230" font-size="10.5" fill="#1d1d1f" text-anchor="middle" font-family="ui-monospace, 'Source Code Pro', monospace">L0B · 64 KB</text>
+
+  <rect x="70" y="258" width="260" height="52" rx="6" fill="#ffffff" stroke="#6d28d9" stroke-width="1.5"/>
+  <text x="200" y="280" font-size="12" fill="#1d1d1f" text-anchor="middle" font-weight="600">Matrix MAC arrays</text>
+  <text x="200" y="298" font-size="10" fill="#555555" text-anchor="middle" font-family="ui-monospace, 'Source Code Pro', monospace">HiF8 · MXFP8 · FP8 · MXFP4 · BF16</text>
+
+  <rect x="70" y="326" width="260" height="48" rx="6" fill="#f3e8ff" stroke="#6d28d9" stroke-width="1.2"/>
+  <text x="200" y="344" font-size="11" fill="#1d1d1f" text-anchor="middle" font-weight="600" font-family="ui-monospace, 'Source Code Pro', monospace">L0C · 256 KB</text>
+  <text x="200" y="360" font-size="9.5" fill="#555555" text-anchor="middle">quantize-on-write FP32→FP8 · layout NZ→ND</text>
+
+  <!-- Vector cores -->
+  <rect x="630" y="112" width="260" height="30" rx="8" fill="#6d28d9"/>
+  <text x="760" y="132" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="600" font-family="ui-monospace, 'Source Code Pro', monospace">VECTOR CORE 0 (AIV)</text>
+  <rect x="630" y="150" width="260" height="26" rx="6" fill="#f3e8ff" stroke="#d8b4fe"/>
+  <text x="760" y="167" font-size="10.5" fill="#1d1d1f" text-anchor="middle">RegFile · dual-issue SIMD · out-of-order</text>
+  <rect x="630" y="182" width="260" height="26" rx="6" fill="#f3e8ff" stroke="#d8b4fe"/>
+  <text x="760" y="199" font-size="10.5" fill="#1d1d1f" text-anchor="middle" font-family="ui-monospace, 'Source Code Pro', monospace">UB · 512 KB</text>
+  <rect x="630" y="214" width="260" height="26" rx="6" fill="#f3e8ff" stroke="#d8b4fe"/>
+  <text x="760" y="231" font-size="10.5" fill="#1d1d1f" text-anchor="middle">SIMT mode: gather/scatter, hash insert</text>
+  <rect x="630" y="246" width="260" height="26" rx="6" fill="#f3e8ff" stroke="#d8b4fe"/>
+  <text x="760" y="263" font-size="10.5" fill="#1d1d1f" text-anchor="middle">BF16 native · Softmax / GELU fixed-fn</text>
+
+  <rect x="630" y="306" width="260" height="30" rx="8" fill="#6d28d9"/>
+  <text x="760" y="326" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="600" font-family="ui-monospace, 'Source Code Pro', monospace">VECTOR CORE 1 (AIV)</text>
+  <rect x="630" y="344" width="260" height="26" rx="6" fill="#f3e8ff" stroke="#d8b4fe"/>
+  <text x="760" y="361" font-size="10.5" fill="#1d1d1f" text-anchor="middle">RegFile · dual-issue SIMD · out-of-order</text>
+  <rect x="630" y="376" width="260" height="26" rx="6" fill="#f3e8ff" stroke="#d8b4fe"/>
+  <text x="760" y="393" font-size="10.5" fill="#1d1d1f" text-anchor="middle" font-family="ui-monospace, 'Source Code Pro', monospace">UB · 512 KB</text>
+  <rect x="630" y="408" width="260" height="26" rx="6" fill="#f3e8ff" stroke="#d8b4fe"/>
+  <text x="760" y="425" font-size="10.5" fill="#1d1d1f" text-anchor="middle">SIMT mode: gather/scatter, hash insert</text>
+  <rect x="630" y="440" width="260" height="26" rx="6" fill="#f3e8ff" stroke="#d8b4fe"/>
+  <text x="760" y="457" font-size="10.5" fill="#1d1d1f" text-anchor="middle">BF16 native · Softmax / GELU fixed-fn</text>
+
+  <!-- CV fusion path -->
+  <path d="M330,350 L470,350 L470,389 L630,389" fill="none" stroke="#6d28d9" stroke-width="4" marker-end="url(#ar2)"/>
+  <text x="404" y="338" font-size="11.5" fill="#6d28d9" font-weight="600" font-family="ui-monospace, 'Source Code Pro', monospace">CV fusion path</text>
+  <text x="480" y="412" font-size="10" fill="#555555" text-anchor="middle">direct L0C↔UB transfer · in-flight format + layout conversion</text>
+
+  <!-- NDDMA -->
+  <rect x="380" y="470" width="200" height="56" rx="10" fill="#ffffff" stroke="#6d28d9" stroke-width="1.5"/>
+  <text x="480" y="490" font-size="11.5" fill="#1d1d1f" text-anchor="middle" font-weight="600" font-family="ui-monospace, 'Source Code Pro', monospace">NDDMA</text>
+  <text x="480" y="508" font-size="9.5" fill="#555555" text-anchor="middle">N-D layout transform ≤5 dims · merges reads into 128 B</text>
+  <line x1="380" y1="498" x2="336" y2="498" stroke="#6d28d9" stroke-width="1.5" marker-end="url(#ar2)"/>
+  <line x1="580" y1="498" x2="624" y2="498" stroke="#6d28d9" stroke-width="1.5" marker-end="url(#ar2)"/>
+
+  <!-- L2 bar -->
+  <rect x="70" y="524" width="820" height="34" rx="8" fill="#f3e8ff" stroke="#d8b4fe"/>
+  <text x="480" y="545" font-size="11.5" fill="#1d1d1f" text-anchor="middle">128 MB L2 Cache: chiplet-wide UMA · hardware-coherent across both AI dies · 512 B lines, 128 B sectors · hints + CMO</text>
+  <line x1="200" y1="374" x2="200" y2="524" stroke="#6d28d9" stroke-opacity="0.5" stroke-width="1.2" marker-end="url(#ar2)"/>
+  <line x1="760" y1="466" x2="760" y2="524" stroke="#6d28d9" stroke-opacity="0.5" stroke-width="1.2" marker-end="url(#ar2)"/>
+</svg>

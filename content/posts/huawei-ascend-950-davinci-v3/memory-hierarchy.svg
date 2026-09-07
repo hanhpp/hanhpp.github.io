@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <rect x="1" y="1" width="958" height="598" rx="14" fill="#ffffff" stroke="#e5e5e7"/>
+  <text x="36" y="44" font-size="17" font-weight="600" fill="#1d1d1f">The memory ladder, top to bottom</text>
+  <text x="36" y="66" font-size="12" fill="#555555">Six levels between an ALU and 128 TB: sizes for the 950DT full config, with PR variants noted</text>
+
+  <!-- scope brackets -->
+  <line x1="88" y1="104" x2="88" y2="240" stroke="#c4b5fd" stroke-width="1.5"/>
+  <line x1="84" y1="104" x2="88" y2="104" stroke="#c4b5fd" stroke-width="1.5"/>
+  <line x1="84" y1="240" x2="88" y2="240" stroke="#c4b5fd" stroke-width="1.5"/>
+  <text x="76" y="176" font-size="10" fill="#86868b" font-family="ui-monospace, 'Source Code Pro', monospace" text-anchor="middle" transform="rotate(-90 76 176)">per AI core</text>
+
+  <line x1="88" y1="256" x2="88" y2="430" stroke="#c4b5fd" stroke-width="1.5"/>
+  <line x1="84" y1="256" x2="88" y2="256" stroke="#c4b5fd" stroke-width="1.5"/>
+  <line x1="84" y1="430" x2="88" y2="430" stroke="#c4b5fd" stroke-width="1.5"/>
+  <text x="76" y="345" font-size="10" fill="#86868b" font-family="ui-monospace, 'Source Code Pro', monospace" text-anchor="middle" transform="rotate(-90 76 345)">per package</text>
+
+  <line x1="88" y1="446" x2="88" y2="510" stroke="#c4b5fd" stroke-width="1.5"/>
+  <line x1="84" y1="446" x2="88" y2="446" stroke="#c4b5fd" stroke-width="1.5"/>
+  <line x1="84" y1="510" x2="88" y2="510" stroke="#c4b5fd" stroke-width="1.5"/>
+  <text x="76" y="480" font-size="10" fill="#86868b" font-family="ui-monospace, 'Source Code Pro', monospace" text-anchor="middle" transform="rotate(-90 76 480)">per system</text>
+
+  <!-- L0 -->
+  <rect x="350" y="104" width="260" height="54" rx="8" fill="#6d28d9" fill-opacity="0.12" stroke="#6d28d9"/>
+  <text x="480" y="127" font-size="11.5" fill="#1d1d1f" text-anchor="middle" font-family="ui-monospace, 'Source Code Pro', monospace">L0A 64 KB · L0B 64 KB · L0C 256 KB</text>
+  <text x="480" y="145" font-size="10" fill="#555555" text-anchor="middle">per AI core: operands and accumulators</text>
+
+  <!-- L1/UB -->
+  <rect x="330" y="174" width="300" height="54" rx="8" fill="#6d28d9" fill-opacity="0.2" stroke="#6d28d9"/>
+  <text x="480" y="197" font-size="11.5" fill="#1d1d1f" text-anchor="middle" font-family="ui-monospace, 'Source Code Pro', monospace">L1 Buffer 512 KB · Unified Buffer 512 KB</text>
+  <text x="480" y="215" font-size="10" fill="#555555" text-anchor="middle">per AI core: the vector workbench</text>
+
+  <!-- AI CPU -->
+  <rect x="290" y="244" width="380" height="54" rx="8" fill="#6d28d9" fill-opacity="0.3" stroke="#6d28d9"/>
+  <text x="480" y="267" font-size="11.5" fill="#1d1d1f" text-anchor="middle" font-family="ui-monospace, 'Source Code Pro', monospace">AI CPU: L1 64 KB · L2 1 MB · L3 4 MB</text>
+  <text x="480" y="285" font-size="10" fill="#555555" text-anchor="middle">per Linx816 core / per 2-core cluster · 8C16T · NEON</text>
+
+  <!-- L2 -->
+  <rect x="240" y="314" width="480" height="54" rx="8" fill="#6d28d9" fill-opacity="0.45" stroke="#6d28d9"/>
+  <text x="480" y="337" font-size="11.5" fill="#ffffff" text-anchor="middle" font-weight="600" font-family="ui-monospace, 'Source Code Pro', monospace">L2 Cache · 128 MB</text>
+  <text x="480" y="355" font-size="10" fill="#f3e8ff" text-anchor="middle">chiplet-wide UMA · coherent across both AI dies · 512 B lines, 128 B sectors</text>
+
+  <!-- on-package memory -->
+  <rect x="190" y="384" width="580" height="54" rx="8" fill="#6d28d9" fill-opacity="0.7" stroke="#6d28d9"/>
+  <text x="480" y="407" font-size="11.5" fill="#ffffff" text-anchor="middle" font-weight="600" font-family="ui-monospace, 'Source Code Pro', monospace">On-package memory · 144 GB @ 4.0 TB/s</text>
+  <text x="480" y="425" font-size="10" fill="#f3e8ff" text-anchor="middle">HiZQ 2.0 (950DT); 950PR: 128 GB @ 1.6 TB/s on HiBL 1.0</text>
+
+  <!-- supernode pool -->
+  <rect x="140" y="454" width="680" height="56" rx="8" fill="#6d28d9" stroke="#6d28d9"/>
+  <text x="480" y="477" font-size="11.5" fill="#ffffff" text-anchor="middle" font-weight="600" font-family="ui-monospace, 'Source Code Pro', monospace">Supernode memory pool · up to 128 TB via UB Memory</text>
+  <text x="480" y="496" font-size="10" fill="#f3e8ff" text-anchor="middle">sync Load/Store/Atomic across up to 8,192 chips · + pooled CPU memory &amp; storage</text>
+
+  <!-- connector ticks -->
+  <g stroke="#c4b5fd" stroke-width="1.2">
+    <line x1="480" y1="158" x2="480" y2="174"/>
+    <line x1="480" y1="228" x2="480" y2="244"/>
+    <line x1="480" y1="298" x2="480" y2="314"/>
+    <line x1="480" y1="368" x2="480" y2="384"/>
+    <line x1="480" y1="438" x2="480" y2="454"/>
+  </g>
+
+  <text x="36" y="560" font-size="11" fill="#1d1d1f">L0C quantizes on write-back (FP32/INT32 → BF16/FP16/FP8/INT8, with layout conversion), so 8-bit consumers never pay DRAM bandwidth for 32-bit intermediates.</text>
+  <text x="36" y="580" font-size="10.5" fill="#86868b">Sizes and bandwidth per the Ascend 950 NPU Architecture White Paper (2026).</text>
+</svg>
