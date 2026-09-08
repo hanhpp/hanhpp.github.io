@@ -9,6 +9,15 @@
 <script defer type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ac11edc7cb41484d9c6f76e81968b36b"}'></script>
 {{- end }}
 
+{{- /* Vercel Web Analytics: only on the Vercel-built copy. vercel.json sets
+       baseURL to the vercel.app domain at build time, so this stays out of
+       the GitHub Pages build, whose host cannot serve /_vercel/insights.
+       Data only appears once Web Analytics is enabled for the project in
+       the Vercel dashboard. */ -}}
+{{- if strings.Contains .Site.BaseURL "vercel.app" }}
+<script defer src="/_vercel/insights/script.js"></script>
+{{- end }}
+
 {{- if .IsHome }}
 <script>
 (function () {
