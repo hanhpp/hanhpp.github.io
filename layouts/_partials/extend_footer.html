@@ -54,6 +54,44 @@
 </script>
 {{- end }}
 
+{{- /* Post view counter. Counts live in Upstash Redis behind api/views.js on
+       the Vercel deployment; both domains call that one endpoint so a post's
+       number is total readership, not per-domain. Increments once per browser
+       session, reads afterwards, and renders nothing if the endpoint is
+       unreachable or the count is zero.
+
+       The slug is derived from location.pathname rather than from Hugo page
+       context on purpose: baseof.html wraps footer.html in partialCached
+       keyed only by .Layout/.Kind/params, so every kind=page shares one
+       cached footer render and per-page template values here would be the
+       first-rendered page's values, not this page's. */ -}}
+<script>
+(function () {
+    var match = location.pathname.match(/^\/posts\/([a-z0-9][a-z0-9-]{0,80})\/?$/);
+    if (!match) return;
+    var slug = match[1];
+    var meta = document.querySelector(".post-meta");
+    if (!meta) return;
+
+    var key = "views:" + slug;
+    var seen = false;
+    try { seen = sessionStorage.getItem(key) === "1"; } catch (e) {}
+
+    fetch("https://hanhpham.vercel.app/api/views?slug=" + encodeURIComponent(slug), {
+        method: seen ? "GET" : "POST"
+    })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (data) {
+            if (!data || typeof data.count !== "number" || data.count < 1) return;
+            try { sessionStorage.setItem(key, "1"); } catch (e) {}
+            var span = document.createElement("span");
+            span.textContent = "\u00b7 " + data.count.toLocaleString() + " views";
+            meta.appendChild(span);
+        })
+        .catch(function () {});
+})();
+</script>
+
 {{- /* Page transition: fade out on navigation click, fade in on load */ -}}
 <script>
 (function () {
