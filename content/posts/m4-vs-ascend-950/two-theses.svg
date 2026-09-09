@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 570" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <rect x="1" y="1" width="958" height="568" rx="14" fill="#ffffff" stroke="#e5e5e7"/>
+  <text x="36" y="44" font-size="17" font-weight="600" fill="#1d1d1f">Same goal, opposite theses</text>
+  <text x="36" y="66" font-size="12" fill="#555555">Both chips are matrix-multiply machines wrapped in a memory system and an ecosystem. Nearly every design choice below is the mirror image of the other.</text>
+
+  <!-- Apple card -->
+  <rect x="36" y="92" width="430" height="430" rx="12" fill="#faf7ff" stroke="#d8b4fe"/>
+  <text x="60" y="122" font-size="13" font-weight="600" fill="#6d28d9" font-family="ui-monospace, 'Source Code Pro', monospace">APPLE M4: THE CLIENT THESIS</text>
+  <g font-size="11" fill="#1d1d1f">
+    <text x="60" y="152" font-weight="600">Matrix work</text>
+    <text x="60" y="170">Fixed-function ANE: FP16-only, undocumented,</text>
+    <text x="60" y="186">dispatchable only through an opaque planner</text>
+    <text x="60" y="214" font-weight="600">Flexible fallback</text>
+    <text x="60" y="232">TBDR GPU via Metal / MLX, does everything,</text>
+    <text x="60" y="248">runs every LLM runtime that matters</text>
+    <text x="60" y="276" font-weight="600">Memory</text>
+    <text x="60" y="294">Unified LPDDR5X, 120-546 GB/s, up to 128 GB,</text>
+    <text x="60" y="310">no HBM anywhere in the product line</text>
+    <text x="60" y="338" font-weight="600">Scaling</text>
+    <text x="60" y="356">None between nodes: Thunderbolt 5 ≈ 60 Gb/s,</text>
+    <text x="60" y="372">4-node hobby clusters, replication in the cloud</text>
+    <text x="60" y="400" font-weight="600">Envelope and software</text>
+    <text x="60" y="418">Battery-powered laptop, 24 h battery life,</text>
+    <text x="60" y="434">Core ML / MLX, formats stop at FP16</text>
+  </g>
+  <text x="60" y="482" font-size="10.5" fill="#86868b">Wins on: tokens per watt, silence, ubiquity (2.5B+ devices)</text>
+  <text x="60" y="500" font-size="10.5" fill="#86868b">Cannot do: fleet-scale serving, frontier-model training</text>
+
+  <!-- Huawei card -->
+  <rect x="494" y="92" width="430" height="430" rx="12" fill="#f3e8ff" stroke="#6d28d9" stroke-width="1.5"/>
+  <text x="518" y="122" font-size="13" font-weight="600" fill="#6d28d9" font-family="ui-monospace, 'Source Code Pro', monospace">ASCEND 950: THE FLEET THESIS</text>
+  <g font-size="11" fill="#1d1d1f">
+    <text x="518" y="152" font-weight="600">Matrix work</text>
+    <text x="518" y="170">Programmable Cube cores: FP8, MXFP8, MXFP4,</text>
+    <text x="518" y="186">proprietary HiF8, quantize-on-write to L2</text>
+    <text x="518" y="214" font-weight="600">Flexible fallback</text>
+    <text x="518" y="232">72 Vector cores with SIMD+SIMT hybrid and</text>
+    <text x="518" y="248">a direct CV fusion path for FlashAttention</text>
+    <text x="518" y="276" font-weight="600">Memory</text>
+    <text x="518" y="294">On-package HBM-class stacks (HiBL/HiZQ),</text>
+    <text x="518" y="310">1.6-4.0 TB/s, up to 144 GB per package</text>
+    <text x="518" y="338" font-weight="600">Scaling</text>
+    <text x="518" y="356">UB 2.0 fabric: 2 TB/s per chip, Load/Store</text>
+    <text x="518" y="372">across 8,192 chips in one SuperPoD</text>
+    <text x="518" y="400" font-weight="600">Envelope and software</text>
+    <text x="518" y="418">600 W datacenter card, CANN + MindSpore,</text>
+    <text x="518" y="434">day-zero ports of open frontier models</text>
+  </g>
+  <text x="518" y="482" font-size="10.5" fill="#555555">Wins on: tokens per dollar at fleet scale, capacity per node</text>
+  <text x="518" y="500" font-size="10.5" fill="#555555">Cannot do: fit in a laptop, idle at 10 W, exist outside sanctions</text>
+
+  <text x="36" y="548" font-size="10.5" fill="#86868b">Sources: Apple newsroom M4 PRs (2024); Ascend 950 NPU Architecture White Paper (2026); ANE architecture per arXiv:2606.22283.</text>
+</svg>
