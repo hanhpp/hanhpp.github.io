@@ -85,7 +85,7 @@
             if (!data || typeof data.count !== "number" || data.count < 1) return;
             try { sessionStorage.setItem(key, "1"); } catch (e) {}
             var span = document.createElement("span");
-            span.textContent = "\u00b7 " + data.count.toLocaleString() + " views";
+            span.textContent = "\u00a0\u00b7\u00a0" + data.count.toLocaleString() + " views";
             meta.appendChild(span);
         })
         .catch(function () {});
