@@ -1,6 +1,6 @@
 /* Custom design layer on top of PaperMod.
    Palette, type, and component treatment adapted from the visual language
-   researched at blog.hieunt.me (see .claude/skills/write-blog-post).
+   researched at blog.hieunt.me.
    Smoothness layer: view transitions, hover effects, scroll behavior. */
 
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Source+Code+Pro:wght@400;500;600&display=swap");

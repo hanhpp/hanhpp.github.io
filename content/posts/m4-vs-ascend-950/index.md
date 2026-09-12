@@ -14,7 +14,7 @@ One scope note first: the M4 generation is a closed chapter. As of this week the
 
 ## Two theses
 
-![Side-by-side comparison of the Apple client thesis and the Huawei fleet thesis across matrix compute, fallback engines, memory, scaling, and software.](two-theses.svg "The M4 and the Ascend 950 make opposite choices at every layer")
+{{< figure src="two-theses.svg" alt="Side-by-side comparison of the Apple client thesis and the Huawei fleet thesis across matrix compute, fallback engines, memory, scaling, and software." caption="The M4 and the Ascend 950 make opposite choices at every layer" >}}
 
 Apple's thesis: **AI happens on the client, mostly in a fixed-function block, powered by a memory system shared with everything else.** Inference runs where the data and the user already are, because it's private, it's free at the margin, and it works on a battery. Apple's datacenter answer, [Private Cloud Compute](https://security.apple.com/blog/private-cloud-compute/), is not a GPU server product; it's custom Apple silicon behind a privacy architecture, and Apple refuses to say what's in it.
 
@@ -64,7 +64,7 @@ Contrast the DaVinci v3 Cube Core: programmable datapaths with native FP8, MXFP8
 
 ## The numbers that actually matter: bandwidth and capacity
 
-![Per-chip memory bandwidth across the M4 family, M3 Ultra, and both Ascend 950 SKUs.](bandwidth-ladder.svg "The bandwidth gap is the whole story for decode workloads")
+{{< figure src="bandwidth-ladder.svg" alt="Per-chip memory bandwidth across the M4 family, M3 Ultra, and both Ascend 950 SKUs." caption="The bandwidth gap is the whole story for decode workloads" >}}
 
 Both companies agree on the load-bearing fact, and Apple's own MLX team [confirmed it with measurements](https://machinelearning.apple.com/research/exploring-llms-mlx-m5): **autoregressive decode is memory-bandwidth-bound.** Tokens per second on a big model is roughly bandwidth divided by model bytes. This collapses the spec war into two numbers per chip:
 

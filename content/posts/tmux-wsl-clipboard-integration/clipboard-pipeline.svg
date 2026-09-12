@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6d28d9"/>
+    </marker>
+  </defs>
+
+  <!-- Background container -->
+  <rect x="1" y="1" width="958" height="518" rx="14" fill="#ffffff" stroke="#e5e5e7"/>
+  <text x="36" y="42" font-size="17" font-weight="700" fill="#1d1d1f">WSL2 and Tmux Bidirectional Clipboard Architecture</text>
+  <text x="36" y="64" font-size="12" fill="#555555">Low-latency Perl sanitization during copy; bracketed paste and carriage return normalization during paste</text>
+
+  <!-- SECTION 1: COPY PIPELINE -->
+  <g transform="translate(36, 90)">
+    <rect x="0" y="0" width="888" height="180" rx="10" fill="#faf7ff" stroke="#d8b4fe"/>
+    <text x="24" y="28" font-size="11" font-weight="700" fill="#6d28d9" letter-spacing="1.2" font-family="ui-monospace, 'Source Code Pro', monospace">COPY PIPELINE: TMUX TO WINDOWS &amp; BUFFER</text>
+
+    <!-- Step 1: Tmux Event -->
+    <rect x="24" y="46" width="180" height="110" rx="8" fill="#ffffff" stroke="#d8b4fe"/>
+    <text x="36" y="70" font-size="13" font-weight="600" fill="#1d1d1f">Tmux Selection</text>
+    <text x="36" y="92" font-size="11" fill="#555555">Mouse drag release</text>
+    <text x="36" y="110" font-size="11" fill="#555555">vi-mode: v / y / Enter</text>
+    <text x="36" y="128" font-size="11" fill="#555555">Double / triple click</text>
+    <text x="36" y="146" font-size="10" fill="#86868b" font-family="ui-monospace, 'Source Code Pro', monospace">copy-pipe-and-cancel</text>
+
+    <!-- Arrow 1 -> 2 -->
+    <line x1="204" y1="101" x2="244" y2="101" stroke="#6d28d9" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- Step 2: tmux-copy-wsl Perl Sanitizer -->
+    <rect x="252" y="46" width="370" height="110" rx="8" fill="#ffffff" stroke="#6d28d9" stroke-width="1.5"/>
+    <rect x="264" y="56" width="140" height="20" rx="4" fill="#f3e8ff" stroke="#d8b4fe"/>
+    <text x="272" y="70" font-size="10.5" font-weight="700" fill="#6d28d9" font-family="ui-monospace, 'Source Code Pro', monospace">tmux-copy-wsl (Perl)</text>
+    
+    <g font-size="10.5" fill="#1d1d1f">
+      <text x="264" y="94">• Strip trailing spaces and tabs (pane padding): <tspan fill="#6d28d9" font-family="ui-monospace, monospace">[ \t]+$</tspan></text>
+      <text x="264" y="112">• Convert non-breaking spaces to standard space: <tspan fill="#6d28d9" font-family="ui-monospace, monospace">\u00a0, \u202f</tspan></text>
+      <text x="264" y="130">• Strip zero-width format chars: <tspan fill="#6d28d9" font-family="ui-monospace, monospace">\u200b-\u200d, \ufeff</tspan></text>
+      <text x="264" y="148">• Normalize line breaks to Unix LF: <tspan fill="#6d28d9" font-family="ui-monospace, monospace">\r\n -&gt; \n</tspan></text>
+    </g>
+
+    <!-- Arrows from Sanitizer to Targets -->
+    <path d="M 622 80 L 658 80 L 658 70 L 678 70" fill="none" stroke="#6d28d9" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M 622 122 L 658 122 L 658 132 L 678 132" fill="none" stroke="#6d28d9" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- Step 3A: Windows Clipboard -->
+    <rect x="686" y="48" width="180" height="44" rx="6" fill="#f3e8ff" stroke="#d8b4fe"/>
+    <text x="698" y="68" font-size="11.5" font-weight="600" fill="#1d1d1f">Windows Host Clipboard</text>
+    <text x="698" y="84" font-size="10" fill="#6d28d9" font-family="ui-monospace, 'Source Code Pro', monospace">clip.exe &lt;- clean text</text>
+
+    <!-- Step 3B: Tmux Load Buffer -->
+    <rect x="686" y="110" width="180" height="44" rx="6" fill="#ffffff" stroke="#d8b4fe"/>
+    <text x="698" y="130" font-size="11.5" font-weight="600" fill="#1d1d1f">Tmux Internal Buffer</text>
+    <text x="698" y="146" font-size="10" fill="#555555" font-family="ui-monospace, 'Source Code Pro', monospace">tmux load-buffer -</text>
+  </g>
+
+  <!-- SECTION 2: PASTE PIPELINE -->
+  <g transform="translate(36, 296)">
+    <rect x="0" y="0" width="888" height="180" rx="10" fill="#faf7ff" stroke="#d8b4fe"/>
+    <text x="24" y="28" font-size="11" font-weight="700" fill="#6d28d9" letter-spacing="1.2" font-family="ui-monospace, 'Source Code Pro', monospace">PASTE PIPELINE: WINDOWS TO ACTIVE TMUX PANE</text>
+
+    <!-- Step 1: Windows Source -->
+    <rect x="24" y="46" width="180" height="110" rx="8" fill="#f3e8ff" stroke="#d8b4fe"/>
+    <text x="36" y="70" font-size="13" font-weight="600" fill="#1d1d1f">Windows Clipboard</text>
+    <text x="36" y="92" font-size="11" fill="#555555">Host text / code</text>
+    <text x="36" y="110" font-size="11" fill="#555555">Right-click in pane</text>
+    <text x="36" y="128" font-size="11" fill="#555555">Middle-click in pane</text>
+    <text x="36" y="146" font-size="10" fill="#6d28d9" font-family="ui-monospace, 'Source Code Pro', monospace">Prefix + ]</text>
+
+    <!-- Arrow 1 -> 2 -->
+    <line x1="204" y1="101" x2="244" y2="101" stroke="#6d28d9" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- Step 2: tmux-paste-wsl Helper -->
+    <rect x="252" y="46" width="370" height="110" rx="8" fill="#ffffff" stroke="#6d28d9" stroke-width="1.5"/>
+    <rect x="264" y="56" width="140" height="20" rx="4" fill="#f3e8ff" stroke="#d8b4fe"/>
+    <text x="272" y="70" font-size="10.5" font-weight="700" fill="#6d28d9" font-family="ui-monospace, 'Source Code Pro', monospace">tmux-paste-wsl</text>
+
+    <g font-size="10.5" fill="#1d1d1f">
+      <text x="264" y="94">• Read exact text: <tspan fill="#6d28d9" font-family="ui-monospace, monospace">powershell.exe Get-Clipboard -Raw</tspan></text>
+      <text x="264" y="112">• Strip Windows carriage returns: <tspan fill="#6d28d9" font-family="ui-monospace, monospace">tr -d '\r'</tspan></text>
+      <text x="264" y="130">• Sync into tmux memory: <tspan fill="#555555" font-family="ui-monospace, monospace">tmux load-buffer -</tspan></text>
+      <text x="264" y="148">• Bracketed paste: <tspan fill="#6d28d9" font-family="ui-monospace, monospace">tmux paste-buffer -p</tspan></text>
+    </g>
+
+    <!-- Arrow 2 -> 3 -->
+    <line x1="622" y1="101" x2="678" y2="101" stroke="#6d28d9" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- Step 3: Active Tmux Pane -->
+    <rect x="686" y="46" width="180" height="110" rx="8" fill="#ffffff" stroke="#d8b4fe"/>
+    <text x="698" y="70" font-size="13" font-weight="600" fill="#1d1d1f">Active Tmux Pane</text>
+    <text x="698" y="92" font-size="11" fill="#555555">Terminal / Shell / Editor</text>
+    <text x="698" y="114" font-size="11" fill="#555555">Bracketed paste guard</text>
+    <text x="698" y="132" font-size="10.5" fill="#555555">No accidental execution</text>
+    <text x="698" y="148" font-size="10" fill="#6d28d9" font-family="ui-monospace, 'Source Code Pro', monospace">Clean Unix LF</text>
+  </g>
+
+  <!-- Footer note -->
+  <text x="36" y="500" font-size="11" fill="#86868b">Holding Shift in Windows Terminal bypasses tmux mouse mode and routes directly to native Windows Terminal selection.</text>
+</svg>
