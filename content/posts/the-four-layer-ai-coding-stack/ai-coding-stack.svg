@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6d28d9"/>
+    </marker>
+  </defs>
+
+  <!-- Background container -->
+  <rect x="1" y="1" width="958" height="538" rx="14" fill="#ffffff" stroke="#e5e5e7"/>
+  <text x="36" y="42" font-size="17" font-weight="700" fill="#1d1d1f">The Four-Layer AI Coding Stack</text>
+  <text x="36" y="64" font-size="12" fill="#555555">Where coding assistants actually fail: why tools, caching, and patch formats matter more than raw benchmarks</text>
+
+  <!-- LAYER 4: INTERACTION SURFACE & IDE -->
+  <g transform="translate(36, 86)">
+    <rect x="0" y="0" width="888" height="92" rx="8" fill="#faf7ff" stroke="#d8b4fe"/>
+    <rect x="16" y="14" width="220" height="24" rx="4" fill="#f3e8ff" stroke="#d8b4fe"/>
+    <text x="24" y="30" font-size="11" font-weight="700" fill="#6d28d9" font-family="ui-monospace, 'Source Code Pro', monospace">LAYER 4: INTERACTION SURFACE</text>
+    <text x="244" y="30" font-size="11" fill="#555555">Cursor, Windsurf, VS Code + Copilot/Continue, Zed, Neovim (Avante), Terminal CLI</text>
+
+    <g font-size="11" fill="#1d1d1f" transform="translate(16, 50)">
+      <text x="0" y="14">• Inline ghost-text autocomplete (low latency streaming, cursor-following context window)</text>
+      <text x="0" y="32">• Diff review visualization: side-by-side inspection vs terminal patch review</text>
+      <text x="520" y="14" fill="#6d28d9" font-weight="600">Core trade-off: micro-edits vs macro refactors</text>
+      <text x="520" y="32" fill="#86868b">GUI IDEs win on single lines; CLI wins on multi-file jobs</text>
+    </g>
+  </g>
+
+  <!-- Downward connector 1 -->
+  <line x1="480" y1="178" x2="480" y2="198" stroke="#6d28d9" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- LAYER 3: HARNESS & AGENT RUNTIME -->
+  <g transform="translate(36, 198)">
+    <rect x="0" y="0" width="888" height="106" rx="8" fill="#ffffff" stroke="#6d28d9" stroke-width="1.8"/>
+    <rect x="16" y="14" width="220" height="24" rx="4" fill="#6d28d9"/>
+    <text x="24" y="30" font-size="11" font-weight="700" fill="#ffffff" font-family="ui-monospace, 'Source Code Pro', monospace">LAYER 3: HARNESS &amp; AGENT LOOP</text>
+    <text x="244" y="30" font-size="11" fill="#1d1d1f" font-weight="600">Aider, OpenCode, Cline, Devin, CLI agents (the load-bearing layer)</text>
+
+    <g font-size="11" fill="#1d1d1f" transform="translate(16, 50)">
+      <text x="0" y="14">• Context assembly: deterministic tools (LSP symbol graph, ripgrep) vs fuzzy vector RAG</text>
+      <text x="0" y="32">• Patch generation: line-anchored hunks vs search-and-replace vs whole-file rewrites</text>
+      <text x="0" y="50">• Execution sandbox: bash tool loops, linter/test feedback, git commit checkpoints</text>
+      <text x="520" y="24" fill="#6d28d9" font-weight="600">Why assistants fail: 80% of bugs happen here</text>
+      <text x="520" y="42" fill="#555555">Truncated files, dropped imports, hallucinated signatures</text>
+    </g>
+  </g>
+
+  <!-- Downward connector 2 -->
+  <line x1="480" y1="304" x2="480" y2="324" stroke="#6d28d9" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- LAYER 2: GATEWAY & INFERENCE PROVIDER -->
+  <g transform="translate(36, 324)">
+    <rect x="0" y="0" width="888" height="92" rx="8" fill="#faf7ff" stroke="#d8b4fe"/>
+    <rect x="16" y="14" width="220" height="24" rx="4" fill="#f3e8ff" stroke="#d8b4fe"/>
+    <text x="24" y="30" font-size="11" font-weight="700" fill="#6d28d9" font-family="ui-monospace, 'Source Code Pro', monospace">LAYER 2: INFERENCE GATEWAY</text>
+    <text x="244" y="30" font-size="11" fill="#555555">Direct Model APIs (OpenAI, Google), OpenRouter, AWS Bedrock, GCP Vertex, vLLM</text>
+
+    <g font-size="11" fill="#1d1d1f" transform="translate(16, 50)">
+      <text x="0" y="14">• Prompt caching: 90% discount on static prefix; reduces turn latency from 15s to 1.5s</text>
+      <text x="0" y="32">• Speculative decoding and rate limits: handling token bursts during multi-step runs</text>
+      <text x="520" y="14" fill="#6d28d9" font-weight="600">Economic survival: multi-turn agents need caching</text>
+      <text x="520" y="32" fill="#86868b">Without prompt caching, 20-step refactors are cost-prohibitive</text>
+    </g>
+  </g>
+
+  <!-- Downward connector 3 -->
+  <line x1="480" y1="416" x2="480" y2="436" stroke="#6d28d9" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- LAYER 1: BASE REASONING MODEL -->
+  <g transform="translate(36, 436)">
+    <rect x="0" y="0" width="888" height="76" rx="8" fill="#faf7ff" stroke="#d8b4fe"/>
+    <rect x="16" y="12" width="220" height="24" rx="4" fill="#f3e8ff" stroke="#d8b4fe"/>
+    <text x="24" y="28" font-size="11" font-weight="700" fill="#6d28d9" font-family="ui-monospace, 'Source Code Pro', monospace">LAYER 1: REASONING MODEL</text>
+    <text x="244" y="28" font-size="11" fill="#555555">Sonnet 3.7 (hybrid thinking), OpenAI o3-mini / o1, DeepSeek V3 / R1, Gemini 2.0</text>
+
+    <g font-size="11" fill="#1d1d1f" transform="translate(16, 46)">
+      <text x="0" y="14">• Cognitive specialization: multi-file spatial reasoning vs algorithmic constraint solvers</text>
+      <text x="520" y="14" fill="#6d28d9" font-weight="600">Thinking budgets: allocating tokens to planning vs output</text>
+    </g>
+  </g>
+</svg>
