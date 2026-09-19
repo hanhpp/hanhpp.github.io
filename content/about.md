@@ -30,5 +30,9 @@ I'm currently obsessed with. Sometimes not.
 I believe the best way to learn something is to build it, break it, and
 then write about it so future-me doesn't have to figure it out again.
 
+Open to contract, consulting, and engineering work in distributed systems,
+backend architecture, and security: reach me directly at
+[hanhphamit@gmail.com](mailto:hanhphamit@gmail.com).
+
 If any of this sounds interesting, the [posts]({{< ref "posts" >}}) are
 where the good stuff lives.

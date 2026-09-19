@@ -13,7 +13,7 @@ Let's talk.
 
 <div class="contact-form-wrap">
   <h3>Send a message</h3>
-  <p>Drop a note below. Submitting opens a pre-addressed email draft in your local mail client: zero server endpoints, zero trackers.</p>
+  <p>Open for contract, consulting, and engineering work. Drop a note below or reach out directly at <a href="mailto:hanhphamit@gmail.com">hanhphamit@gmail.com</a>. Submitting opens a pre-addressed email draft in your local mail client: zero server endpoints, zero trackers.</p>
   <form class="contact-form" id="contact-form" onsubmit="return handleContactSubmit(event)">
     <div class="contact-field">
       <label for="contact-name">Your Name</label>
