@@ -355,6 +355,124 @@ html {
     font-size: 0.9em;
 }
 
+/* ── Contact form (zero-backend mailto composer) ── */
+.contact-form-wrap {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: var(--entry);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.contact-form-wrap h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.contact-form-wrap p {
+    color: var(--secondary);
+    font-size: 0.95rem;
+    margin-bottom: 1.25rem;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.contact-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.contact-field label {
+    font-family: "Source Code Pro", ui-monospace, monospace;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.contact-field input,
+.contact-field textarea {
+    width: 100%;
+    padding: 0.75rem 0.85rem;
+    background: var(--theme);
+    color: var(--primary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.contact-field input:focus,
+.contact-field textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+.contact-field textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+
+.contact-submit-btn {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.4rem;
+    background: var(--accent);
+    color: #ffffff !important;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.contact-submit-btn:hover {
+    background: var(--accent-hover);
+    transform: translateY(-1px);
+}
+
+.contact-submit-btn:active {
+    transform: translateY(0);
+}
+
+.contact-status {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    display: none;
+}
+
+.contact-status.is-visible {
+    display: block;
+}
+
+.contact-status.info {
+    background: var(--accent-bg);
+    color: var(--accent);
+    border: 1px solid var(--accent-border);
+}
+
+.contact-status a {
+    color: inherit;
+    text-decoration: underline;
+    font-weight: 600;
+}
+
 /* ── About page ── */
 .about-interests {
     display: flex;

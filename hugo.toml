@@ -48,6 +48,9 @@ pygmentsUseClasses = true
   [[params.socialIcons]]
     name = "linkedin"
     url = "https://www.linkedin.com/in/hanhphamphuoc/"
+  [[params.socialIcons]]
+    name = "email"
+    url = "mailto:hanhphamit@gmail.com"
 
 [menu]
   [[menu.main]]
