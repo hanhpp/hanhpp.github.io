@@ -2,7 +2,7 @@
 title: "Making a Multi-Step SQL Server Script's Rollback Actually Trustworthy"
 date: 2026-09-06T11:00:00+07:00
 draft: false
-tags: ["sql", "sql-server", "performance"]
+tags: ["sql", "sql-server", "performance", "database"]
 summary: "When one step in a multi-step SQL Server script fails, what actually happens to your data depends entirely on how you've wired up error handling, and the default is not what most people assume. Three scenarios, measured with real ledger output."
 ---
 
@@ -12,6 +12,8 @@ I tested three variants against the same failure: a nested procedure that
 inserts a row, hits a divide-by-zero error, then (in source code, never in
 practice, because the error stops it) tries to insert a second row. Here's
 the real ledger output from each run: not paraphrased, not estimated.
+
+> **The 10-Second Takeaway:** In SQL Server, `BEGIN TRAN` without `SET XACT_ABORT ON` does not roll back on runtime error by default; it silently commits partial data. For trustworthy multi-step migrations, always prepend `SET XACT_ABORT, NOCOUNT ON;` and use a structured `BEGIN TRY ... BEGIN TRAN ... COMMIT TRAN END TRY BEGIN CATCH IF @@TRANCOUNT > 0 ROLLBACK TRAN; THROW; END CATCH` block.
 
 ## Scenario 1: plain `BEGIN TRAN`, no error handling
 

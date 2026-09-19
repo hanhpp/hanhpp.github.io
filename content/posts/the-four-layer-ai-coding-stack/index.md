@@ -2,7 +2,7 @@
 title: "The Four-Layer AI Coding Stack: Why Your Assistant Fails (and It's Not the Model)"
 date: 2026-09-19T09:30:00+07:00
 draft: false
-tags: ["ai", "workflow", "tooling"]
+tags: ["ai", "workflow", "tooling", "architecture"]
 summary: "Most developer frustration with AI coding assistants comes from conflating the editor, the agent loop, the gateway, and the model. Here is how the four layers actually fit together, where failures originate, and how to build a setup that survives production work."
 ---
 
@@ -11,6 +11,8 @@ The default reaction is to blame the model. People go to social media, declare t
 Almost every time, the model was not the problem. The failure happened two layers above it.
 
 An AI coding setup is not a single product. It is a four-tier infrastructure stack. Conflating those tiers is why developers get burned by tools they do not understand.
+
+> **The 30-Second Diagnosis:** When an assistant breaks, 80% of failures originate in Layer 3 (the harness using vector RAG instead of LSP, or truncating patches) and Layer 2 (un-cached prefixes causing turn latency to spike from 1s to 15s). The model weights at Layer 1 are almost never the culprit.
 
 {{< figure src="ai-coding-stack.svg" alt="The Four-Layer AI Coding Stack" caption="The four-layer hierarchy: Surface, Harness, Gateway, and Base Model." >}}
 

@@ -2,13 +2,15 @@
 title: "Apple M4 vs Huawei Ascend 950: Two Theories of the AI Chip"
 date: 2026-09-09T09:00:00+07:00
 draft: false
-tags: ["ai", "hardware"]
+tags: ["ai", "hardware", "architecture"]
 summary: "One is a fixed-function FP16 block hidden inside a laptop chip Apple won't document. The other is a programmable FP4 datacenter engine Huawei ships in 8,192-chip fabrics. Same goal, opposite theses: here's what the M4 family actually is, and what the numbers do and don't mean against the Ascend 950."
 ---
 
 Last week's post took apart [Huawei's Ascend 950]({{< ref "huawei-ascend-950-davinci-v3" >}}), a datacenter accelerator built under export controls. The natural reaction was "but how does it compare to the chip in my laptop?" So: Apple's M4 family. Not because they compete, exactly. They don't, and that's the interesting part. One is the most sophisticated client SoC on the market; the other is a fleet component. Reading them against each other clarifies what "an AI chip" even means, because the two companies answered that question in almost perfectly opposite ways.
 
 One scope note first: the M4 generation is a closed chapter. As of this week the Mac Studio ships with M5 Max and M5 Ultra (pre-orders open, delivery September 22), and there never was an M4 Ultra. Apple skipped straight past it. That fact will matter later.
+
+> **The Core Takeaway:** Autoregressive LLM decode is memory-bandwidth-bound, not compute-bound. An M4 Max ($2k laptop) hits 546 GB/s and runs an 8B model at ~90 tok/s. An Ascend 950DT (600W server card) hits 4.0 TB/s across an 8,192-chip fabric. They represent opposite answers to the same equation: local client privacy vs datacenter tokens-per-dollar.
 
 ---
 

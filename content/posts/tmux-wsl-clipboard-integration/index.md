@@ -2,7 +2,7 @@
 title: "WSL2 and tmux: Clean Clipboard Integration Without the Latency or Garbage Characters"
 date: 2026-09-12T10:00:00+07:00
 draft: false
-tags: ["cli", "workflow"]
+tags: ["cli", "workflow", "wsl", "terminal"]
 summary: "Piping tmux selections directly to clip.exe leaves trailing pane padding, broken prompt glyphs, and line ending mismatches in your clipboard. Here is a fast, sanitized copy-paste pipeline built for WSL2."
 ---
 
@@ -11,6 +11,8 @@ Yank five lines from a 120-column tmux pane inside WSL2, paste them into a Pytho
 Standard Linux clipboard utilities like `xclip` or `wl-copy` fail out of the box in headless WSL2 because there is no X11 or Wayland display server. The standard advice online is piping tmux selections directly to `/mnt/c/WINDOWS/system32/clip.exe`. That works for about ten minutes, until the trailing whitespace, broken prompt glyphs, and line ending mismatches turn daily development into death by a thousand paper cuts.
 
 A clean setup needs a bidirectional pipeline: sanitize text on the way out, normalize line endings on the way in, and complete in single-digit milliseconds so mouse dragging never stutters.
+
+> **The 30-Second Setup:** If your terminal clipboard is broken right now and you just want the working code: grab [`tmux-copy-wsl`](#sanitizing-on-copy-why-perl-beats-python-and-sed) and [`tmux-paste-wsl`](#pasting-back-from-windows-powershell-and-bracketed-paste), drop them into `~/.local/bin/`, make them executable, and append the [tmux bindings](#wiring-it-into-tmuxconf) to `~/.tmux.conf`. If you want to understand why standard pipes corrupt prompt glyphs, freeze server loops, and leak clipboard history, read the breakdown below.
 
 ---
 

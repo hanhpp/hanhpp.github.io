@@ -2,7 +2,7 @@
 title: "Huawei's Ascend 950 & DaVinci v3: How China Built a Competitive AI Chip Without EUV"
 date: 2026-09-07T09:00:00+07:00
 draft: false
-tags: ["ai", "hardware"]
+tags: ["ai", "hardware", "architecture"]
 summary: "DeepSeek just ordered 160,000 Huawei Ascend 950DT chips: a chip built on a DUV-only process, with self-developed HBM and a homegrown interconnect, because export controls left no other choice. Here's how the thing actually works, and where it still falls short."
 ---
 
@@ -11,6 +11,8 @@ On September 4, Bloomberg reported that DeepSeek plans to deploy **at least 160,
 The same season, Jensen Huang said NVIDIA's China revenue has dropped to "essentially zero" and that NVIDIA has "largely conceded" the market to Huawei. Whether that's a full retreat or a temporary posture is genuinely unclear (Washington approved H200 sales to Chinese firms in December 2025, and Beijing made sure almost none were delivered), but the direction is not: the market share NVIDIA doesn't have anymore is being filled by a chip that, eighteen months ago, did not exist.
 
 The Ascend 950 is interesting precisely because of what it is *not*. It is not a TSMC-class chip built on a bleeding-edge EUV node; it can't be, because SMIC has no EUV machines and can't buy one. It is a chiplet package on a DUV-only 7nm-class process, wrapped in self-developed HBM, glued by a homegrown interconnect into systems of up to 8,192 chips, and fed by a software stack that now claims day-zero support for the most popular open model on Earth. This post takes it apart: the process, the architecture, the package, the system, and an honest look at what's still missing.
+
+> **The Architecture at a Glance:** The Ascend 950 is not an EUV miracle; it is an aggressive chiplet architecture on SMIC's DUV 7nm-class node. Huawei compensated for lithography limits by engineering custom memory (HiZQ 2.0 HBM delivering 4.0 TB/s), a variable-width float format (HiF8), and an optical Unified Bus scaling to 8,192 chips in a single load/store domain.
 
 ---
 

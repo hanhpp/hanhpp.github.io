@@ -2,7 +2,7 @@
 title: "Caching Geospatial Queries Without a Specialized Geo Database"
 date: 2026-07-23T15:00:00+07:00
 draft: false
-tags: ["go", "geospatial", "postgres"]
+tags: ["go", "geospatial", "postgres", "caching"]
 summary: "You don't need PostGIS or a geohash library to cache repeat road-distance lookups: rounding coordinates and a unique index gets you most of the win."
 ---
 
@@ -18,6 +18,8 @@ The instinct is to reach for something geospatial-native: PostGIS, a
 geohash library, an R-tree. For exact-match lookups on a bounded set of
 recurring routes, that's more machinery than the problem needs. Plain
 Postgres, one rounding function, and a unique index cover it.
+
+> **The 30-Second Pattern:** Don't install PostGIS just to cache recurring route lookups. Round incoming GPS coordinates to 4 decimal places (~11m precision), build a composite key `(origin_lat, origin_lng, dest_lat, dest_lng)`, and back it with a standard Postgres `UNIQUE` B-tree index. You get 90%+ cache hit rates on repeat queries without geospatial extensions.
 
 ## The key insight: round before you key
 
