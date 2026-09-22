@@ -61,7 +61,7 @@
   {{- end }}
 {{- end }}
 {{- range $i, $p := $validPages }}
-  {"date": "{{ $p.Date.Format "2006-01-02" }}", "title": {{ $p.Title | plainify | jsonify }}, "url": "{{ $p.RelPermalink }}"}{{- if ne (add $i 1) (len $validPages) }},{{- end }}
+  {"date": "{{ $p.Date.Format "2006-01-02" }}", "title": {{ $p.Title | plainify | jsonify | safeJS }}, "url": "{{ $p.RelPermalink }}"}{{- if ne (add $i 1) (len $validPages) }},{{- end }}
 {{- end }}
 ]
 </script>

@@ -120,7 +120,7 @@
 (function () {
     var bar = document.getElementById("reading-progress-bar");
     if (!bar) return;
-    if (window.CSS && CSS.supports && CSS.supports("animation-timeline", "scroll()")) return;
+    if (window.CSS && CSS.supports && CSS.supports("animation-timeline", "scroll(root block)")) return;
     window.addEventListener("scroll", function () {
         var total = document.documentElement.scrollHeight - window.innerHeight;
         if (total > 0) {

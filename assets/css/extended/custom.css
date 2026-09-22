@@ -507,10 +507,10 @@ html {
     transition: opacity 0.2s ease;
 }
 
-@supports (animation-timeline: scroll()) {
+@supports (animation-timeline: scroll(root block)) {
     .reading-progress-bar {
         animation: reading-progress linear;
-        animation-timeline: scroll();
+        animation-timeline: scroll(root block);
     }
     @keyframes reading-progress {
         from { transform: scaleX(0); }

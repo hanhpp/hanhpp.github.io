@@ -4,6 +4,7 @@ date: 2026-09-19T09:30:00+07:00
 draft: false
 tags: ["ai", "workflow", "tooling", "architecture"]
 summary: "Most developer frustration with AI coding assistants comes from conflating the editor, the agent loop, the gateway, and the model. Here is how the four layers actually fit together, where failures originate, and how to build a setup that survives production work."
+math: true
 ---
 
 You ask an assistant to refactor an HTTP handler, and it replaces your 500-line controller with a 40-line stub containing `// ... rest of code remains the same`. Or you ask it to fix a database query, and it confidently writes a solution using an ORM method deprecated three major versions ago. Or you run a multi-turn session across ten files and watch a $20 flat-rate subscription hit an opaque rate limit, while an API session burns thirty dollars in un-cached tokens.

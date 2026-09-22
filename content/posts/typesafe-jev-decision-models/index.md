@@ -4,6 +4,7 @@ date: 2026-09-22T09:00:00+07:00
 draft: false
 tags: ["ai", "architecture", "deep-dive", "performance"]
 summary: "When you force a 70-billion-parameter language model to output 'true' or 'false', you pay for sequential token decoding, uncalibrated probabilities, and broken JSON. Here is why TypeSafe stripped natural language out of the loop."
+math: true
 ---
 
 You want a binary decision in an automated workflow: should this customer support ticket escalate to engineering, or does this generated SQL query attempt an injection attack?
@@ -36,7 +37,7 @@ Using conversational language generation as the control plane for software logic
 
 Every time software engineers integrate a generative LLM into a backend service, they pay an invisible three-part tax: latency, cost, and fragility.
 
-### 1. The Sequential Decoding Loop ($O(N)$ Forward Passes)
+### 1. The Sequential Decoding Loop (\(O(N)\) Forward Passes)
 Generative transformers predict one token at a time. Each generated token requires reading all model weights from High Bandwidth Memory (HBM) into compute cores:
 
 $$\text{Latency} = \text{Time to First Token (TTFT)} + (N_{\text{tokens}} \times \text{Inter-Token Latency})$$
@@ -111,7 +112,7 @@ Because no text tokens are decoded, inference drops to **70ms to 250ms**. There 
 
 ### 2. Supported Primitives
 Jev limits its output to typed mathematical primitives:
-- `Bool`: A boolean judgment returning true or false alongside calibrated confidence: $P(\text{true})$.
+- `Bool`: A boolean judgment returning true or false alongside calibrated confidence: \(P(\text{true})\).
 - `Choice`: Categorical selection among a predefined list of string labels, returning normalized probability distributions across all choices.
 - `Score`: A continuous numeric value scaled against a defined rubric with confidence bounds.
 
@@ -160,7 +161,7 @@ In RLCD, the model trains against ground-truth outcomes evaluated on scoring rul
 
 $$\text{BS} = \frac{1}{N} \sum_{t=1}^{N} (f_t - o_t)^2$$
 
-Where $f_t$ is the model's forecasted probability and $o_t \in \{0, 1\}$ is the actual empirical outcome.
+Where \(f_t\) is the model's forecasted probability and \(o_t \in \{0, 1\}\) is the actual empirical outcome.
 
 Minimizing the Brier score forces the model to achieve **probabilistic calibration**: when Jev assigns an 80% confidence score across 1,000 different decisions, exactly 800 of those decisions must be empirically correct.
 
@@ -190,8 +191,8 @@ When probabilities are statistically calibrated, software architects can establi
 +-------------------------------+         +-------------------------------+
 ```
 
-1. **High Confidence ($P \ge 0.95$):** Auto-execute the branch immediately. The task completes in under 100 milliseconds with zero human intervention.
-2. **Medium/Low Confidence ($P < 0.95$):** Route the difficult edge case to an expensive System 2 reasoning model (o3-mini, Sonnet 3.7) or an on-call engineer.
+1. **High Confidence (\(P \ge 0.95\)):** Auto-execute the branch immediately. The task completes in under 100 milliseconds with zero human intervention.
+2. **Medium/Low Confidence (\(P < 0.95\)):** Route the difficult edge case to an expensive System 2 reasoning model (o3-mini, Sonnet 3.7) or an on-call engineer.
 
 This dual-speed topology reduces frontier model API consumption by 80% to 90% while keeping end-to-end pipeline latency under 100ms for the vast majority of requests.
 
