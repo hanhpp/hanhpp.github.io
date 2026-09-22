@@ -8,6 +8,9 @@ enableEmoji = true
 pygmentsCodeFences = true
 pygmentsUseClasses = true
 
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
 [pagination]
   pagerSize = 10
 
@@ -54,10 +57,20 @@ pygmentsUseClasses = true
 
 [menu]
   [[menu.main]]
+    identifier = 'search'
+    name = 'Search'
+    url = '/search/'
+    weight = 5
+  [[menu.main]]
     identifier = 'posts'
     name = 'Posts'
     url = '/posts/'
     weight = 10
+  [[menu.main]]
+    identifier = 'archives'
+    name = 'Archive'
+    url = '/archives/'
+    weight = 15
   [[menu.main]]
     identifier = 'tags'
     name = 'Tags'
@@ -73,7 +86,6 @@ pygmentsUseClasses = true
     name = 'Contact'
     url = '/contact/'
     weight = 40
-
 [markup]
   [markup.goldmark]
     [markup.goldmark.renderer]

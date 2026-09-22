@@ -113,3 +113,48 @@
     });
 })();
 </script>
+
+{{- if .IsPage }}
+<div id="reading-progress-bar" class="reading-progress-bar" aria-hidden="true"></div>
+<script>
+(function () {
+    var bar = document.getElementById("reading-progress-bar");
+    if (!bar) return;
+    if (window.CSS && CSS.supports && CSS.supports("animation-timeline", "scroll()")) return;
+    window.addEventListener("scroll", function () {
+        var total = document.documentElement.scrollHeight - window.innerHeight;
+        if (total > 0) {
+            var progress = Math.min(1, Math.max(0, window.scrollY / total));
+            bar.style.transform = "scaleX(" + progress + ")";
+        }
+    }, { passive: true });
+})();
+</script>
+{{- end }}
+
+{{- /* Mermaid.js dynamic loader: only loads if code.language-mermaid exists on page */ -}}
+<script>
+(function () {
+    var codeBlocks = document.querySelectorAll("code.language-mermaid, pre.mermaid, div.mermaid");
+    if (!codeBlocks.length) return;
+
+    var script = document.createElement("script");
+    script.type = "module";
+    script.textContent = [
+        'import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";',
+        'var isDark = document.body.className.includes("dark") || document.documentElement.getAttribute("data-theme") === "dark";',
+        'mermaid.initialize({ startOnLoad: false, theme: isDark ? "dark" : "default" });',
+        'document.querySelectorAll("code.language-mermaid").forEach(function (el) {',
+        '    var pre = el.closest("pre");',
+        '    var container = document.createElement("div");',
+        '    container.className = "mermaid";',
+        '    container.textContent = el.textContent;',
+        '    if (pre && pre.parentNode) {',
+        '        pre.parentNode.replaceChild(container, pre);',
+        '    }',
+        '});',
+        'await mermaid.run();'
+    ].join("\n");
+    document.body.appendChild(script);
+})();
+</script>

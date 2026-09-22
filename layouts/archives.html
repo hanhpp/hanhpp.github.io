@@ -1,0 +1,213 @@
+{{- define "main" }}
+
+<header class="page-header">
+  <h1>
+    {{ .Title }}
+    {{- if (.Param "ShowRssButtonInSectionTermList") }}
+    {{- $rss := (.OutputFormats.Get "rss") }}
+    {{- if (eq .Kind `page`) }}
+    {{- $rss = (.Parent.OutputFormats.Get "rss") }}
+    {{- end }}
+    {{- with $rss }}
+    <a href="{{ .RelPermalink }}" title="RSS" aria-label="RSS">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" height="23">
+        <path d="M4 11a9 9 0 0 1 9 9" />
+        <path d="M4 4a16 16 0 0 1 16 16" />
+        <circle cx="5" cy="19" r="1" />
+      </svg>
+    </a>
+    {{- end }}
+    {{- end }}
+  </h1>
+  {{- if .Description }}
+  <div class="post-description">
+    {{ .Description }}
+  </div>
+  {{- end }}
+</header>
+
+{{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections }}
+{{- if site.Params.ShowAllPagesInArchive }}
+{{- $pages = site.RegularPages }}
+{{- end }}
+
+{{- /* Writing Activity Heatmap Widget */ -}}
+<div class="activity-heatmap-container">
+  <div class="activity-heatmap-header">
+    <span class="activity-heatmap-title">Writing Activity</span>
+    <span class="activity-heatmap-count">{{ len $pages }} articles published</span>
+  </div>
+  <div class="activity-heatmap-scroll">
+    <div id="activity-heatmap" class="activity-heatmap-grid" aria-label="Writing activity calendar"></div>
+  </div>
+  <div class="activity-heatmap-legend">
+    <span>Less</span>
+    <span class="legend-cell lvl-0"></span>
+    <span class="legend-cell lvl-1"></span>
+    <span class="legend-cell lvl-2"></span>
+    <span class="legend-cell lvl-3"></span>
+    <span>More</span>
+  </div>
+  <div id="heatmap-tooltip" class="heatmap-tooltip" role="tooltip" aria-hidden="true"></div>
+</div>
+
+<script type="application/json" id="post-activity-data">
+[
+{{- $validPages := slice }}
+{{- range $pages }}
+  {{- if eq .Kind "page" }}
+    {{- $validPages = $validPages | append . }}
+  {{- end }}
+{{- end }}
+{{- range $i, $p := $validPages }}
+  {"date": "{{ $p.Date.Format "2006-01-02" }}", "title": {{ $p.Title | plainify | jsonify }}, "url": "{{ $p.RelPermalink }}"}{{- if ne (add $i 1) (len $validPages) }},{{- end }}
+{{- end }}
+]
+</script>
+
+<script>
+(function () {
+    var rawData = document.getElementById("post-activity-data");
+    var container = document.getElementById("activity-heatmap");
+    var tooltip = document.getElementById("heatmap-tooltip");
+    if (!rawData || !container) return;
+
+    var posts = [];
+    try {
+        posts = JSON.parse(rawData.textContent || "[]");
+    } catch (e) {
+        return;
+    }
+
+    var postsByDate = {};
+    posts.forEach(function (p) {
+        if (!postsByDate[p.date]) postsByDate[p.date] = [];
+        postsByDate[p.date].push(p);
+    });
+
+    var today = new Date();
+    var endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    var startDate = new Date(endDate);
+    startDate.setDate(startDate.getDate() - (52 * 7) + 1);
+    var dayOfWeek = startDate.getDay();
+    startDate.setDate(startDate.getDate() - dayOfWeek);
+
+    var fragment = document.createDocumentFragment();
+    var cur = new Date(startDate);
+
+    while (cur <= endDate) {
+        var y = cur.getFullYear();
+        var m = String(cur.getMonth() + 1).padStart(2, "0");
+        var d = String(cur.getDate()).padStart(2, "0");
+        var dateStr = y + "-" + m + "-" + d;
+
+        var matches = postsByDate[dateStr] || [];
+        var count = matches.length;
+
+        var cell = document.createElement("div");
+        cell.className = "activity-cell";
+
+        if (count === 0) {
+            cell.classList.add("lvl-0");
+        } else if (count === 1) {
+            cell.classList.add("lvl-1", "active");
+        } else if (count === 2) {
+            cell.classList.add("lvl-2", "active");
+        } else {
+            cell.classList.add("lvl-3", "active");
+        }
+
+        cell.setAttribute("data-date", dateStr);
+        cell.setAttribute("data-count", count);
+
+        if (count > 0) {
+            cell.setAttribute("data-titles", matches.map(function(p){ return p.title; }).join(" | "));
+            cell.setAttribute("data-url", matches[0].url);
+            cell.addEventListener("click", function () {
+                var url = this.getAttribute("data-url");
+                if (url) window.location.href = url;
+            });
+        }
+
+        cell.addEventListener("mouseenter", function (e) {
+            if (!tooltip) return;
+            var dt = this.getAttribute("data-date");
+            var cnt = parseInt(this.getAttribute("data-count") || "0", 10);
+            var titles = this.getAttribute("data-titles");
+
+            var text = dt + ": " + cnt + (cnt === 1 ? " post" : " posts");
+            if (titles) text += " (" + titles + ")";
+
+            tooltip.textContent = text;
+            tooltip.style.display = "block";
+
+            var rect = this.getBoundingClientRect();
+            var parentRect = container.closest(".activity-heatmap-container").getBoundingClientRect();
+            var left = rect.left - parentRect.left + (rect.width / 2);
+            var top = rect.top - parentRect.top - 28;
+
+            tooltip.style.left = Math.max(10, Math.min(left - 50, parentRect.width - 240)) + "px";
+            tooltip.style.top = top + "px";
+        });
+
+        cell.addEventListener("mouseleave", function () {
+            if (tooltip) tooltip.style.display = "none";
+        });
+
+        fragment.appendChild(cell);
+        cur.setDate(cur.getDate() + 1);
+    }
+
+    container.appendChild(fragment);
+})();
+</script>
+
+{{- range $pages.GroupByPublishDate "2006" }}
+{{- if ne .Key "0001" }}
+<div class="archive-year">
+  {{- $year := replace .Key "0001" "" }}
+  <h2 class="archive-year-header" id="{{ $year }}">
+    <a class="archive-header-link" href="#{{ $year }}">
+      {{- $year -}}
+    </a>
+    <sup class="archive-count">&nbsp;{{ len .Pages }}</sup>
+  </h2>
+  {{- range .Pages.GroupByDate "January" }}
+  <div class="archive-month">
+    <h3 class="archive-month-header" id="{{ $year }}-{{ .Key }}">
+      <a class="archive-header-link" href="#{{ $year }}-{{ .Key }}">
+        {{- .Key -}}
+      </a>
+      <sup class="archive-count">&nbsp;{{ len .Pages }}</sup>
+    </h3>
+    <div class="archive-posts">
+      {{- range .Pages }}
+      {{- if eq .Kind "page" }}
+      <div class="archive-entry">
+        <h3 class="archive-entry-title entry-hint-parent">
+          {{- .Title | markdownify }}
+          {{- if .Draft }}
+          <span class="entry-hint" title="Draft">
+            <svg xmlns="http://www.w3.org/2000/svg" height="15" viewBox="0 -960 960 960" fill="currentColor">
+              <path
+                d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z" />
+            </svg>
+          </span>
+          {{- end }}
+        </h3>
+        <div class="archive-meta">
+          {{- partial "post_meta.html" . -}}
+        </div>
+        <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+      </div>
+      {{- end }}
+      {{- end }}
+    </div>
+  </div>
+  {{- end }}
+</div>
+{{- end }}
+{{- end }}
+
+{{- end }}{{/* end main */}}
