@@ -36,7 +36,10 @@
 <div class="activity-heatmap-container">
   <div class="activity-heatmap-header">
     <span class="activity-heatmap-title">Writing Activity</span>
-    <span class="activity-heatmap-count">{{ len $pages }} articles published</span>
+    <span class="activity-heatmap-count">
+      <span>{{ len $pages }} articles published</span>
+      <span id="heatmap-total-views" style="display:none"> · <strong id="total-views-val">0</strong> total views</span>
+    </span>
   </div>
   <div class="activity-heatmap-scroll">
     <div id="activity-heatmap" class="activity-heatmap-grid" aria-label="Writing activity calendar"></div>
@@ -50,6 +53,11 @@
     <span>More</span>
   </div>
   <div id="heatmap-tooltip" class="heatmap-tooltip" role="tooltip" aria-hidden="true"></div>
+</div>
+
+<div id="top-articles-shelf" class="top-articles-shelf" style="display:none">
+  <div class="top-articles-title">Most Read Articles</div>
+  <div id="top-articles-list" class="top-articles-list"></div>
 </div>
 
 <script type="application/json" id="post-activity-data">
@@ -160,6 +168,74 @@
     }
 
     container.appendChild(fragment);
+
+    // Fetch readership metrics across all articles
+    fetch("https://hanhpham.vercel.app/api/views?all=1")
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (data) {
+            if (!data || !data.views) return;
+            var views = data.views;
+
+            // 1. Total views in heatmap header
+            if (data.total > 0) {
+                var tvSpan = document.getElementById("heatmap-total-views");
+                var tvVal = document.getElementById("total-views-val");
+                if (tvSpan && tvVal) {
+                    tvVal.textContent = data.total.toLocaleString();
+                    tvSpan.style.display = "inline";
+                }
+            }
+
+            // 2. Attach view counts to each entry in the archive list
+            var entries = document.querySelectorAll(".archive-entry[data-url]");
+            var postItems = [];
+            entries.forEach(function (el) {
+                var url = el.getAttribute("data-url");
+                var match = url.match(/^\/posts\/([a-z0-9][a-z0-9-]{0,80})\/?$/);
+                if (!match) return;
+                var s = match[1];
+                var count = views[s] || 0;
+                var titleEl = el.querySelector(".archive-entry-title");
+                var title = titleEl ? titleEl.textContent.trim() : s;
+
+                if (count > 0) {
+                    postItems.push({ slug: s, title: title, url: url, count: count });
+                    var meta = el.querySelector(".archive-meta");
+                    if (meta) {
+                        var vSpan = document.createElement("span");
+                        vSpan.className = "archive-entry-views";
+                        vSpan.textContent = "\u00a0\u00b7\u00a0" + count.toLocaleString() + (count === 1 ? " view" : " views");
+                        meta.appendChild(vSpan);
+                    }
+                }
+            });
+
+            // 3. Render Top Articles shelf
+            if (postItems.length > 0) {
+                postItems.sort(function (a, b) { return b.count - a.count; });
+                var topShelf = document.getElementById("top-articles-shelf");
+                var topList = document.getElementById("top-articles-list");
+                if (topShelf && topList) {
+                    topList.innerHTML = "";
+                    postItems.slice(0, 5).forEach(function (item) {
+                        var a = document.createElement("a");
+                        a.className = "top-article-chip";
+                        a.href = item.url;
+                        var tSpan = document.createElement("span");
+                        tSpan.className = "title";
+                        tSpan.textContent = item.title;
+                        var cSpan = document.createElement("span");
+                        cSpan.className = "view-count";
+                        cSpan.textContent = item.count.toLocaleString() + (item.count === 1 ? " view" : " views");
+                        a.appendChild(tSpan);
+                        a.appendChild(cSpan);
+                        topList.appendChild(a);
+                    });
+                    topShelf.style.display = "block";
+                }
+            }
+        })
+        .catch(function () {});
 })();
 </script>
 
@@ -184,7 +260,7 @@
     <div class="archive-posts">
       {{- range .Pages }}
       {{- if eq .Kind "page" }}
-      <div class="archive-entry">
+      <div class="archive-entry" data-url="{{ .RelPermalink }}">
         <h3 class="archive-entry-title entry-hint-parent">
           {{- .Title | markdownify }}
           {{- if .Draft }}

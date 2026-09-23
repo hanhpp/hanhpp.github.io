@@ -56,16 +56,40 @@ module.exports = async (req, res) => {
     res.status(405).json({ error: "method not allowed" });
     return;
   }
+  const config = storageConfig();
+  if (!config) {
+    res.status(503).json({ error: "storage not configured" });
+    return;
+  }
+
+  // Return view counts across all articles for archive reporting
+  if (req.query && (req.query.all === "1" || req.query.all === "true" || req.query.slug === "all")) {
+    try {
+      const keys = await redis(config, "keys", "views:*");
+      if (!keys || !keys.length) {
+        res.status(200).json({ views: {}, total: 0 });
+        return;
+      }
+      const values = await redis(config, "mget", ...keys);
+      const views = {};
+      let total = 0;
+      keys.forEach((key, i) => {
+        const s = key.replace(/^views:/, "");
+        const count = Number(values[i]) || 0;
+        views[s] = count;
+        total += count;
+      });
+      res.status(200).json({ views, total });
+      return;
+    } catch (err) {
+      res.status(502).json({ error: "storage unavailable" });
+      return;
+    }
+  }
 
   const slug = String((req.query && req.query.slug) || "");
   if (!SLUG_RE.test(slug)) {
     res.status(400).json({ error: "invalid slug" });
-    return;
-  }
-
-  const config = storageConfig();
-  if (!config) {
-    res.status(503).json({ error: "storage not configured" });
     return;
   }
 
