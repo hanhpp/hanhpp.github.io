@@ -9,6 +9,8 @@
 const ALLOWED_ORIGINS = new Set([
   "https://hanhpp.github.io",
   "https://hanhpham.vercel.app",
+  "http://localhost:1313",
+  "http://127.0.0.1:1313",
 ]);
 
 // Post slugs are Hugo content base names: lowercase, digits, hyphens.
