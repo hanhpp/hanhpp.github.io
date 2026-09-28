@@ -1,0 +1,324 @@
+{{- define "main" }}
+
+<div class="post-layout-container">
+<!-- Left Rail: Filesystem Tree, Reversing Spec, Progress Ring -->
+<aside class="post-left-sidebar" aria-label="Terminal filesystem explorer and spec">
+  <div class="sidebar-sticky">
+    <div class="sidebar-widget filesystem-widget">
+      <div class="fs-header">
+        <span class="fs-dots"><i class="dot-red"></i><i class="dot-yellow"></i><i class="dot-green"></i></span>
+        <span class="fs-cwd">hanh@home:~/blog/posts</span>
+      </div>
+      <nav class="fs-tree" aria-label="Directory tree">
+        {{- if site.BuildDrafts }}
+        <details class="fs-folder" open>
+          <summary class="fs-folder-name">📁 flareon-13/</summary>
+          <ul class="fs-files">
+            <li class="{{ if in .RelPermalink "flareon-13-polyglots-and-traps" }}active{{ end }}">
+              <a href="{{ "/posts/flareon-13-polyglots-and-traps/" | absURL }}"><span class="fs-icon">📄</span> 01-polyglots.md</a>
+            </li>
+            <li class="{{ if in .RelPermalink "flareon-13-cryptanalysis-and-compression" }}active{{ end }}">
+              <a href="{{ "/posts/flareon-13-cryptanalysis-and-compression/" | absURL }}"><span class="fs-icon">📄</span> 02-crypto.md</a>
+            </li>
+            <li class="{{ if in .RelPermalink "flareon-13-native-coreclr-jit-hooks" }}active{{ end }}">
+              <a href="{{ "/posts/flareon-13-native-coreclr-jit-hooks/" | absURL }}"><span class="fs-icon">📄</span> 03-coreclr-jit.md</a>
+            </li>
+            <li class="{{ if in .RelPermalink "flareon-13-the-1000-node-asn1-labyrinth" }}active{{ end }}">
+              <a href="{{ "/posts/flareon-13-the-1000-node-asn1-labyrinth/" | absURL }}"><span class="fs-icon">📄</span> 04-asn1-lab.md</a>
+            </li>
+          </ul>
+        </details>
+        {{- end }}
+        <details class="fs-folder" {{ if in .RelPermalink "microservices" }}open{{ end }}>
+          <summary class="fs-folder-name">📁 microservices/</summary>
+          <ul class="fs-files">
+            <li class="{{ if in .RelPermalink "microservices-boundaries-coupling-cohesion" }}active{{ end }}">
+              <a href="{{ "/posts/microservices-boundaries-coupling-cohesion/" | absURL }}"><span class="fs-icon">📄</span> boundaries.md</a>
+            </li>
+            <li class="{{ if in .RelPermalink "microservices-database-per-service" }}active{{ end }}">
+              <a href="{{ "/posts/microservices-database-per-service/" | absURL }}"><span class="fs-icon">📄</span> db-per-service.md</a>
+            </li>
+            <li class="{{ if in .RelPermalink "microservices-sagas-vs-two-phase-commit" }}active{{ end }}">
+              <a href="{{ "/posts/microservices-sagas-vs-two-phase-commit/" | absURL }}"><span class="fs-icon">📄</span> sagas-2pc.md</a>
+            </li>
+          </ul>
+        </details>
+        <details class="fs-folder" {{ if or (in .RelPermalink "reverse-engineering") (in .RelPermalink "anti-debugging") (in .RelPermalink "custom-vms") (in .RelPermalink "ghidra") }}open{{ end }}>
+          <summary class="fs-folder-name">📁 ctf-reversing/</summary>
+          <ul class="fs-files">
+            <li class="{{ if in .RelPermalink "custom-vms-in-ctf" }}active{{ end }}">
+              <a href="{{ "/posts/custom-vms-in-ctf/" | absURL }}"><span class="fs-icon">📄</span> custom-vms.md</a>
+            </li>
+            <li class="{{ if in .RelPermalink "anti-debugging-tricks" }}active{{ end }}">
+              <a href="{{ "/posts/anti-debugging-tricks/" | absURL }}"><span class="fs-icon">📄</span> anti-debug.md</a>
+            </li>
+            <li class="{{ if in .RelPermalink "ghidra-in-30-minutes" }}active{{ end }}">
+              <a href="{{ "/posts/ghidra-in-30-minutes/" | absURL }}"><span class="fs-icon">📄</span> ghidra-tips.md</a>
+            </li>
+            <li class="{{ if in .RelPermalink "how-i-started-learning-reverse-engineering" }}active{{ end }}">
+              <a href="{{ "/posts/how-i-started-learning-reverse-engineering/" | absURL }}"><span class="fs-icon">📄</span> learning-re.md</a>
+            </li>
+          </ul>
+        </details>
+        <details class="fs-folder" {{ if or (in .RelPermalink "kubernetes") (in .RelPermalink "docker") (in .RelPermalink "gitops") }}open{{ end }}>
+          <summary class="fs-folder-name">📁 cloud-native/</summary>
+          <ul class="fs-files">
+            <li class="{{ if in .RelPermalink "kubernetes-cfs-cpu-throttling-and-resource-limits" }}active{{ end }}">
+              <a href="{{ "/posts/kubernetes-cfs-cpu-throttling-and-resource-limits/" | absURL }}"><span class="fs-icon">📄</span> k8s-cfs-cpu.md</a>
+            </li>
+            <li class="{{ if in .RelPermalink "kubernetes-rolling-updates-and-connection-draining" }}active{{ end }}">
+              <a href="{{ "/posts/kubernetes-rolling-updates-and-connection-draining/" | absURL }}"><span class="fs-icon">📄</span> k8s-rolling.md</a>
+            </li>
+            <li class="{{ if in .RelPermalink "docker-buildkit-caching-economics-in-ci" }}active{{ end }}">
+              <a href="{{ "/posts/docker-buildkit-caching-economics-in-ci/" | absURL }}"><span class="fs-icon">📄</span> buildkit-ci.md</a>
+            </li>
+            <li class="{{ if in .RelPermalink "gitops-argocd-database-migration-reality" }}active{{ end }}">
+              <a href="{{ "/posts/gitops-argocd-database-migration-reality/" | absURL }}"><span class="fs-icon">📄</span> gitops-db.md</a>
+            </li>
+          </ul>
+        </details>
+      </nav>
+    </div>
+
+    <!-- Reversing Spec HUD Widget -->
+    {{- $isReversing := or (in .RelPermalink "flareon") (in .RelPermalink "reverse-engineering") (in .RelPermalink "ctf") (in .RelPermalink "anti-debugging") }}
+    {{- if $isReversing }}
+    <div class="sidebar-widget reversing-spec-widget">
+      <h3 class="sidebar-widget-title"><span class="widget-icon">🔬</span> Reversing Spec</h3>
+      <ul class="spec-list">
+        <li><span class="spec-k">Target</span> <span class="spec-v">{{ if in .RelPermalink "coreclr" }}CoreCLR JIT{{ else if in .RelPermalink "asn1" }}ASN.1 PE{{ else if in .RelPermalink "crypto" }}SHA-256d{{ else }}PE / Mach-O{{ end }}</span></li>
+        <li><span class="spec-k">Method</span> <span class="spec-v">Closed-Form</span></li>
+        <li><span class="spec-k">Tools</span> <span class="spec-v">Ghidra, Unicorn</span></li>
+        <li><span class="spec-k">Status</span> <span class="spec-v status-ok">Verified</span></li>
+      </ul>
+    </div>
+    {{- end }}
+
+    <!-- Live Reading Progress Ring & Action Dock -->
+    <div class="sidebar-widget progress-dock-widget">
+      <div class="progress-ring-wrap">
+        <svg class="progress-ring-svg" width="48" height="48" viewBox="0 0 48 48">
+          <circle class="progress-ring-bg" stroke="currentColor" stroke-width="4" fill="transparent" r="18" cx="24" cy="24"/>
+          <circle class="progress-ring-bar" stroke="currentColor" stroke-width="4" fill="transparent" r="18" cx="24" cy="24"/>
+        </svg>
+        <span class="progress-ring-text" id="progress-percent">0%</span>
+      </div>
+      <div class="progress-dock-actions">
+        <button class="dock-btn" id="copy-article-url" onclick="navigator.clipboard.writeText(window.location.href); this.innerText='✓ Copied'; setTimeout(()=>this.innerHTML='<span class=\'dock-icon\'>🔗</span> Copy', 1800);">
+          <span class="dock-icon">🔗</span> Copy
+        </button>
+        <button class="dock-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">
+          <span class="dock-icon">↑</span> Top
+        </button>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- Center Column: Post Article -->
+<article class="post-single">
+  <header class="post-header">
+    {{ partial "breadcrumbs.html" . }}
+    <h1 class="post-title entry-hint-parent">
+      {{ .Title }}
+      {{- if .Draft }}
+      <span class="entry-hint" title="Draft">
+        <svg xmlns="http://www.w3.org/2000/svg" height="35" viewBox="0 -960 960 960" fill="currentColor">
+          <path
+            d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z" />
+        </svg>
+      </span>
+      {{- end }}
+    </h1>
+    {{- if .Description }}
+    <div class="post-description">
+      {{ .Description }}
+    </div>
+    {{- end }}
+    {{- if not (.Param "hideMeta") }}
+    <div class="post-meta">
+      {{- partial "post_meta.html" . -}}
+      {{- partial "translation_list.html" . -}}
+      {{- partial "edit_post.html" . -}}
+      {{- partial "post_canonical.html" . -}}
+    </div>
+    {{- end }}
+  </header>
+  {{- $isHidden := (.Param "cover.hiddenInSingle") | default (.Param "cover.hidden") | default false }}
+  {{- partial "cover.html" (dict "cxt" . "IsSingle" true "isHidden" $isHidden) }}
+
+  {{- if .Content }}
+  <div class="post-content md-content">
+    {{- if not (.Param "disableAnchoredHeadings") }}
+    {{- partial "anchored_headings.html" .Content -}}
+    {{- else }}{{ .Content }}{{ end }}
+  </div>
+  {{- end }}
+
+  {{- partial "extend_post_content.html" . }}
+
+  <footer class="post-footer">
+    {{- $tags := .Language.Params.Taxonomies.tag | default "tags" }}
+    <ul class="post-tags">
+      {{- range ($.GetTerms $tags) }}
+      <li><a href="{{ .Permalink }}">{{ .LinkTitle }}</a></li>
+      {{- end }}
+    </ul>
+    {{- if (.Param "ShowPostNavLinks") }}
+    {{- partial "post_nav_links.html" . }}
+    {{- end }}
+    {{- if (and site.Params.ShowShareButtons (ne .Params.disableShare true)) }}
+    {{- partial "share_icons.html" . -}}
+    {{- end }}
+  </footer>
+
+  {{- if (.Param "comments") }}
+  {{- partial "comments.html" . }}
+  {{- end }}
+</article>
+
+<!-- Right Rail: Series Stepper, Scrollspy TOC, Related Articles -->
+{{- $pageTags := .Params.tags -}}
+{{- $related := slice -}}
+{{- if $pageTags -}}
+  {{- $related = where (where site.RegularPages "Permalink" "ne" .Permalink) "Params.tags" "intersect" $pageTags | first 4 -}}
+{{- end -}}
+
+<aside class="post-sidebar" aria-label="Table of contents and series navigation">
+  <div class="sidebar-sticky">
+    {{- if in .RelPermalink "flareon-13" }}
+    <div class="sidebar-widget series-stepper-widget">
+      <h3 class="sidebar-widget-title">
+        <span class="widget-icon">🗺️</span> Flare-On 13 Series
+      </h3>
+      <ul class="stepper-list">
+        <li class="{{ if in .RelPermalink "polyglots-and-traps" }}active{{ else }}done{{ end }}">
+          <a href="{{ "/posts/flareon-13-polyglots-and-traps/" | absURL }}">
+            <span class="step-marker">1</span>
+            <span class="step-title">Polyglots &amp; Traps</span>
+          </a>
+        </li>
+        <li class="{{ if in .RelPermalink "cryptanalysis-and-compression" }}active{{ else }}done{{ end }}">
+          <a href="{{ "/posts/flareon-13-cryptanalysis-and-compression/" | absURL }}">
+            <span class="step-marker">2</span>
+            <span class="step-title">Crypto &amp; Compression</span>
+          </a>
+        </li>
+        <li class="{{ if in .RelPermalink "native-coreclr-jit-hooks" }}active{{ else }}done{{ end }}">
+          <a href="{{ "/posts/flareon-13-native-coreclr-jit-hooks/" | absURL }}">
+            <span class="step-marker">3</span>
+            <span class="step-title">CoreCLR JIT Hooks</span>
+          </a>
+        </li>
+        <li class="{{ if in .RelPermalink "the-1000-node-asn1-labyrinth" }}active{{ else }}done{{ end }}">
+          <a href="{{ "/posts/flareon-13-the-1000-node-asn1-labyrinth/" | absURL }}">
+            <span class="step-marker">4</span>
+            <span class="step-title">ASN.1 Labyrinth</span>
+          </a>
+        </li>
+        <li class="queued">
+          <span class="step-marker">5</span>
+          <span class="step-title">Crux &amp; Beyond (Queued)</span>
+        </li>
+      </ul>
+    </div>
+    {{- end }}
+
+    {{- if (.Param "ShowToc") }}
+    <div class="sidebar-widget toc-widget">
+      <h3 class="sidebar-widget-title">
+        <span class="widget-icon">📑</span> Document Outline
+      </h3>
+      {{- partial "toc.html" . }}
+    </div>
+    {{- end }}
+
+    {{- if $related }}
+    <div class="sidebar-widget related-posts-widget">
+      <h3 class="sidebar-widget-title">
+        <span class="widget-icon">📚</span> Related Articles
+      </h3>
+      <ul class="sidebar-related-list">
+        {{- range $related }}
+        <li class="sidebar-related-item">
+          <a class="sidebar-related-link" href="{{ .Permalink }}">
+            <span class="sidebar-related-title">{{ .Title }}</span>
+            <div class="sidebar-related-meta">
+              {{- with .Params.tags }}
+              <span class="sidebar-mini-tag">{{ index . 0 }}</span>
+              {{- end }}
+              <span class="sidebar-reading-time">{{ .ReadingTime }} min read</span>
+            </div>
+          </a>
+        </li>
+        {{- end }}
+      </ul>
+    </div>
+    {{- end }}
+
+    {{- if $pageTags }}
+    <div class="sidebar-widget related-tags-widget">
+      <h3 class="sidebar-widget-title">
+        <span class="widget-icon">🏷️</span> Topic Tags
+      </h3>
+      <ul class="post-tags sidebar-tags-list">
+        {{- range $pageTags }}
+        <li><a href="{{ "tags/" | absURL }}{{ . | urlize }}/">{{ . }}</a></li>
+        {{- end }}
+      </ul>
+    </div>
+    {{- end }}
+  </div>
+</aside>
+</div>
+
+<script>
+/* Live Reading Progress Ring & Scrollspy */
+(function () {
+  var circle = document.querySelector(".progress-ring-bar");
+  var text = document.getElementById("progress-percent");
+  if (!circle || !text) return;
+  var radius = circle.r.baseVal.value;
+  var circumference = 2 * Math.PI * radius;
+  circle.style.strokeDasharray = circumference + " " + circumference;
+  circle.style.strokeDashoffset = circumference;
+
+  function updateProgress() {
+    var winScroll = window.scrollY || document.documentElement.scrollTop;
+    var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    var scrolled = height > 0 ? (winScroll / height) : 0;
+    var offset = circumference - (scrolled * circumference);
+    circle.style.strokeDashoffset = offset;
+    text.innerText = Math.min(100, Math.round(scrolled * 100)) + "%";
+  }
+
+  /* Scrollspy for Document Outline */
+  var headings = document.querySelectorAll(".post-content h2, .post-content h3");
+  var tocLinks = document.querySelectorAll(".toc-widget a");
+  
+  function updateScrollspy() {
+    var fromTop = window.scrollY + 120;
+    var current = null;
+    headings.forEach(function (h) {
+      if (h.offsetTop <= fromTop) current = h.id;
+    });
+    tocLinks.forEach(function (a) {
+      if (current && a.getAttribute("href") === "#" + current) {
+        a.classList.add("is-active-heading");
+      } else {
+        a.classList.remove("is-active-heading");
+      }
+    });
+  }
+
+  window.addEventListener("scroll", function () {
+    updateProgress();
+    updateScrollspy();
+  }, { passive: true });
+
+  updateProgress();
+  updateScrollspy();
+})();
+</script>
+
+{{- end }}{{/* end main */}}

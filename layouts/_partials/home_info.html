@@ -5,6 +5,13 @@
     </div>
     <header class="entry-header">
         <h1>{{ .Title | markdownify }}</h1>
+        <div class="terminal-status-bar" aria-label="System status telemetry">
+            <span class="status-indicator"><span class="status-dot"></span>SYS: ONLINE</span>
+            <span class="status-divider">/</span>
+            <span class="status-item"><span class="status-prompt">&gt;</span> DISTRIBUTED SYSTEMS &amp; BINARY REVERSING</span>
+            <span class="status-divider">/</span>
+            <span class="status-item status-live"><span class="status-pulse">&#x26A1;</span> REVERSING &amp; CLOUD-NATIVE DEEP DIVES</span>
+        </div>
     </header>
     <div class="entry-content md-content">
         {{ $opts := dict "display" "block" }}

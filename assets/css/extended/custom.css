@@ -148,21 +148,239 @@ html {
 }
 
 .post-tags a:hover,
-.paginav a:hover {
-    color: var(--accent);
+.terms-tags a:hover {
+    transform: translateY(-1px);
 }
 
-/* ── Tags as monospace pills ── */
-.post-tags a {
+/* ── Tags as vibrant, memorable pills with icons ── */
+.post-tags a,
+.terms-tags a {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
     font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
     font-size: 13px;
     font-weight: 500;
-    color: var(--accent);
-    background: var(--accent-bg);
-    border-color: var(--accent-border);
-    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    padding: 3px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--code-bg);
+    color: var(--primary);
+    text-decoration: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
 }
 
+/* Default fallback tag icon and styling */
+.post-tags a::before,
+.terms-tags a::before {
+    content: "🏷️";
+    font-size: 0.9em;
+}
+
+/* 1. Reverse Engineering */
+.post-tags a[href*="/tags/reverse-engineering/"], .terms-tags a[href*="/tags/reverse-engineering/"] { color: #f97316; border-color: rgba(249, 115, 22, 0.35); background: rgba(249, 115, 22, 0.08); }
+.post-tags a[href*="/tags/reverse-engineering/"]:hover, .terms-tags a[href*="/tags/reverse-engineering/"]:hover { border-color: #f97316; box-shadow: 0 2px 10px rgba(249, 115, 22, 0.25); }
+.post-tags a[href*="/tags/reverse-engineering/"]::before, .terms-tags a[href*="/tags/reverse-engineering/"]::before { content: "⚙️"; }
+
+/* 2. CTF */
+.post-tags a[href*="/tags/ctf/"], .terms-tags a[href*="/tags/ctf/"] { color: #ef4444; border-color: rgba(239, 68, 68, 0.35); background: rgba(239, 68, 68, 0.08); }
+.post-tags a[href*="/tags/ctf/"]:hover, .terms-tags a[href*="/tags/ctf/"]:hover { border-color: #ef4444; box-shadow: 0 2px 10px rgba(239, 68, 68, 0.25); }
+.post-tags a[href*="/tags/ctf/"]::before, .terms-tags a[href*="/tags/ctf/"]::before { content: "🚩"; }
+
+/* 3. Cryptography */
+.post-tags a[href*="/tags/cryptography/"], .terms-tags a[href*="/tags/cryptography/"] { color: #06b6d4; border-color: rgba(6, 182, 212, 0.35); background: rgba(6, 182, 212, 0.08); }
+.post-tags a[href*="/tags/cryptography/"]:hover, .terms-tags a[href*="/tags/cryptography/"]:hover { border-color: #06b6d4; box-shadow: 0 2px 10px rgba(6, 182, 212, 0.25); }
+.post-tags a[href*="/tags/cryptography/"]::before, .terms-tags a[href*="/tags/cryptography/"]::before { content: "🔐"; }
+
+/* 4. Security */
+.post-tags a[href*="/tags/security/"], .terms-tags a[href*="/tags/security/"] { color: #10b981; border-color: rgba(16, 185, 129, 0.35); background: rgba(16, 185, 129, 0.08); }
+.post-tags a[href*="/tags/security/"]:hover, .terms-tags a[href*="/tags/security/"]:hover { border-color: #10b981; box-shadow: 0 2px 10px rgba(16, 185, 129, 0.25); }
+.post-tags a[href*="/tags/security/"]::before, .terms-tags a[href*="/tags/security/"]::before { content: "🛡️"; }
+
+/* 5. Assembly */
+.post-tags a[href*="/tags/assembly/"], .terms-tags a[href*="/tags/assembly/"] { color: #eab308; border-color: rgba(234, 179, 8, 0.35); background: rgba(234, 179, 8, 0.08); }
+.post-tags a[href*="/tags/assembly/"]:hover, .terms-tags a[href*="/tags/assembly/"]:hover { border-color: #eab308; box-shadow: 0 2px 10px rgba(234, 179, 8, 0.25); }
+.post-tags a[href*="/tags/assembly/"]::before, .terms-tags a[href*="/tags/assembly/"]::before { content: "⚡"; }
+
+/* 6. Deep Dive */
+.post-tags a[href*="/tags/deep-dive/"], .terms-tags a[href*="/tags/deep-dive/"] { color: #a855f7; border-color: rgba(168, 85, 247, 0.35); background: rgba(168, 85, 247, 0.08); }
+.post-tags a[href*="/tags/deep-dive/"]:hover, .terms-tags a[href*="/tags/deep-dive/"]:hover { border-color: #a855f7; box-shadow: 0 2px 10px rgba(168, 85, 247, 0.25); }
+.post-tags a[href*="/tags/deep-dive/"]::before, .terms-tags a[href*="/tags/deep-dive/"]::before { content: "🤿"; }
+
+/* 7. Dotnet */
+.post-tags a[href*="/tags/dotnet/"], .terms-tags a[href*="/tags/dotnet/"] { color: #818cf8; border-color: rgba(129, 140, 248, 0.35); background: rgba(129, 140, 248, 0.08); }
+.post-tags a[href*="/tags/dotnet/"]:hover, .terms-tags a[href*="/tags/dotnet/"]:hover { border-color: #818cf8; box-shadow: 0 2px 10px rgba(129, 140, 248, 0.25); }
+.post-tags a[href*="/tags/dotnet/"]::before, .terms-tags a[href*="/tags/dotnet/"]::before { content: "🔷"; }
+
+/* 8. Rust */
+.post-tags a[href*="/tags/rust/"], .terms-tags a[href*="/tags/rust/"] { color: #ea580c; border-color: rgba(234, 88, 12, 0.35); background: rgba(234, 88, 12, 0.08); }
+.post-tags a[href*="/tags/rust/"]:hover, .terms-tags a[href*="/tags/rust/"]:hover { border-color: #ea580c; box-shadow: 0 2px 10px rgba(234, 88, 12, 0.25); }
+.post-tags a[href*="/tags/rust/"]::before, .terms-tags a[href*="/tags/rust/"]::before { content: "🦀"; }
+
+/* 9. Compression */
+.post-tags a[href*="/tags/compression/"], .terms-tags a[href*="/tags/compression/"] { color: #14b8a6; border-color: rgba(20, 184, 166, 0.35); background: rgba(20, 184, 166, 0.08); }
+.post-tags a[href*="/tags/compression/"]:hover, .terms-tags a[href*="/tags/compression/"]:hover { border-color: #14b8a6; box-shadow: 0 2px 10px rgba(20, 184, 166, 0.25); }
+.post-tags a[href*="/tags/compression/"]::before, .terms-tags a[href*="/tags/compression/"]::before { content: "🗜️"; }
+
+/* 10. Malware Analysis */
+.post-tags a[href*="/tags/malware-analysis/"], .terms-tags a[href*="/tags/malware-analysis/"] { color: #f43f5e; border-color: rgba(244, 63, 94, 0.35); background: rgba(244, 63, 94, 0.08); }
+.post-tags a[href*="/tags/malware-analysis/"]:hover, .terms-tags a[href*="/tags/malware-analysis/"]:hover { border-color: #f43f5e; box-shadow: 0 2px 10px rgba(244, 63, 94, 0.25); }
+.post-tags a[href*="/tags/malware-analysis/"]::before, .terms-tags a[href*="/tags/malware-analysis/"]::before { content: "🦠"; }
+
+/* 11. State Machine */
+.post-tags a[href*="/tags/state-machine/"], .terms-tags a[href*="/tags/state-machine/"] { color: #ec4899; border-color: rgba(236, 72, 153, 0.35); background: rgba(236, 72, 153, 0.08); }
+.post-tags a[href*="/tags/state-machine/"]:hover, .terms-tags a[href*="/tags/state-machine/"]:hover { border-color: #ec4899; box-shadow: 0 2px 10px rgba(236, 72, 153, 0.25); }
+.post-tags a[href*="/tags/state-machine/"]::before, .terms-tags a[href*="/tags/state-machine/"]::before { content: "🔄"; }
+
+/* 12. Go */
+.post-tags a[href*="/tags/go/"], .terms-tags a[href*="/tags/go/"] { color: #00add8; border-color: rgba(0, 173, 216, 0.35); background: rgba(0, 173, 216, 0.08); }
+.post-tags a[href*="/tags/go/"]:hover, .terms-tags a[href*="/tags/go/"]:hover { border-color: #00add8; box-shadow: 0 2px 10px rgba(0, 173, 216, 0.25); }
+.post-tags a[href*="/tags/go/"]::before, .terms-tags a[href*="/tags/go/"]::before { content: "🐹"; }
+
+/* 13. Kubernetes */
+.post-tags a[href*="/tags/kubernetes/"], .terms-tags a[href*="/tags/kubernetes/"] { color: #326ce5; border-color: rgba(50, 108, 229, 0.35); background: rgba(50, 108, 229, 0.08); }
+.post-tags a[href*="/tags/kubernetes/"]:hover, .terms-tags a[href*="/tags/kubernetes/"]:hover { border-color: #326ce5; box-shadow: 0 2px 10px rgba(50, 108, 229, 0.25); }
+.post-tags a[href*="/tags/kubernetes/"]::before, .terms-tags a[href*="/tags/kubernetes/"]::before { content: "☸️"; }
+
+/* 14. Docker */
+.post-tags a[href*="/tags/docker/"], .terms-tags a[href*="/tags/docker/"] { color: #2496ed; border-color: rgba(36, 150, 237, 0.35); background: rgba(36, 150, 237, 0.08); }
+.post-tags a[href*="/tags/docker/"]:hover, .terms-tags a[href*="/tags/docker/"]:hover { border-color: #2496ed; box-shadow: 0 2px 10px rgba(36, 150, 237, 0.25); }
+.post-tags a[href*="/tags/docker/"]::before, .terms-tags a[href*="/tags/docker/"]::before { content: "🐳"; }
+
+/* 15. Architecture */
+.post-tags a[href*="/tags/architecture/"], .terms-tags a[href*="/tags/architecture/"] { color: #a855f7; border-color: rgba(168, 85, 247, 0.35); background: rgba(168, 85, 247, 0.08); }
+.post-tags a[href*="/tags/architecture/"]:hover, .terms-tags a[href*="/tags/architecture/"]:hover { border-color: #a855f7; box-shadow: 0 2px 10px rgba(168, 85, 247, 0.25); }
+.post-tags a[href*="/tags/architecture/"]::before, .terms-tags a[href*="/tags/architecture/"]::before { content: "🏛️"; }
+
+/* 16. AI */
+.post-tags a[href*="/tags/ai/"], .terms-tags a[href*="/tags/ai/"] { color: #8b5cf6; border-color: rgba(139, 92, 246, 0.35); background: rgba(139, 92, 246, 0.08); }
+.post-tags a[href*="/tags/ai/"]:hover, .terms-tags a[href*="/tags/ai/"]:hover { border-color: #8b5cf6; box-shadow: 0 2px 10px rgba(139, 92, 246, 0.25); }
+.post-tags a[href*="/tags/ai/"]::before, .terms-tags a[href*="/tags/ai/"]::before { content: "🧠"; }
+
+/* 17. Microservices */
+.post-tags a[href*="/tags/microservices/"], .terms-tags a[href*="/tags/microservices/"] { color: #3b82f6; border-color: rgba(59, 130, 246, 0.35); background: rgba(59, 130, 246, 0.08); }
+.post-tags a[href*="/tags/microservices/"]:hover, .terms-tags a[href*="/tags/microservices/"]:hover { border-color: #3b82f6; box-shadow: 0 2px 10px rgba(59, 130, 246, 0.25); }
+.post-tags a[href*="/tags/microservices/"]::before, .terms-tags a[href*="/tags/microservices/"]::before { content: "🧩"; }
+
+/* 18. Distributed Systems */
+.post-tags a[href*="/tags/distributed-systems/"], .terms-tags a[href*="/tags/distributed-systems/"] { color: #6366f1; border-color: rgba(99, 102, 241, 0.35); background: rgba(99, 102, 241, 0.08); }
+.post-tags a[href*="/tags/distributed-systems/"]:hover, .terms-tags a[href*="/tags/distributed-systems/"]:hover { border-color: #6366f1; box-shadow: 0 2px 10px rgba(99, 102, 241, 0.25); }
+.post-tags a[href*="/tags/distributed-systems/"]::before, .terms-tags a[href*="/tags/distributed-systems/"]::before { content: "🌐"; }
+
+/* 19. Database */
+.post-tags a[href*="/tags/database/"], .terms-tags a[href*="/tags/database/"] { color: #3b82f6; border-color: rgba(59, 130, 246, 0.35); background: rgba(59, 130, 246, 0.08); }
+.post-tags a[href*="/tags/database/"]:hover, .terms-tags a[href*="/tags/database/"]:hover { border-color: #3b82f6; box-shadow: 0 2px 10px rgba(59, 130, 246, 0.25); }
+.post-tags a[href*="/tags/database/"]::before, .terms-tags a[href*="/tags/database/"]::before { content: "🗄️"; }
+
+/* 20. Postgres */
+.post-tags a[href*="/tags/postgres/"], .terms-tags a[href*="/tags/postgres/"] { color: #336791; border-color: rgba(51, 103, 145, 0.35); background: rgba(51, 103, 145, 0.08); }
+.post-tags a[href*="/tags/postgres/"]:hover, .terms-tags a[href*="/tags/postgres/"]:hover { border-color: #336791; box-shadow: 0 2px 10px rgba(51, 103, 145, 0.25); }
+.post-tags a[href*="/tags/postgres/"]::before, .terms-tags a[href*="/tags/postgres/"]::before { content: "🐘"; }
+
+/* 21. SQL Server */
+.post-tags a[href*="/tags/sql-server/"], .terms-tags a[href*="/tags/sql-server/"] { color: #cc292b; border-color: rgba(204, 41, 43, 0.35); background: rgba(204, 41, 43, 0.08); }
+.post-tags a[href*="/tags/sql-server/"]:hover, .terms-tags a[href*="/tags/sql-server/"]:hover { border-color: #cc292b; box-shadow: 0 2px 10px rgba(204, 41, 43, 0.25); }
+.post-tags a[href*="/tags/sql-server/"]::before, .terms-tags a[href*="/tags/sql-server/"]::before { content: "🗃️"; }
+
+/* 22. SQL */
+.post-tags a[href*="/tags/sql/"], .terms-tags a[href*="/tags/sql/"] { color: #0284c7; border-color: rgba(2, 132, 199, 0.35); background: rgba(2, 132, 199, 0.08); }
+.post-tags a[href*="/tags/sql/"]:hover, .terms-tags a[href*="/tags/sql/"]:hover { border-color: #0284c7; box-shadow: 0 2px 10px rgba(2, 132, 199, 0.25); }
+.post-tags a[href*="/tags/sql/"]::before, .terms-tags a[href*="/tags/sql/"]::before { content: "📊"; }
+
+/* 23. GitOps */
+.post-tags a[href*="/tags/gitops/"], .terms-tags a[href*="/tags/gitops/"] { color: #f43f5e; border-color: rgba(244, 63, 94, 0.35); background: rgba(244, 63, 94, 0.08); }
+.post-tags a[href*="/tags/gitops/"]:hover, .terms-tags a[href*="/tags/gitops/"]:hover { border-color: #f43f5e; box-shadow: 0 2px 10px rgba(244, 63, 94, 0.25); }
+.post-tags a[href*="/tags/gitops/"]::before, .terms-tags a[href*="/tags/gitops/"]::before { content: "🐙"; }
+
+/* 24. DevOps */
+.post-tags a[href*="/tags/devops/"], .terms-tags a[href*="/tags/devops/"] { color: #06b6d4; border-color: rgba(6, 182, 212, 0.35); background: rgba(6, 182, 212, 0.08); }
+.post-tags a[href*="/tags/devops/"]:hover, .terms-tags a[href*="/tags/devops/"]:hover { border-color: #06b6d4; box-shadow: 0 2px 10px rgba(6, 182, 212, 0.25); }
+.post-tags a[href*="/tags/devops/"]::before, .terms-tags a[href*="/tags/devops/"]::before { content: "♾️"; }
+
+/* 25. CI/CD */
+.post-tags a[href*="/tags/ci-cd/"], .terms-tags a[href*="/tags/ci-cd/"] { color: #ec4899; border-color: rgba(236, 72, 153, 0.35); background: rgba(236, 72, 153, 0.08); }
+.post-tags a[href*="/tags/ci-cd/"]:hover, .terms-tags a[href*="/tags/ci-cd/"]:hover { border-color: #ec4899; box-shadow: 0 2px 10px rgba(236, 72, 153, 0.25); }
+.post-tags a[href*="/tags/ci-cd/"]::before, .terms-tags a[href*="/tags/ci-cd/"]::before { content: "🚀"; }
+
+/* 26. Performance */
+.post-tags a[href*="/tags/performance/"], .terms-tags a[href*="/tags/performance/"] { color: #10b981; border-color: rgba(16, 185, 129, 0.35); background: rgba(16, 185, 129, 0.08); }
+.post-tags a[href*="/tags/performance/"]:hover, .terms-tags a[href*="/tags/performance/"]:hover { border-color: #10b981; box-shadow: 0 2px 10px rgba(16, 185, 129, 0.25); }
+.post-tags a[href*="/tags/performance/"]::before, .terms-tags a[href*="/tags/performance/"]::before { content: "⏱️"; }
+
+/* 27. Caching */
+.post-tags a[href*="/tags/caching/"], .terms-tags a[href*="/tags/caching/"] { color: #f59e0b; border-color: rgba(245, 158, 11, 0.35); background: rgba(245, 158, 11, 0.08); }
+.post-tags a[href*="/tags/caching/"]:hover, .terms-tags a[href*="/tags/caching/"]:hover { border-color: #f59e0b; box-shadow: 0 2px 10px rgba(245, 158, 11, 0.25); }
+.post-tags a[href*="/tags/caching/"]::before, .terms-tags a[href*="/tags/caching/"]::before { content: "⚡"; }
+
+/* 28. Networking */
+.post-tags a[href*="/tags/networking/"], .terms-tags a[href*="/tags/networking/"] { color: #0284c7; border-color: rgba(2, 132, 199, 0.35); background: rgba(2, 132, 199, 0.08); }
+.post-tags a[href*="/tags/networking/"]:hover, .terms-tags a[href*="/tags/networking/"]:hover { border-color: #0284c7; box-shadow: 0 2px 10px rgba(2, 132, 199, 0.25); }
+.post-tags a[href*="/tags/networking/"]::before, .terms-tags a[href*="/tags/networking/"]::before { content: "🔌"; }
+
+/* 29. Linux */
+.post-tags a[href*="/tags/linux/"], .terms-tags a[href*="/tags/linux/"] { color: #eab308; border-color: rgba(234, 179, 8, 0.35); background: rgba(234, 179, 8, 0.08); }
+.post-tags a[href*="/tags/linux/"]:hover, .terms-tags a[href*="/tags/linux/"]:hover { border-color: #eab308; box-shadow: 0 2px 10px rgba(234, 179, 8, 0.25); }
+.post-tags a[href*="/tags/linux/"]::before, .terms-tags a[href*="/tags/linux/"]::before { content: "🐧"; }
+
+/* 30. WSL */
+.post-tags a[href*="/tags/wsl/"], .terms-tags a[href*="/tags/wsl/"] { color: #0ea5e9; border-color: rgba(14, 165, 233, 0.35); background: rgba(14, 165, 233, 0.08); }
+.post-tags a[href*="/tags/wsl/"]:hover, .terms-tags a[href*="/tags/wsl/"]:hover { border-color: #0ea5e9; box-shadow: 0 2px 10px rgba(14, 165, 233, 0.25); }
+.post-tags a[href*="/tags/wsl/"]::before, .terms-tags a[href*="/tags/wsl/"]::before { content: "🐧"; }
+
+/* 31. Terminal */
+.post-tags a[href*="/tags/terminal/"], .terms-tags a[href*="/tags/terminal/"] { color: #10b981; border-color: rgba(16, 185, 129, 0.35); background: rgba(16, 185, 129, 0.08); }
+.post-tags a[href*="/tags/terminal/"]:hover, .terms-tags a[href*="/tags/terminal/"]:hover { border-color: #10b981; box-shadow: 0 2px 10px rgba(16, 185, 129, 0.25); }
+.post-tags a[href*="/tags/terminal/"]::before, .terms-tags a[href*="/tags/terminal/"]::before { content: "💻"; }
+
+/* 32. CLI */
+.post-tags a[href*="/tags/cli/"], .terms-tags a[href*="/tags/cli/"] { color: #64748b; border-color: rgba(100, 116, 139, 0.35); background: rgba(100, 116, 139, 0.08); }
+.post-tags a[href*="/tags/cli/"]:hover, .terms-tags a[href*="/tags/cli/"]:hover { border-color: #64748b; box-shadow: 0 2px 10px rgba(100, 116, 139, 0.25); }
+.post-tags a[href*="/tags/cli/"]::before, .terms-tags a[href*="/tags/cli/"]::before { content: "⌨️"; }
+
+/* 33. Tooling */
+.post-tags a[href*="/tags/tooling/"], .terms-tags a[href*="/tags/tooling/"] { color: #f59e0b; border-color: rgba(245, 158, 11, 0.35); background: rgba(245, 158, 11, 0.08); }
+.post-tags a[href*="/tags/tooling/"]:hover, .terms-tags a[href*="/tags/tooling/"]:hover { border-color: #f59e0b; box-shadow: 0 2px 10px rgba(245, 158, 11, 0.25); }
+.post-tags a[href*="/tags/tooling/"]::before, .terms-tags a[href*="/tags/tooling/"]::before { content: "🔧"; }
+
+/* 34. Workflow */
+.post-tags a[href*="/tags/workflow/"], .terms-tags a[href*="/tags/workflow/"] { color: #8b5cf6; border-color: rgba(139, 92, 246, 0.35); background: rgba(139, 92, 246, 0.08); }
+.post-tags a[href*="/tags/workflow/"]:hover, .terms-tags a[href*="/tags/workflow/"]:hover { border-color: #8b5cf6; box-shadow: 0 2px 10px rgba(139, 92, 246, 0.25); }
+.post-tags a[href*="/tags/workflow/"]::before, .terms-tags a[href*="/tags/workflow/"]::before { content: "🔄"; }
+
+/* 35. Geospatial */
+.post-tags a[href*="/tags/geospatial/"], .terms-tags a[href*="/tags/geospatial/"] { color: #10b981; border-color: rgba(16, 185, 129, 0.35); background: rgba(16, 185, 129, 0.08); }
+.post-tags a[href*="/tags/geospatial/"]:hover, .terms-tags a[href*="/tags/geospatial/"]:hover { border-color: #10b981; box-shadow: 0 2px 10px rgba(16, 185, 129, 0.25); }
+.post-tags a[href*="/tags/geospatial/"]::before, .terms-tags a[href*="/tags/geospatial/"]::before { content: "🗺️"; }
+
+/* 36. Hardware */
+.post-tags a[href*="/tags/hardware/"], .terms-tags a[href*="/tags/hardware/"] { color: #64748b; border-color: rgba(100, 116, 139, 0.35); background: rgba(100, 116, 139, 0.08); }
+.post-tags a[href*="/tags/hardware/"]:hover, .terms-tags a[href*="/tags/hardware/"]:hover { border-color: #64748b; box-shadow: 0 2px 10px rgba(100, 116, 139, 0.25); }
+.post-tags a[href*="/tags/hardware/"]::before, .terms-tags a[href*="/tags/hardware/"]::before { content: "🔲"; }
+
+/* 37. Infrastructure */
+.post-tags a[href*="/tags/infrastructure/"], .terms-tags a[href*="/tags/infrastructure/"] { color: #f97316; border-color: rgba(249, 115, 22, 0.35); background: rgba(249, 115, 22, 0.08); }
+.post-tags a[href*="/tags/infrastructure/"]:hover, .terms-tags a[href*="/tags/infrastructure/"]:hover { border-color: #f97316; box-shadow: 0 2px 10px rgba(249, 115, 22, 0.25); }
+.post-tags a[href*="/tags/infrastructure/"]::before, .terms-tags a[href*="/tags/infrastructure/"]::before { content: "🏗️"; }
+
+/* 38. Release Notes */
+.post-tags a[href*="/tags/release-notes/"], .terms-tags a[href*="/tags/release-notes/"] { color: #06b6d4; border-color: rgba(6, 182, 212, 0.35); background: rgba(6, 182, 212, 0.08); }
+.post-tags a[href*="/tags/release-notes/"]:hover, .terms-tags a[href*="/tags/release-notes/"]:hover { border-color: #06b6d4; box-shadow: 0 2px 10px rgba(6, 182, 212, 0.25); }
+.post-tags a[href*="/tags/release-notes/"]::before, .terms-tags a[href*="/tags/release-notes/"]::before { content: "📋"; }
+
+/* 39. Demo */
+.post-tags a[href*="/tags/demo/"], .terms-tags a[href*="/tags/demo/"] { color: #eab308; border-color: rgba(234, 179, 8, 0.35); background: rgba(234, 179, 8, 0.08); }
+.post-tags a[href*="/tags/demo/"]:hover, .terms-tags a[href*="/tags/demo/"]:hover { border-color: #eab308; box-shadow: 0 2px 10px rgba(234, 179, 8, 0.25); }
+.post-tags a[href*="/tags/demo/"]::before, .terms-tags a[href*="/tags/demo/"]::before { content: "💡"; }
+
+/* 40. Hugo */
+.post-tags a[href*="/tags/hugo/"], .terms-tags a[href*="/tags/hugo/"] { color: #ff4088; border-color: rgba(255, 64, 136, 0.35); background: rgba(255, 64, 136, 0.08); }
+.post-tags a[href*="/tags/hugo/"]:hover, .terms-tags a[href*="/tags/hugo/"]:hover { border-color: #ff4088; box-shadow: 0 2px 10px rgba(255, 64, 136, 0.25); }
+.post-tags a[href*="/tags/hugo/"]::before, .terms-tags a[href*="/tags/hugo/"]::before { content: "🦩"; }
+
+/* 41. Meta */
+.post-tags a[href*="/tags/meta/"], .terms-tags a[href*="/tags/meta/"] { color: #8b5cf6; border-color: rgba(139, 92, 246, 0.35); background: rgba(139, 92, 246, 0.08); }
+.post-tags a[href*="/tags/meta/"]:hover, .terms-tags a[href*="/tags/meta/"]:hover { border-color: #8b5cf6; box-shadow: 0 2px 10px rgba(139, 92, 246, 0.25); }
+.post-tags a[href*="/tags/meta/"]::before, .terms-tags a[href*="/tags/meta/"]::before { content: "📝"; }
 /* ── Inline code chip ── */
 .post-content code,
 .md-content :not(pre) > code {
@@ -706,4 +924,1099 @@ html {
     font-size: 11px;
     font-weight: 600;
     color: var(--accent);
+}
+
+/* ── Terminal Status Bar (Hero HUD) ── */
+.terminal-status-bar {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 6px 12px;
+    background: rgba(15, 23, 42, 0.04);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--secondary);
+}
+
+:root[data-theme="dark"] .terminal-status-bar {
+    background: rgba(15, 23, 42, 0.45);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    color: #10b981;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #10b981;
+    box-shadow: 0 0 8px #10b981;
+    animation: status-pulse-anim 2s infinite ease-in-out;
+}
+
+@keyframes status-pulse-anim {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.status-divider {
+    color: var(--border);
+    user-select: none;
+}
+
+.status-prompt {
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.status-item.status-live {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.status-pulse {
+    display: inline-block;
+    animation: bounce-subtle 1.8s infinite;
+}
+
+@keyframes bounce-subtle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-2px); }
+}
+
+/* ── Live Topic Filter Bar ── */
+.topic-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 24px 0 20px 0;
+    padding-bottom: 14px;
+    border-bottom: 1px dashed var(--border);
+}
+
+.filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 14px;
+    font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 20px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    color: var(--secondary);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+}
+
+.filter-chip:hover {
+    color: var(--primary);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+}
+
+.filter-chip.active {
+    background: var(--accent);
+    color: #ffffff;
+    border-color: var(--accent);
+    box-shadow: 0 2px 10px rgba(109, 40, 217, 0.3);
+}
+
+:root[data-theme="dark"] .filter-chip.active {
+    color: #0f172a;
+    box-shadow: 0 2px 12px rgba(216, 180, 254, 0.25);
+}
+
+/* ── Card Filter Animations & Layout ── */
+.post-entry.is-filtered-out {
+    display: none !important;
+}
+
+.post-entry {
+    position: relative;
+    border-left: 3px solid transparent;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                border-left-color 0.2s ease;
+}
+
+.post-entry:hover {
+    transform: translateY(-2px);
+    border-left-color: var(--accent);
+    box-shadow: 0 8px 24px rgba(109, 40, 217, 0.08);
+}
+
+:root[data-theme="dark"] .post-entry:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 16px rgba(216, 180, 254, 0.06);
+}
+
+/* ── Tags Rendered on Article Cards ── */
+.entry-tags {
+    margin: 8px 0 0 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.entry-tags li {
+    display: inline-block;
+    margin: 0 !important;
+}
+
+.entry-tag-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--code-bg);
+    color: var(--secondary);
+}
+
+/* ── High-Contrast Mission / Hero Callouts ── */
+.md-content blockquote {
+    position: relative;
+    border-left: 4px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    background: var(--accent-bg);
+    padding: 14px 18px;
+    margin: 20px 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    box-shadow: 0 2px 8px rgba(109, 40, 217, 0.04);
+}
+
+:root[data-theme="dark"] .md-content blockquote {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+.md-content blockquote strong:first-child {
+    display: block;
+    font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    margin-bottom: 6px;
+}
+
+/* ── Terminal Directory Header (Starship Prompt Aesthetic) ── */
+.terminal-directory-header {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin: 18px 0 12px 0;
+    padding: 7px 14px;
+    background: rgba(15, 23, 42, 0.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
+    font-size: 12.5px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+:root[data-theme="dark"] .terminal-directory-header {
+    background: rgba(15, 23, 42, 0.55);
+    border-color: rgba(255, 255, 255, 0.09);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.terminal-directory-header:hover {
+    border-color: var(--accent);
+}
+
+.term-segment {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11.5px;
+    font-weight: 500;
+}
+
+.term-segment.term-user {
+    background: rgba(16, 185, 129, 0.12);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    font-weight: 600;
+}
+
+:root[data-theme="dark"] .term-segment.term-user {
+    background: rgba(16, 185, 129, 0.18);
+    color: #34d399;
+}
+
+.term-segment.term-path {
+    background: rgba(56, 189, 248, 0.1);
+    color: #0284c7;
+    border: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+:root[data-theme="dark"] .term-segment.term-path {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+}
+
+.term-segment.term-git {
+    background: rgba(168, 85, 247, 0.1);
+    color: #9333ea;
+    border: 1px solid rgba(168, 85, 247, 0.25);
+}
+
+:root[data-theme="dark"] .term-segment.term-git {
+    background: rgba(168, 85, 247, 0.15);
+    color: #c084fc;
+}
+
+.git-icon {
+    font-size: 12px;
+}
+
+.term-prompt-arrow {
+    color: var(--accent);
+    font-weight: 800;
+    font-size: 13px;
+    margin: 0 1px;
+}
+
+.term-prompt-cmd {
+    color: var(--primary);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.term-cursor {
+    display: inline-block;
+    width: 7px;
+    height: 14px;
+    background-color: var(--accent);
+    border-radius: 1px;
+    vertical-align: middle;
+    margin-left: 2px;
+    animation: term-blink 1.1s infinite;
+}
+
+@keyframes term-blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+}
+/* ── Post Layout: Mobile-First Responsive Hierarchy ── */
+.post-layout-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    gap: 28px;
+}
+
+/* On mobile & tablet (< 1280px), the article ALWAYS renders first */
+.post-single {
+    order: 1;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.post-left-sidebar {
+    order: 2;
+    width: 100%;
+}
+
+.post-sidebar {
+    order: 3;
+    width: 100%;
+}
+
+/* Mobile & Tablet Sidebar behavior: static, natural flow, no scroll-traps */
+.sidebar-sticky {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: none;
+    overflow-y: visible;
+}
+
+/* Tablet Layout (768px - 1279px): Sidebars pair up side-by-side below article */
+@media (min-width: 768px) and (max-width: 1279px) {
+    .post-left-sidebar .sidebar-sticky,
+    .post-sidebar .sidebar-sticky {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+    }
+}
+
+/* Desktop 3-Column Workstation Layout (>= 1280px) */
+@media (min-width: 1280px) {
+    .main:has(.post-layout-container) {
+        max-width: 1440px !important;
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    .post-layout-container {
+        display: grid;
+        grid-template-columns: 240px minmax(0, 1fr) 280px;
+        gap: 36px;
+        align-items: start;
+        width: 100%;
+    }
+
+    .post-left-sidebar {
+        order: unset;
+        width: 100%;
+    }
+
+    .post-single {
+        order: unset;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .post-sidebar {
+        order: unset;
+        width: 100%;
+    }
+
+    .sidebar-sticky {
+        position: sticky;
+        top: 80px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        max-height: calc(100vh - 100px);
+        overflow-y: auto;
+        scrollbar-width: thin;
+    }
+}
+.sidebar-widget {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    transition: border-color 0.15s ease;
+}
+
+:root[data-theme="dark"] .sidebar-widget {
+    background: rgba(15, 23, 42, 0.35);
+    border-color: rgba(255, 255, 255, 0.07);
+}
+
+.sidebar-widget-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--primary);
+    margin: 0 0 10px 0 !important;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed var(--border);
+}
+
+.sidebar-widget-title .widget-icon {
+    font-size: 13px;
+}
+
+/* ── Left Rail Filesystem Tree Widget ── */
+.filesystem-widget {
+    font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
+}
+
+.fs-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+}
+
+.fs-dots {
+    display: flex;
+    gap: 5px;
+}
+
+.fs-dots i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot-red { background: #ef4444; }
+.dot-yellow { background: #eab308; }
+.dot-green { background: #10b981; }
+
+.fs-cwd {
+    font-size: 11px;
+    color: #38bdf8;
+    font-weight: 500;
+}
+
+.fs-tree {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 12px;
+}
+
+.fs-folder {
+    margin: 0;
+}
+
+.fs-folder summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--primary);
+    list-style: none;
+    user-select: none;
+    padding: 3px 0;
+}
+
+.fs-folder summary::-webkit-details-marker {
+    display: none;
+}
+
+.fs-folder summary:hover {
+    color: var(--accent);
+}
+
+.fs-files {
+    list-style: none !important;
+    margin: 4px 0 6px 14px !important;
+    padding: 0 0 0 8px !important;
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.fs-files li {
+    margin: 0 !important;
+}
+
+.fs-files li a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--secondary);
+    text-decoration: none;
+    font-size: 11.5px;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: color 0.15s ease, background 0.15s ease;
+}
+
+.fs-files li a:hover {
+    color: var(--primary);
+    background: var(--accent-bg);
+}
+
+.fs-files li.active a {
+    color: var(--accent);
+    font-weight: 600;
+    background: var(--accent-bg);
+    border-left: 2px solid var(--accent);
+}
+
+.fs-quick-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+}
+
+.fs-action-btn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 5px 8px;
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-radius: 5px;
+    font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
+    font-size: 11px;
+    color: var(--accent);
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.fs-action-btn:hover {
+    transform: translateY(-1px);
+    background: var(--accent);
+    color: #ffffff;
+}
+
+/* ── Right Rail TOC & Related Posts ── */
+.toc-widget .inner {
+    max-height: 280px;
+    overflow-y: auto;
+    font-size: 12px;
+}
+
+.toc-widget ul {
+    margin: 0 !important;
+    padding-left: 14px !important;
+}
+
+.toc-widget li a {
+    color: var(--secondary);
+    text-decoration: none;
+    font-size: 12px;
+    transition: color 0.15s ease;
+}
+
+.toc-widget li a:hover {
+    color: var(--accent);
+}
+
+.sidebar-related-list {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar-related-item {
+    margin: 0 !important;
+}
+
+.sidebar-related-link {
+    display: block;
+    text-decoration: none !important;
+    color: var(--primary);
+    transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.sidebar-related-link:hover {
+    color: var(--accent) !important;
+    transform: translateX(3px);
+}
+
+.sidebar-related-title {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 3px;
+}
+
+.sidebar-related-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
+    font-size: 11px;
+    color: var(--secondary);
+}
+
+.sidebar-mini-tag {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: var(--accent-bg);
+    color: var(--accent);
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.sidebar-tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+}
+
+/* ── Subtle Dot-Matrix Cyber Grid in Outer Gutters ── */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    background-image: radial-gradient(rgba(109, 40, 217, 0.12) 1px, transparent 1px);
+    background-size: 24px 24px;
+    mask-image: radial-gradient(ellipse at center, transparent 35%, black 85%);
+    -webkit-mask-image: radial-gradient(ellipse at center, transparent 35%, black 85%);
+}
+
+:root[data-theme="dark"] body::before {
+    background-image: radial-gradient(rgba(216, 180, 254, 0.15) 1px, transparent 1px);
+    mask-image: radial-gradient(ellipse at center, transparent 30%, black 85%);
+    -webkit-mask-image: radial-gradient(ellipse at center, transparent 30%, black 85%);
+}
+
+/* ── Homepage Workstation Multi-Column Layout ── */
+.home-workstation-layout {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 32px;
+}
+
+.home-left-rail,
+.home-right-rail {
+    display: none;
+}
+
+@media (min-width: 1280px) {
+    body.list .main {
+        max-width: 1440px !important;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .home-workstation-layout {
+        display: grid;
+        grid-template-columns: 240px minmax(0, 1fr) 280px;
+        gap: 36px;
+        align-items: start;
+    }
+
+    .home-left-rail,
+    .home-right-rail {
+        display: block;
+        width: 100%;
+    }
+}
+
+/* ── Telemetry & Toolbox Widgets (Homepage Left Rail) ── */
+.telemetry-list {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
+    font-size: 11.5px;
+}
+
+.telemetry-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 !important;
+}
+
+.telemetry-k {
+    color: var(--secondary);
+}
+
+.telemetry-v {
+    font-weight: 500;
+    color: var(--primary);
+}
+
+.telemetry-v.status-online {
+    color: #10b981;
+    font-weight: 600;
+}
+
+.telemetry-v.status-highlight {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.toolbox-grid {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+}
+
+.toolbox-grid li {
+    margin: 0 !important;
+}
+
+.toolbox-chip {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 8px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
+    font-size: 11px;
+    color: var(--primary);
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.toolbox-chip:hover {
+    border-color: var(--accent);
+    background: var(--accent-bg);
+}
+
+/* ── Series Tracker & Tag Cloud (Homepage Right Rail) ── */
+.series-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.series-card-tag {
+    font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+}
+
+.series-card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.series-card-desc {
+    font-size: 11px;
+    color: var(--secondary);
+    line-height: 1.4;
+    margin: 0 !important;
+}
+
+.series-progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
+    font-size: 10.5px;
+    color: var(--secondary);
+    margin-top: 4px;
+}
+
+.series-progress-bar {
+    width: 100%;
+    height: 5px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 2px;
+}
+
+.series-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #10b981, var(--accent));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+}
+
+.home-topics-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.topic-count {
+    font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
+    font-size: 10px;
+    opacity: 0.65;
+    margin-left: 2px;
+}
+
+/* ── Reversing Spec HUD Card (Single Post Left Rail) ── */
+.reversing-spec-widget {
+    border-left: 3px solid var(--accent);
+}
+
+.spec-list {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
+    font-size: 11.5px;
+}
+
+.spec-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 !important;
+}
+
+.spec-k {
+    color: var(--secondary);
+}
+
+.spec-v {
+    font-weight: 500;
+    color: var(--primary);
+}
+
+.spec-v.status-ok {
+    color: #10b981;
+    font-weight: 600;
+}
+
+/* ── Circular Reading Progress Ring Widget ── */
+.progress-dock-widget {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+}
+
+.progress-ring-wrap {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress-ring-svg {
+    transform: rotate(-90deg);
+}
+
+.progress-ring-bg {
+    color: var(--border);
+}
+
+.progress-ring-bar {
+    color: var(--accent);
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.15s ease;
+}
+
+.progress-ring-text {
+    position: absolute;
+    font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.progress-dock-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.dock-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 8px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
+    font-size: 11px;
+    color: var(--primary);
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.dock-btn:hover {
+    border-color: var(--accent);
+    background: var(--accent-bg);
+    color: var(--accent);
+}
+
+/* ── Flare-On 13 Series Stepper (Single Post Right Rail) ── */
+.stepper-list {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.stepper-list li {
+    margin: 0 !important;
+}
+
+.stepper-list li a,
+.stepper-list li.queued {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 8px;
+    border-radius: 5px;
+    font-size: 11.5px;
+    text-decoration: none !important;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.stepper-list li a {
+    color: var(--secondary);
+}
+
+.stepper-list li a:hover {
+    background: var(--accent-bg);
+    color: var(--accent);
+}
+
+.stepper-list li.active a {
+    background: var(--accent-bg);
+    color: var(--accent);
+    font-weight: 600;
+    border-left: 2px solid var(--accent);
+}
+
+.stepper-list li.queued {
+    color: var(--secondary);
+    opacity: 0.55;
+}
+
+.step-marker {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--border);
+    color: var(--primary);
+    font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.stepper-list li.active .step-marker {
+    background: var(--accent);
+    color: #ffffff;
+}
+
+.step-title {
+    line-height: 1.3;
+}
+
+/* ── TOC Active Scrollspy Highlight ── */
+.toc-widget li a.is-active-heading {
+    color: var(--accent) !important;
+    font-weight: 600;
+    border-left: 2px solid var(--accent);
+    padding-left: 6px;
+    transition: color 0.15s ease, border-left-color 0.15s ease;
+}
+
+/* ── Mobile Viewport Defenses (< 768px) ── */
+@media (max-width: 767px) {
+    .main {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+        overflow-x: hidden;
+    }
+
+    .post-title {
+        font-size: 24px !important;
+        line-height: 1.25 !important;
+    }
+
+    .terminal-status-bar {
+        font-size: 10px;
+        padding: 5px 8px;
+        gap: 5px;
+    }
+
+    .terminal-directory-header {
+        font-size: 11px;
+        padding: 6px 10px;
+        gap: 5px;
+        width: 100%;
+    }
+
+    .term-segment {
+        font-size: 10.5px;
+        padding: 2px 6px;
+    }
+
+    .topic-filter-bar {
+        gap: 6px;
+        margin: 16px 0 14px 0;
+        padding-bottom: 8px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .topic-filter-bar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .filter-chip {
+        font-size: 11px;
+        padding: 4px 10px;
+        white-space: nowrap;
+    }
+
+    .post-content pre {
+        max-width: 100% !important;
+        overflow-x: auto !important;
+        font-size: 12px !important;
+        border-radius: 6px !important;
+    }
+
+    .md-content table {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .progress-dock-widget {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+
+    .progress-dock-actions {
+        width: 100%;
+        display: flex;
+        gap: 8px;
+    }
+
+    .dock-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 8px 12px;
+    }
 }
