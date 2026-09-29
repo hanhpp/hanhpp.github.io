@@ -152,235 +152,287 @@ html {
     transform: translateY(-1px);
 }
 
-/* ── Tags as vibrant, memorable pills with icons ── */
+/* ── Tags: Clean GitBook-Style Monospace Pills by Default ── */
 .post-tags a,
 .terms-tags a {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
     font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 500;
-    padding: 3px 10px;
-    border-radius: 6px;
+    padding: 2px 8px;
+    border-radius: 4px;
     border: 1px solid var(--border);
     background: var(--code-bg);
-    color: var(--primary);
+    color: var(--secondary);
     text-decoration: none;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+    transition: all 0.15s ease;
 }
 
-/* Default fallback tag icon and styling */
-.post-tags a::before,
-.terms-tags a::before {
+.post-tags a:hover,
+.terms-tags a:hover {
+    color: var(--primary);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+}
+
+/* ── View Mode Toggle Button in Header ── */
+.view-mode-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    margin-inline-end: 6px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 16px;
+    line-height: 1;
+    color: var(--primary);
+    transition: transform 0.15s ease;
+    user-select: none;
+}
+
+.view-mode-toggle:hover {
+    transform: scale(1.18);
+}
+
+/* Minimal mode (default): show 📟 icon to enter workstation */
+html:not(.view-workstation) .mode-icon-workstation {
+    display: none !important;
+}
+html:not(.view-workstation) .mode-icon-minimal {
+    display: inline-block !important;
+}
+
+/* Workstation mode: show 📖 icon to return to minimal */
+html.view-workstation .mode-icon-minimal {
+    display: none !important;
+}
+html.view-workstation .mode-icon-workstation {
+    display: inline-block !important;
+}
+
+/* ── Workstation Mode Only: Activate 41 Colorful Badges with Emoji Icons & Glow ── */
+html.view-workstation .post-tags a,
+html.view-workstation .terms-tags a {
+    font-size: 13px;
+    padding: 3px 10px;
+    border-radius: 6px;
+    color: var(--primary);
+}
+
+html.view-workstation .post-tags a::before,
+html.view-workstation .terms-tags a::before {
     content: "🏷️";
     font-size: 0.9em;
 }
 
 /* 1. Reverse Engineering */
-.post-tags a[href*="/tags/reverse-engineering/"], .terms-tags a[href*="/tags/reverse-engineering/"] { color: #f97316; border-color: rgba(249, 115, 22, 0.35); background: rgba(249, 115, 22, 0.08); }
-.post-tags a[href*="/tags/reverse-engineering/"]:hover, .terms-tags a[href*="/tags/reverse-engineering/"]:hover { border-color: #f97316; box-shadow: 0 2px 10px rgba(249, 115, 22, 0.25); }
-.post-tags a[href*="/tags/reverse-engineering/"]::before, .terms-tags a[href*="/tags/reverse-engineering/"]::before { content: "⚙️"; }
+html.view-workstation .post-tags a[href*="/tags/reverse-engineering/"], html.view-workstation .terms-tags a[href*="/tags/reverse-engineering/"] { color: #f97316; border-color: rgba(249, 115, 22, 0.35); background: rgba(249, 115, 22, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/reverse-engineering/"]:hover, html.view-workstation .terms-tags a[href*="/tags/reverse-engineering/"]:hover { border-color: #f97316; box-shadow: 0 2px 10px rgba(249, 115, 22, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/reverse-engineering/"]::before, html.view-workstation .terms-tags a[href*="/tags/reverse-engineering/"]::before { content: "⚙️"; }
 
 /* 2. CTF */
-.post-tags a[href*="/tags/ctf/"], .terms-tags a[href*="/tags/ctf/"] { color: #ef4444; border-color: rgba(239, 68, 68, 0.35); background: rgba(239, 68, 68, 0.08); }
-.post-tags a[href*="/tags/ctf/"]:hover, .terms-tags a[href*="/tags/ctf/"]:hover { border-color: #ef4444; box-shadow: 0 2px 10px rgba(239, 68, 68, 0.25); }
-.post-tags a[href*="/tags/ctf/"]::before, .terms-tags a[href*="/tags/ctf/"]::before { content: "🚩"; }
+html.view-workstation .post-tags a[href*="/tags/ctf/"], html.view-workstation .terms-tags a[href*="/tags/ctf/"] { color: #ef4444; border-color: rgba(239, 68, 68, 0.35); background: rgba(239, 68, 68, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/ctf/"]:hover, html.view-workstation .terms-tags a[href*="/tags/ctf/"]:hover { border-color: #ef4444; box-shadow: 0 2px 10px rgba(239, 68, 68, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/ctf/"]::before, html.view-workstation .terms-tags a[href*="/tags/ctf/"]::before { content: "🚩"; }
 
 /* 3. Cryptography */
-.post-tags a[href*="/tags/cryptography/"], .terms-tags a[href*="/tags/cryptography/"] { color: #06b6d4; border-color: rgba(6, 182, 212, 0.35); background: rgba(6, 182, 212, 0.08); }
-.post-tags a[href*="/tags/cryptography/"]:hover, .terms-tags a[href*="/tags/cryptography/"]:hover { border-color: #06b6d4; box-shadow: 0 2px 10px rgba(6, 182, 212, 0.25); }
-.post-tags a[href*="/tags/cryptography/"]::before, .terms-tags a[href*="/tags/cryptography/"]::before { content: "🔐"; }
+html.view-workstation .post-tags a[href*="/tags/cryptography/"], html.view-workstation .terms-tags a[href*="/tags/cryptography/"] { color: #06b6d4; border-color: rgba(6, 182, 212, 0.35); background: rgba(6, 182, 212, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/cryptography/"]:hover, html.view-workstation .terms-tags a[href*="/tags/cryptography/"]:hover { border-color: #06b6d4; box-shadow: 0 2px 10px rgba(6, 182, 212, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/cryptography/"]::before, html.view-workstation .terms-tags a[href*="/tags/cryptography/"]::before { content: "🔐"; }
 
 /* 4. Security */
-.post-tags a[href*="/tags/security/"], .terms-tags a[href*="/tags/security/"] { color: #10b981; border-color: rgba(16, 185, 129, 0.35); background: rgba(16, 185, 129, 0.08); }
-.post-tags a[href*="/tags/security/"]:hover, .terms-tags a[href*="/tags/security/"]:hover { border-color: #10b981; box-shadow: 0 2px 10px rgba(16, 185, 129, 0.25); }
-.post-tags a[href*="/tags/security/"]::before, .terms-tags a[href*="/tags/security/"]::before { content: "🛡️"; }
+html.view-workstation .post-tags a[href*="/tags/security/"], html.view-workstation .terms-tags a[href*="/tags/security/"] { color: #10b981; border-color: rgba(16, 185, 129, 0.35); background: rgba(16, 185, 129, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/security/"]:hover, html.view-workstation .terms-tags a[href*="/tags/security/"]:hover { border-color: #10b981; box-shadow: 0 2px 10px rgba(16, 185, 129, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/security/"]::before, html.view-workstation .terms-tags a[href*="/tags/security/"]::before { content: "🛡️"; }
 
 /* 5. Assembly */
-.post-tags a[href*="/tags/assembly/"], .terms-tags a[href*="/tags/assembly/"] { color: #eab308; border-color: rgba(234, 179, 8, 0.35); background: rgba(234, 179, 8, 0.08); }
-.post-tags a[href*="/tags/assembly/"]:hover, .terms-tags a[href*="/tags/assembly/"]:hover { border-color: #eab308; box-shadow: 0 2px 10px rgba(234, 179, 8, 0.25); }
-.post-tags a[href*="/tags/assembly/"]::before, .terms-tags a[href*="/tags/assembly/"]::before { content: "⚡"; }
+html.view-workstation .post-tags a[href*="/tags/assembly/"], html.view-workstation .terms-tags a[href*="/tags/assembly/"] { color: #eab308; border-color: rgba(234, 179, 8, 0.35); background: rgba(234, 179, 8, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/assembly/"]:hover, html.view-workstation .terms-tags a[href*="/tags/assembly/"]:hover { border-color: #eab308; box-shadow: 0 2px 10px rgba(234, 179, 8, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/assembly/"]::before, html.view-workstation .terms-tags a[href*="/tags/assembly/"]::before { content: "⚡"; }
 
 /* 6. Deep Dive */
-.post-tags a[href*="/tags/deep-dive/"], .terms-tags a[href*="/tags/deep-dive/"] { color: #a855f7; border-color: rgba(168, 85, 247, 0.35); background: rgba(168, 85, 247, 0.08); }
-.post-tags a[href*="/tags/deep-dive/"]:hover, .terms-tags a[href*="/tags/deep-dive/"]:hover { border-color: #a855f7; box-shadow: 0 2px 10px rgba(168, 85, 247, 0.25); }
-.post-tags a[href*="/tags/deep-dive/"]::before, .terms-tags a[href*="/tags/deep-dive/"]::before { content: "🤿"; }
+html.view-workstation .post-tags a[href*="/tags/deep-dive/"], html.view-workstation .terms-tags a[href*="/tags/deep-dive/"] { color: #a855f7; border-color: rgba(168, 85, 247, 0.35); background: rgba(168, 85, 247, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/deep-dive/"]:hover, html.view-workstation .terms-tags a[href*="/tags/deep-dive/"]:hover { border-color: #a855f7; box-shadow: 0 2px 10px rgba(168, 85, 247, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/deep-dive/"]::before, html.view-workstation .terms-tags a[href*="/tags/deep-dive/"]::before { content: "🤿"; }
 
 /* 7. Dotnet */
-.post-tags a[href*="/tags/dotnet/"], .terms-tags a[href*="/tags/dotnet/"] { color: #818cf8; border-color: rgba(129, 140, 248, 0.35); background: rgba(129, 140, 248, 0.08); }
-.post-tags a[href*="/tags/dotnet/"]:hover, .terms-tags a[href*="/tags/dotnet/"]:hover { border-color: #818cf8; box-shadow: 0 2px 10px rgba(129, 140, 248, 0.25); }
-.post-tags a[href*="/tags/dotnet/"]::before, .terms-tags a[href*="/tags/dotnet/"]::before { content: "🔷"; }
+html.view-workstation .post-tags a[href*="/tags/dotnet/"], html.view-workstation .terms-tags a[href*="/tags/dotnet/"] { color: #818cf8; border-color: rgba(129, 140, 248, 0.35); background: rgba(129, 140, 248, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/dotnet/"]:hover, html.view-workstation .terms-tags a[href*="/tags/dotnet/"]:hover { border-color: #818cf8; box-shadow: 0 2px 10px rgba(129, 140, 248, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/dotnet/"]::before, html.view-workstation .terms-tags a[href*="/tags/dotnet/"]::before { content: "🔷"; }
 
 /* 8. Rust */
-.post-tags a[href*="/tags/rust/"], .terms-tags a[href*="/tags/rust/"] { color: #ea580c; border-color: rgba(234, 88, 12, 0.35); background: rgba(234, 88, 12, 0.08); }
-.post-tags a[href*="/tags/rust/"]:hover, .terms-tags a[href*="/tags/rust/"]:hover { border-color: #ea580c; box-shadow: 0 2px 10px rgba(234, 88, 12, 0.25); }
-.post-tags a[href*="/tags/rust/"]::before, .terms-tags a[href*="/tags/rust/"]::before { content: "🦀"; }
+html.view-workstation .post-tags a[href*="/tags/rust/"], html.view-workstation .terms-tags a[href*="/tags/rust/"] { color: #ea580c; border-color: rgba(234, 88, 12, 0.35); background: rgba(234, 88, 12, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/rust/"]:hover, html.view-workstation .terms-tags a[href*="/tags/rust/"]:hover { border-color: #ea580c; box-shadow: 0 2px 10px rgba(234, 88, 12, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/rust/"]::before, html.view-workstation .terms-tags a[href*="/tags/rust/"]::before { content: "🦀"; }
 
 /* 9. Compression */
-.post-tags a[href*="/tags/compression/"], .terms-tags a[href*="/tags/compression/"] { color: #14b8a6; border-color: rgba(20, 184, 166, 0.35); background: rgba(20, 184, 166, 0.08); }
-.post-tags a[href*="/tags/compression/"]:hover, .terms-tags a[href*="/tags/compression/"]:hover { border-color: #14b8a6; box-shadow: 0 2px 10px rgba(20, 184, 166, 0.25); }
-.post-tags a[href*="/tags/compression/"]::before, .terms-tags a[href*="/tags/compression/"]::before { content: "🗜️"; }
+html.view-workstation .post-tags a[href*="/tags/compression/"], html.view-workstation .terms-tags a[href*="/tags/compression/"] { color: #14b8a6; border-color: rgba(20, 184, 166, 0.35); background: rgba(20, 184, 166, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/compression/"]:hover, html.view-workstation .terms-tags a[href*="/tags/compression/"]:hover { border-color: #14b8a6; box-shadow: 0 2px 10px rgba(20, 184, 166, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/compression/"]::before, html.view-workstation .terms-tags a[href*="/tags/compression/"]::before { content: "🗜️"; }
 
 /* 10. Malware Analysis */
-.post-tags a[href*="/tags/malware-analysis/"], .terms-tags a[href*="/tags/malware-analysis/"] { color: #f43f5e; border-color: rgba(244, 63, 94, 0.35); background: rgba(244, 63, 94, 0.08); }
-.post-tags a[href*="/tags/malware-analysis/"]:hover, .terms-tags a[href*="/tags/malware-analysis/"]:hover { border-color: #f43f5e; box-shadow: 0 2px 10px rgba(244, 63, 94, 0.25); }
-.post-tags a[href*="/tags/malware-analysis/"]::before, .terms-tags a[href*="/tags/malware-analysis/"]::before { content: "🦠"; }
+html.view-workstation .post-tags a[href*="/tags/malware-analysis/"], html.view-workstation .terms-tags a[href*="/tags/malware-analysis/"] { color: #f43f5e; border-color: rgba(244, 63, 94, 0.35); background: rgba(244, 63, 94, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/malware-analysis/"]:hover, html.view-workstation .terms-tags a[href*="/tags/malware-analysis/"]:hover { border-color: #f43f5e; box-shadow: 0 2px 10px rgba(244, 63, 94, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/malware-analysis/"]::before, html.view-workstation .terms-tags a[href*="/tags/malware-analysis/"]::before { content: "🦠"; }
 
 /* 11. State Machine */
-.post-tags a[href*="/tags/state-machine/"], .terms-tags a[href*="/tags/state-machine/"] { color: #ec4899; border-color: rgba(236, 72, 153, 0.35); background: rgba(236, 72, 153, 0.08); }
-.post-tags a[href*="/tags/state-machine/"]:hover, .terms-tags a[href*="/tags/state-machine/"]:hover { border-color: #ec4899; box-shadow: 0 2px 10px rgba(236, 72, 153, 0.25); }
-.post-tags a[href*="/tags/state-machine/"]::before, .terms-tags a[href*="/tags/state-machine/"]::before { content: "🔄"; }
+html.view-workstation .post-tags a[href*="/tags/state-machine/"], html.view-workstation .terms-tags a[href*="/tags/state-machine/"] { color: #ec4899; border-color: rgba(236, 72, 153, 0.35); background: rgba(236, 72, 153, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/state-machine/"]:hover, html.view-workstation .terms-tags a[href*="/tags/state-machine/"]:hover { border-color: #ec4899; box-shadow: 0 2px 10px rgba(236, 72, 153, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/state-machine/"]::before, html.view-workstation .terms-tags a[href*="/tags/state-machine/"]::before { content: "🔄"; }
 
 /* 12. Go */
-.post-tags a[href*="/tags/go/"], .terms-tags a[href*="/tags/go/"] { color: #00add8; border-color: rgba(0, 173, 216, 0.35); background: rgba(0, 173, 216, 0.08); }
-.post-tags a[href*="/tags/go/"]:hover, .terms-tags a[href*="/tags/go/"]:hover { border-color: #00add8; box-shadow: 0 2px 10px rgba(0, 173, 216, 0.25); }
-.post-tags a[href*="/tags/go/"]::before, .terms-tags a[href*="/tags/go/"]::before { content: "🐹"; }
+html.view-workstation .post-tags a[href*="/tags/go/"], html.view-workstation .terms-tags a[href*="/tags/go/"] { color: #00add8; border-color: rgba(0, 173, 216, 0.35); background: rgba(0, 173, 216, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/go/"]:hover, html.view-workstation .terms-tags a[href*="/tags/go/"]:hover { border-color: #00add8; box-shadow: 0 2px 10px rgba(0, 173, 216, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/go/"]::before, html.view-workstation .terms-tags a[href*="/tags/go/"]::before { content: "🐹"; }
 
 /* 13. Kubernetes */
-.post-tags a[href*="/tags/kubernetes/"], .terms-tags a[href*="/tags/kubernetes/"] { color: #326ce5; border-color: rgba(50, 108, 229, 0.35); background: rgba(50, 108, 229, 0.08); }
-.post-tags a[href*="/tags/kubernetes/"]:hover, .terms-tags a[href*="/tags/kubernetes/"]:hover { border-color: #326ce5; box-shadow: 0 2px 10px rgba(50, 108, 229, 0.25); }
-.post-tags a[href*="/tags/kubernetes/"]::before, .terms-tags a[href*="/tags/kubernetes/"]::before { content: "☸️"; }
+html.view-workstation .post-tags a[href*="/tags/kubernetes/"], html.view-workstation .terms-tags a[href*="/tags/kubernetes/"] { color: #326ce5; border-color: rgba(50, 108, 229, 0.35); background: rgba(50, 108, 229, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/kubernetes/"]:hover, html.view-workstation .terms-tags a[href*="/tags/kubernetes/"]:hover { border-color: #326ce5; box-shadow: 0 2px 10px rgba(50, 108, 229, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/kubernetes/"]::before, html.view-workstation .terms-tags a[href*="/tags/kubernetes/"]::before { content: "☸️"; }
 
 /* 14. Docker */
-.post-tags a[href*="/tags/docker/"], .terms-tags a[href*="/tags/docker/"] { color: #2496ed; border-color: rgba(36, 150, 237, 0.35); background: rgba(36, 150, 237, 0.08); }
-.post-tags a[href*="/tags/docker/"]:hover, .terms-tags a[href*="/tags/docker/"]:hover { border-color: #2496ed; box-shadow: 0 2px 10px rgba(36, 150, 237, 0.25); }
-.post-tags a[href*="/tags/docker/"]::before, .terms-tags a[href*="/tags/docker/"]::before { content: "🐳"; }
+html.view-workstation .post-tags a[href*="/tags/docker/"], html.view-workstation .terms-tags a[href*="/tags/docker/"] { color: #2496ed; border-color: rgba(36, 150, 237, 0.35); background: rgba(36, 150, 237, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/docker/"]:hover, html.view-workstation .terms-tags a[href*="/tags/docker/"]:hover { border-color: #2496ed; box-shadow: 0 2px 10px rgba(36, 150, 237, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/docker/"]::before, html.view-workstation .terms-tags a[href*="/tags/docker/"]::before { content: "🐳"; }
 
 /* 15. Architecture */
-.post-tags a[href*="/tags/architecture/"], .terms-tags a[href*="/tags/architecture/"] { color: #a855f7; border-color: rgba(168, 85, 247, 0.35); background: rgba(168, 85, 247, 0.08); }
-.post-tags a[href*="/tags/architecture/"]:hover, .terms-tags a[href*="/tags/architecture/"]:hover { border-color: #a855f7; box-shadow: 0 2px 10px rgba(168, 85, 247, 0.25); }
-.post-tags a[href*="/tags/architecture/"]::before, .terms-tags a[href*="/tags/architecture/"]::before { content: "🏛️"; }
+html.view-workstation .post-tags a[href*="/tags/architecture/"], html.view-workstation .terms-tags a[href*="/tags/architecture/"] { color: #a855f7; border-color: rgba(168, 85, 247, 0.35); background: rgba(168, 85, 247, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/architecture/"]:hover, html.view-workstation .terms-tags a[href*="/tags/architecture/"]:hover { border-color: #a855f7; box-shadow: 0 2px 10px rgba(168, 85, 247, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/architecture/"]::before, html.view-workstation .terms-tags a[href*="/tags/architecture/"]::before { content: "🏛️"; }
 
 /* 16. AI */
-.post-tags a[href*="/tags/ai/"], .terms-tags a[href*="/tags/ai/"] { color: #8b5cf6; border-color: rgba(139, 92, 246, 0.35); background: rgba(139, 92, 246, 0.08); }
-.post-tags a[href*="/tags/ai/"]:hover, .terms-tags a[href*="/tags/ai/"]:hover { border-color: #8b5cf6; box-shadow: 0 2px 10px rgba(139, 92, 246, 0.25); }
-.post-tags a[href*="/tags/ai/"]::before, .terms-tags a[href*="/tags/ai/"]::before { content: "🧠"; }
+html.view-workstation .post-tags a[href*="/tags/ai/"], html.view-workstation .terms-tags a[href*="/tags/ai/"] { color: #8b5cf6; border-color: rgba(139, 92, 246, 0.35); background: rgba(139, 92, 246, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/ai/"]:hover, html.view-workstation .terms-tags a[href*="/tags/ai/"]:hover { border-color: #8b5cf6; box-shadow: 0 2px 10px rgba(139, 92, 246, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/ai/"]::before, html.view-workstation .terms-tags a[href*="/tags/ai/"]::before { content: "🧠"; }
 
 /* 17. Microservices */
-.post-tags a[href*="/tags/microservices/"], .terms-tags a[href*="/tags/microservices/"] { color: #3b82f6; border-color: rgba(59, 130, 246, 0.35); background: rgba(59, 130, 246, 0.08); }
-.post-tags a[href*="/tags/microservices/"]:hover, .terms-tags a[href*="/tags/microservices/"]:hover { border-color: #3b82f6; box-shadow: 0 2px 10px rgba(59, 130, 246, 0.25); }
-.post-tags a[href*="/tags/microservices/"]::before, .terms-tags a[href*="/tags/microservices/"]::before { content: "🧩"; }
+html.view-workstation .post-tags a[href*="/tags/microservices/"], html.view-workstation .terms-tags a[href*="/tags/microservices/"] { color: #3b82f6; border-color: rgba(59, 130, 246, 0.35); background: rgba(59, 130, 246, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/microservices/"]:hover, html.view-workstation .terms-tags a[href*="/tags/microservices/"]:hover { border-color: #3b82f6; box-shadow: 0 2px 10px rgba(59, 130, 246, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/microservices/"]::before, html.view-workstation .terms-tags a[href*="/tags/microservices/"]::before { content: "🧩"; }
 
 /* 18. Distributed Systems */
-.post-tags a[href*="/tags/distributed-systems/"], .terms-tags a[href*="/tags/distributed-systems/"] { color: #6366f1; border-color: rgba(99, 102, 241, 0.35); background: rgba(99, 102, 241, 0.08); }
-.post-tags a[href*="/tags/distributed-systems/"]:hover, .terms-tags a[href*="/tags/distributed-systems/"]:hover { border-color: #6366f1; box-shadow: 0 2px 10px rgba(99, 102, 241, 0.25); }
-.post-tags a[href*="/tags/distributed-systems/"]::before, .terms-tags a[href*="/tags/distributed-systems/"]::before { content: "🌐"; }
+html.view-workstation .post-tags a[href*="/tags/distributed-systems/"], html.view-workstation .terms-tags a[href*="/tags/distributed-systems/"] { color: #6366f1; border-color: rgba(99, 102, 241, 0.35); background: rgba(99, 102, 241, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/distributed-systems/"]:hover, html.view-workstation .terms-tags a[href*="/tags/distributed-systems/"]:hover { border-color: #6366f1; box-shadow: 0 2px 10px rgba(99, 102, 241, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/distributed-systems/"]::before, html.view-workstation .terms-tags a[href*="/tags/distributed-systems/"]::before { content: "🌐"; }
 
 /* 19. Database */
-.post-tags a[href*="/tags/database/"], .terms-tags a[href*="/tags/database/"] { color: #3b82f6; border-color: rgba(59, 130, 246, 0.35); background: rgba(59, 130, 246, 0.08); }
-.post-tags a[href*="/tags/database/"]:hover, .terms-tags a[href*="/tags/database/"]:hover { border-color: #3b82f6; box-shadow: 0 2px 10px rgba(59, 130, 246, 0.25); }
-.post-tags a[href*="/tags/database/"]::before, .terms-tags a[href*="/tags/database/"]::before { content: "🗄️"; }
+html.view-workstation .post-tags a[href*="/tags/database/"], html.view-workstation .terms-tags a[href*="/tags/database/"] { color: #3b82f6; border-color: rgba(59, 130, 246, 0.35); background: rgba(59, 130, 246, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/database/"]:hover, html.view-workstation .terms-tags a[href*="/tags/database/"]:hover { border-color: #3b82f6; box-shadow: 0 2px 10px rgba(59, 130, 246, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/database/"]::before, html.view-workstation .terms-tags a[href*="/tags/database/"]::before { content: "🗄️"; }
 
 /* 20. Postgres */
-.post-tags a[href*="/tags/postgres/"], .terms-tags a[href*="/tags/postgres/"] { color: #336791; border-color: rgba(51, 103, 145, 0.35); background: rgba(51, 103, 145, 0.08); }
-.post-tags a[href*="/tags/postgres/"]:hover, .terms-tags a[href*="/tags/postgres/"]:hover { border-color: #336791; box-shadow: 0 2px 10px rgba(51, 103, 145, 0.25); }
-.post-tags a[href*="/tags/postgres/"]::before, .terms-tags a[href*="/tags/postgres/"]::before { content: "🐘"; }
+html.view-workstation .post-tags a[href*="/tags/postgres/"], html.view-workstation .terms-tags a[href*="/tags/postgres/"] { color: #336791; border-color: rgba(51, 103, 145, 0.35); background: rgba(51, 103, 145, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/postgres/"]:hover, html.view-workstation .terms-tags a[href*="/tags/postgres/"]:hover { border-color: #336791; box-shadow: 0 2px 10px rgba(51, 103, 145, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/postgres/"]::before, html.view-workstation .terms-tags a[href*="/tags/postgres/"]::before { content: "🐘"; }
 
 /* 21. SQL Server */
-.post-tags a[href*="/tags/sql-server/"], .terms-tags a[href*="/tags/sql-server/"] { color: #cc292b; border-color: rgba(204, 41, 43, 0.35); background: rgba(204, 41, 43, 0.08); }
-.post-tags a[href*="/tags/sql-server/"]:hover, .terms-tags a[href*="/tags/sql-server/"]:hover { border-color: #cc292b; box-shadow: 0 2px 10px rgba(204, 41, 43, 0.25); }
-.post-tags a[href*="/tags/sql-server/"]::before, .terms-tags a[href*="/tags/sql-server/"]::before { content: "🗃️"; }
+html.view-workstation .post-tags a[href*="/tags/sql-server/"], html.view-workstation .terms-tags a[href*="/tags/sql-server/"] { color: #cc292b; border-color: rgba(204, 41, 43, 0.35); background: rgba(204, 41, 43, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/sql-server/"]:hover, html.view-workstation .terms-tags a[href*="/tags/sql-server/"]:hover { border-color: #cc292b; box-shadow: 0 2px 10px rgba(204, 41, 43, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/sql-server/"]::before, html.view-workstation .terms-tags a[href*="/tags/sql-server/"]::before { content: "🗃️"; }
 
 /* 22. SQL */
-.post-tags a[href*="/tags/sql/"], .terms-tags a[href*="/tags/sql/"] { color: #0284c7; border-color: rgba(2, 132, 199, 0.35); background: rgba(2, 132, 199, 0.08); }
-.post-tags a[href*="/tags/sql/"]:hover, .terms-tags a[href*="/tags/sql/"]:hover { border-color: #0284c7; box-shadow: 0 2px 10px rgba(2, 132, 199, 0.25); }
-.post-tags a[href*="/tags/sql/"]::before, .terms-tags a[href*="/tags/sql/"]::before { content: "📊"; }
+html.view-workstation .post-tags a[href*="/tags/sql/"], html.view-workstation .terms-tags a[href*="/tags/sql/"] { color: #0284c7; border-color: rgba(2, 132, 199, 0.35); background: rgba(2, 132, 199, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/sql/"]:hover, html.view-workstation .terms-tags a[href*="/tags/sql/"]:hover { border-color: #0284c7; box-shadow: 0 2px 10px rgba(2, 132, 199, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/sql/"]::before, html.view-workstation .terms-tags a[href*="/tags/sql/"]::before { content: "📊"; }
 
 /* 23. GitOps */
-.post-tags a[href*="/tags/gitops/"], .terms-tags a[href*="/tags/gitops/"] { color: #f43f5e; border-color: rgba(244, 63, 94, 0.35); background: rgba(244, 63, 94, 0.08); }
-.post-tags a[href*="/tags/gitops/"]:hover, .terms-tags a[href*="/tags/gitops/"]:hover { border-color: #f43f5e; box-shadow: 0 2px 10px rgba(244, 63, 94, 0.25); }
-.post-tags a[href*="/tags/gitops/"]::before, .terms-tags a[href*="/tags/gitops/"]::before { content: "🐙"; }
+html.view-workstation .post-tags a[href*="/tags/gitops/"], html.view-workstation .terms-tags a[href*="/tags/gitops/"] { color: #f43f5e; border-color: rgba(244, 63, 94, 0.35); background: rgba(244, 63, 94, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/gitops/"]:hover, html.view-workstation .terms-tags a[href*="/tags/gitops/"]:hover { border-color: #f43f5e; box-shadow: 0 2px 10px rgba(244, 63, 94, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/gitops/"]::before, html.view-workstation .terms-tags a[href*="/tags/gitops/"]::before { content: "🐙"; }
 
 /* 24. DevOps */
-.post-tags a[href*="/tags/devops/"], .terms-tags a[href*="/tags/devops/"] { color: #06b6d4; border-color: rgba(6, 182, 212, 0.35); background: rgba(6, 182, 212, 0.08); }
-.post-tags a[href*="/tags/devops/"]:hover, .terms-tags a[href*="/tags/devops/"]:hover { border-color: #06b6d4; box-shadow: 0 2px 10px rgba(6, 182, 212, 0.25); }
-.post-tags a[href*="/tags/devops/"]::before, .terms-tags a[href*="/tags/devops/"]::before { content: "♾️"; }
+html.view-workstation .post-tags a[href*="/tags/devops/"], html.view-workstation .terms-tags a[href*="/tags/devops/"] { color: #06b6d4; border-color: rgba(6, 182, 212, 0.35); background: rgba(6, 182, 212, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/devops/"]:hover, html.view-workstation .terms-tags a[href*="/tags/devops/"]:hover { border-color: #06b6d4; box-shadow: 0 2px 10px rgba(6, 182, 212, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/devops/"]::before, html.view-workstation .terms-tags a[href*="/tags/devops/"]::before { content: "♾️"; }
 
 /* 25. CI/CD */
-.post-tags a[href*="/tags/ci-cd/"], .terms-tags a[href*="/tags/ci-cd/"] { color: #ec4899; border-color: rgba(236, 72, 153, 0.35); background: rgba(236, 72, 153, 0.08); }
-.post-tags a[href*="/tags/ci-cd/"]:hover, .terms-tags a[href*="/tags/ci-cd/"]:hover { border-color: #ec4899; box-shadow: 0 2px 10px rgba(236, 72, 153, 0.25); }
-.post-tags a[href*="/tags/ci-cd/"]::before, .terms-tags a[href*="/tags/ci-cd/"]::before { content: "🚀"; }
+html.view-workstation .post-tags a[href*="/tags/ci-cd/"], html.view-workstation .terms-tags a[href*="/tags/ci-cd/"] { color: #ec4899; border-color: rgba(236, 72, 153, 0.35); background: rgba(236, 72, 153, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/ci-cd/"]:hover, html.view-workstation .terms-tags a[href*="/tags/ci-cd/"]:hover { border-color: #ec4899; box-shadow: 0 2px 10px rgba(236, 72, 153, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/ci-cd/"]::before, html.view-workstation .terms-tags a[href*="/tags/ci-cd/"]::before { content: "🚀"; }
 
 /* 26. Performance */
-.post-tags a[href*="/tags/performance/"], .terms-tags a[href*="/tags/performance/"] { color: #10b981; border-color: rgba(16, 185, 129, 0.35); background: rgba(16, 185, 129, 0.08); }
-.post-tags a[href*="/tags/performance/"]:hover, .terms-tags a[href*="/tags/performance/"]:hover { border-color: #10b981; box-shadow: 0 2px 10px rgba(16, 185, 129, 0.25); }
-.post-tags a[href*="/tags/performance/"]::before, .terms-tags a[href*="/tags/performance/"]::before { content: "⏱️"; }
+html.view-workstation .post-tags a[href*="/tags/performance/"], html.view-workstation .terms-tags a[href*="/tags/performance/"] { color: #10b981; border-color: rgba(16, 185, 129, 0.35); background: rgba(16, 185, 129, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/performance/"]:hover, html.view-workstation .terms-tags a[href*="/tags/performance/"]:hover { border-color: #10b981; box-shadow: 0 2px 10px rgba(16, 185, 129, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/performance/"]::before, html.view-workstation .terms-tags a[href*="/tags/performance/"]::before { content: "⏱️"; }
 
 /* 27. Caching */
-.post-tags a[href*="/tags/caching/"], .terms-tags a[href*="/tags/caching/"] { color: #f59e0b; border-color: rgba(245, 158, 11, 0.35); background: rgba(245, 158, 11, 0.08); }
-.post-tags a[href*="/tags/caching/"]:hover, .terms-tags a[href*="/tags/caching/"]:hover { border-color: #f59e0b; box-shadow: 0 2px 10px rgba(245, 158, 11, 0.25); }
-.post-tags a[href*="/tags/caching/"]::before, .terms-tags a[href*="/tags/caching/"]::before { content: "⚡"; }
+html.view-workstation .post-tags a[href*="/tags/caching/"], html.view-workstation .terms-tags a[href*="/tags/caching/"] { color: #f59e0b; border-color: rgba(245, 158, 11, 0.35); background: rgba(245, 158, 11, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/caching/"]:hover, html.view-workstation .terms-tags a[href*="/tags/caching/"]:hover { border-color: #f59e0b; box-shadow: 0 2px 10px rgba(245, 158, 11, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/caching/"]::before, html.view-workstation .terms-tags a[href*="/tags/caching/"]::before { content: "⚡"; }
 
 /* 28. Networking */
-.post-tags a[href*="/tags/networking/"], .terms-tags a[href*="/tags/networking/"] { color: #0284c7; border-color: rgba(2, 132, 199, 0.35); background: rgba(2, 132, 199, 0.08); }
-.post-tags a[href*="/tags/networking/"]:hover, .terms-tags a[href*="/tags/networking/"]:hover { border-color: #0284c7; box-shadow: 0 2px 10px rgba(2, 132, 199, 0.25); }
-.post-tags a[href*="/tags/networking/"]::before, .terms-tags a[href*="/tags/networking/"]::before { content: "🔌"; }
+html.view-workstation .post-tags a[href*="/tags/networking/"], html.view-workstation .terms-tags a[href*="/tags/networking/"] { color: #0284c7; border-color: rgba(2, 132, 199, 0.35); background: rgba(2, 132, 199, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/networking/"]:hover, html.view-workstation .terms-tags a[href*="/tags/networking/"]:hover { border-color: #0284c7; box-shadow: 0 2px 10px rgba(2, 132, 199, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/networking/"]::before, html.view-workstation .terms-tags a[href*="/tags/networking/"]::before { content: "🔌"; }
 
 /* 29. Linux */
-.post-tags a[href*="/tags/linux/"], .terms-tags a[href*="/tags/linux/"] { color: #eab308; border-color: rgba(234, 179, 8, 0.35); background: rgba(234, 179, 8, 0.08); }
-.post-tags a[href*="/tags/linux/"]:hover, .terms-tags a[href*="/tags/linux/"]:hover { border-color: #eab308; box-shadow: 0 2px 10px rgba(234, 179, 8, 0.25); }
-.post-tags a[href*="/tags/linux/"]::before, .terms-tags a[href*="/tags/linux/"]::before { content: "🐧"; }
+html.view-workstation .post-tags a[href*="/tags/linux/"], html.view-workstation .terms-tags a[href*="/tags/linux/"] { color: #eab308; border-color: rgba(234, 179, 8, 0.35); background: rgba(234, 179, 8, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/linux/"]:hover, html.view-workstation .terms-tags a[href*="/tags/linux/"]:hover { border-color: #eab308; box-shadow: 0 2px 10px rgba(234, 179, 8, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/linux/"]::before, html.view-workstation .terms-tags a[href*="/tags/linux/"]::before { content: "🐧"; }
 
 /* 30. WSL */
-.post-tags a[href*="/tags/wsl/"], .terms-tags a[href*="/tags/wsl/"] { color: #0ea5e9; border-color: rgba(14, 165, 233, 0.35); background: rgba(14, 165, 233, 0.08); }
-.post-tags a[href*="/tags/wsl/"]:hover, .terms-tags a[href*="/tags/wsl/"]:hover { border-color: #0ea5e9; box-shadow: 0 2px 10px rgba(14, 165, 233, 0.25); }
-.post-tags a[href*="/tags/wsl/"]::before, .terms-tags a[href*="/tags/wsl/"]::before { content: "🐧"; }
+html.view-workstation .post-tags a[href*="/tags/wsl/"], html.view-workstation .terms-tags a[href*="/tags/wsl/"] { color: #0ea5e9; border-color: rgba(14, 165, 233, 0.35); background: rgba(14, 165, 233, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/wsl/"]:hover, html.view-workstation .terms-tags a[href*="/tags/wsl/"]:hover { border-color: #0ea5e9; box-shadow: 0 2px 10px rgba(14, 165, 233, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/wsl/"]::before, html.view-workstation .terms-tags a[href*="/tags/wsl/"]::before { content: "🐧"; }
 
 /* 31. Terminal */
-.post-tags a[href*="/tags/terminal/"], .terms-tags a[href*="/tags/terminal/"] { color: #10b981; border-color: rgba(16, 185, 129, 0.35); background: rgba(16, 185, 129, 0.08); }
-.post-tags a[href*="/tags/terminal/"]:hover, .terms-tags a[href*="/tags/terminal/"]:hover { border-color: #10b981; box-shadow: 0 2px 10px rgba(16, 185, 129, 0.25); }
-.post-tags a[href*="/tags/terminal/"]::before, .terms-tags a[href*="/tags/terminal/"]::before { content: "💻"; }
+html.view-workstation .post-tags a[href*="/tags/terminal/"], html.view-workstation .terms-tags a[href*="/tags/terminal/"] { color: #10b981; border-color: rgba(16, 185, 129, 0.35); background: rgba(16, 185, 129, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/terminal/"]:hover, html.view-workstation .terms-tags a[href*="/tags/terminal/"]:hover { border-color: #10b981; box-shadow: 0 2px 10px rgba(16, 185, 129, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/terminal/"]::before, html.view-workstation .terms-tags a[href*="/tags/terminal/"]::before { content: "💻"; }
 
 /* 32. CLI */
-.post-tags a[href*="/tags/cli/"], .terms-tags a[href*="/tags/cli/"] { color: #64748b; border-color: rgba(100, 116, 139, 0.35); background: rgba(100, 116, 139, 0.08); }
-.post-tags a[href*="/tags/cli/"]:hover, .terms-tags a[href*="/tags/cli/"]:hover { border-color: #64748b; box-shadow: 0 2px 10px rgba(100, 116, 139, 0.25); }
-.post-tags a[href*="/tags/cli/"]::before, .terms-tags a[href*="/tags/cli/"]::before { content: "⌨️"; }
+html.view-workstation .post-tags a[href*="/tags/cli/"], html.view-workstation .terms-tags a[href*="/tags/cli/"] { color: #64748b; border-color: rgba(100, 116, 139, 0.35); background: rgba(100, 116, 139, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/cli/"]:hover, html.view-workstation .terms-tags a[href*="/tags/cli/"]:hover { border-color: #64748b; box-shadow: 0 2px 10px rgba(100, 116, 139, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/cli/"]::before, html.view-workstation .terms-tags a[href*="/tags/cli/"]::before { content: "⌨️"; }
 
 /* 33. Tooling */
-.post-tags a[href*="/tags/tooling/"], .terms-tags a[href*="/tags/tooling/"] { color: #f59e0b; border-color: rgba(245, 158, 11, 0.35); background: rgba(245, 158, 11, 0.08); }
-.post-tags a[href*="/tags/tooling/"]:hover, .terms-tags a[href*="/tags/tooling/"]:hover { border-color: #f59e0b; box-shadow: 0 2px 10px rgba(245, 158, 11, 0.25); }
-.post-tags a[href*="/tags/tooling/"]::before, .terms-tags a[href*="/tags/tooling/"]::before { content: "🔧"; }
+html.view-workstation .post-tags a[href*="/tags/tooling/"], html.view-workstation .terms-tags a[href*="/tags/tooling/"] { color: #f59e0b; border-color: rgba(245, 158, 11, 0.35); background: rgba(245, 158, 11, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/tooling/"]:hover, html.view-workstation .terms-tags a[href*="/tags/tooling/"]:hover { border-color: #f59e0b; box-shadow: 0 2px 10px rgba(245, 158, 11, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/tooling/"]::before, html.view-workstation .terms-tags a[href*="/tags/tooling/"]::before { content: "🔧"; }
 
 /* 34. Workflow */
-.post-tags a[href*="/tags/workflow/"], .terms-tags a[href*="/tags/workflow/"] { color: #8b5cf6; border-color: rgba(139, 92, 246, 0.35); background: rgba(139, 92, 246, 0.08); }
-.post-tags a[href*="/tags/workflow/"]:hover, .terms-tags a[href*="/tags/workflow/"]:hover { border-color: #8b5cf6; box-shadow: 0 2px 10px rgba(139, 92, 246, 0.25); }
-.post-tags a[href*="/tags/workflow/"]::before, .terms-tags a[href*="/tags/workflow/"]::before { content: "🔄"; }
+html.view-workstation .post-tags a[href*="/tags/workflow/"], html.view-workstation .terms-tags a[href*="/tags/workflow/"] { color: #8b5cf6; border-color: rgba(139, 92, 246, 0.35); background: rgba(139, 92, 246, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/workflow/"]:hover, html.view-workstation .terms-tags a[href*="/tags/workflow/"]:hover { border-color: #8b5cf6; box-shadow: 0 2px 10px rgba(139, 92, 246, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/workflow/"]::before, html.view-workstation .terms-tags a[href*="/tags/workflow/"]::before { content: "🔄"; }
 
 /* 35. Geospatial */
-.post-tags a[href*="/tags/geospatial/"], .terms-tags a[href*="/tags/geospatial/"] { color: #10b981; border-color: rgba(16, 185, 129, 0.35); background: rgba(16, 185, 129, 0.08); }
-.post-tags a[href*="/tags/geospatial/"]:hover, .terms-tags a[href*="/tags/geospatial/"]:hover { border-color: #10b981; box-shadow: 0 2px 10px rgba(16, 185, 129, 0.25); }
-.post-tags a[href*="/tags/geospatial/"]::before, .terms-tags a[href*="/tags/geospatial/"]::before { content: "🗺️"; }
+html.view-workstation .post-tags a[href*="/tags/geospatial/"], html.view-workstation .terms-tags a[href*="/tags/geospatial/"] { color: #10b981; border-color: rgba(16, 185, 129, 0.35); background: rgba(16, 185, 129, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/geospatial/"]:hover, html.view-workstation .terms-tags a[href*="/tags/geospatial/"]:hover { border-color: #10b981; box-shadow: 0 2px 10px rgba(16, 185, 129, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/geospatial/"]::before, html.view-workstation .terms-tags a[href*="/tags/geospatial/"]::before { content: "🗺️"; }
 
 /* 36. Hardware */
-.post-tags a[href*="/tags/hardware/"], .terms-tags a[href*="/tags/hardware/"] { color: #64748b; border-color: rgba(100, 116, 139, 0.35); background: rgba(100, 116, 139, 0.08); }
-.post-tags a[href*="/tags/hardware/"]:hover, .terms-tags a[href*="/tags/hardware/"]:hover { border-color: #64748b; box-shadow: 0 2px 10px rgba(100, 116, 139, 0.25); }
-.post-tags a[href*="/tags/hardware/"]::before, .terms-tags a[href*="/tags/hardware/"]::before { content: "🔲"; }
+html.view-workstation .post-tags a[href*="/tags/hardware/"], html.view-workstation .terms-tags a[href*="/tags/hardware/"] { color: #64748b; border-color: rgba(100, 116, 139, 0.35); background: rgba(100, 116, 139, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/hardware/"]:hover, html.view-workstation .terms-tags a[href*="/tags/hardware/"]:hover { border-color: #64748b; box-shadow: 0 2px 10px rgba(100, 116, 139, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/hardware/"]::before, html.view-workstation .terms-tags a[href*="/tags/hardware/"]::before { content: "🔲"; }
 
 /* 37. Infrastructure */
-.post-tags a[href*="/tags/infrastructure/"], .terms-tags a[href*="/tags/infrastructure/"] { color: #f97316; border-color: rgba(249, 115, 22, 0.35); background: rgba(249, 115, 22, 0.08); }
-.post-tags a[href*="/tags/infrastructure/"]:hover, .terms-tags a[href*="/tags/infrastructure/"]:hover { border-color: #f97316; box-shadow: 0 2px 10px rgba(249, 115, 22, 0.25); }
-.post-tags a[href*="/tags/infrastructure/"]::before, .terms-tags a[href*="/tags/infrastructure/"]::before { content: "🏗️"; }
+html.view-workstation .post-tags a[href*="/tags/infrastructure/"], html.view-workstation .terms-tags a[href*="/tags/infrastructure/"] { color: #f97316; border-color: rgba(249, 115, 22, 0.35); background: rgba(249, 115, 22, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/infrastructure/"]:hover, html.view-workstation .terms-tags a[href*="/tags/infrastructure/"]:hover { border-color: #f97316; box-shadow: 0 2px 10px rgba(249, 115, 22, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/infrastructure/"]::before, html.view-workstation .terms-tags a[href*="/tags/infrastructure/"]::before { content: "🏗️"; }
 
 /* 38. Release Notes */
-.post-tags a[href*="/tags/release-notes/"], .terms-tags a[href*="/tags/release-notes/"] { color: #06b6d4; border-color: rgba(6, 182, 212, 0.35); background: rgba(6, 182, 212, 0.08); }
-.post-tags a[href*="/tags/release-notes/"]:hover, .terms-tags a[href*="/tags/release-notes/"]:hover { border-color: #06b6d4; box-shadow: 0 2px 10px rgba(6, 182, 212, 0.25); }
-.post-tags a[href*="/tags/release-notes/"]::before, .terms-tags a[href*="/tags/release-notes/"]::before { content: "📋"; }
+html.view-workstation .post-tags a[href*="/tags/release-notes/"], html.view-workstation .terms-tags a[href*="/tags/release-notes/"] { color: #06b6d4; border-color: rgba(6, 182, 212, 0.35); background: rgba(6, 182, 212, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/release-notes/"]:hover, html.view-workstation .terms-tags a[href*="/tags/release-notes/"]:hover { border-color: #06b6d4; box-shadow: 0 2px 10px rgba(6, 182, 212, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/release-notes/"]::before, html.view-workstation .terms-tags a[href*="/tags/release-notes/"]::before { content: "📋"; }
 
 /* 39. Demo */
-.post-tags a[href*="/tags/demo/"], .terms-tags a[href*="/tags/demo/"] { color: #eab308; border-color: rgba(234, 179, 8, 0.35); background: rgba(234, 179, 8, 0.08); }
-.post-tags a[href*="/tags/demo/"]:hover, .terms-tags a[href*="/tags/demo/"]:hover { border-color: #eab308; box-shadow: 0 2px 10px rgba(234, 179, 8, 0.25); }
-.post-tags a[href*="/tags/demo/"]::before, .terms-tags a[href*="/tags/demo/"]::before { content: "💡"; }
+html.view-workstation .post-tags a[href*="/tags/demo/"], html.view-workstation .terms-tags a[href*="/tags/demo/"] { color: #eab308; border-color: rgba(234, 179, 8, 0.35); background: rgba(234, 179, 8, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/demo/"]:hover, html.view-workstation .terms-tags a[href*="/tags/demo/"]:hover { border-color: #eab308; box-shadow: 0 2px 10px rgba(234, 179, 8, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/demo/"]::before, html.view-workstation .terms-tags a[href*="/tags/demo/"]::before { content: "💡"; }
 
 /* 40. Hugo */
-.post-tags a[href*="/tags/hugo/"], .terms-tags a[href*="/tags/hugo/"] { color: #ff4088; border-color: rgba(255, 64, 136, 0.35); background: rgba(255, 64, 136, 0.08); }
-.post-tags a[href*="/tags/hugo/"]:hover, .terms-tags a[href*="/tags/hugo/"]:hover { border-color: #ff4088; box-shadow: 0 2px 10px rgba(255, 64, 136, 0.25); }
-.post-tags a[href*="/tags/hugo/"]::before, .terms-tags a[href*="/tags/hugo/"]::before { content: "🦩"; }
+html.view-workstation .post-tags a[href*="/tags/hugo/"], html.view-workstation .terms-tags a[href*="/tags/hugo/"] { color: #ff4088; border-color: rgba(255, 64, 136, 0.35); background: rgba(255, 64, 136, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/hugo/"]:hover, html.view-workstation .terms-tags a[href*="/tags/hugo/"]:hover { border-color: #ff4088; box-shadow: 0 2px 10px rgba(255, 64, 136, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/hugo/"]::before, html.view-workstation .terms-tags a[href*="/tags/hugo/"]::before { content: "🦩"; }
 
 /* 41. Meta */
-.post-tags a[href*="/tags/meta/"], .terms-tags a[href*="/tags/meta/"] { color: #8b5cf6; border-color: rgba(139, 92, 246, 0.35); background: rgba(139, 92, 246, 0.08); }
-.post-tags a[href*="/tags/meta/"]:hover, .terms-tags a[href*="/tags/meta/"]:hover { border-color: #8b5cf6; box-shadow: 0 2px 10px rgba(139, 92, 246, 0.25); }
-.post-tags a[href*="/tags/meta/"]::before, .terms-tags a[href*="/tags/meta/"]::before { content: "📝"; }
+html.view-workstation .post-tags a[href*="/tags/meta/"], html.view-workstation .terms-tags a[href*="/tags/meta/"] { color: #8b5cf6; border-color: rgba(139, 92, 246, 0.35); background: rgba(139, 92, 246, 0.08); }
+html.view-workstation .post-tags a[href*="/tags/meta/"]:hover, html.view-workstation .terms-tags a[href*="/tags/meta/"]:hover { border-color: #8b5cf6; box-shadow: 0 2px 10px rgba(139, 92, 246, 0.25); }
+html.view-workstation .post-tags a[href*="/tags/meta/"]::before, html.view-workstation .terms-tags a[href*="/tags/meta/"]::before { content: "📝"; }
 /* ── Inline code chip ── */
 .post-content code,
 .md-content :not(pre) > code {
@@ -1119,34 +1171,61 @@ html {
     margin-bottom: 6px;
 }
 
-/* ── Terminal Directory Header (Starship Prompt Aesthetic) ── */
+/* ── Terminal Directory Header ── */
 .terminal-directory-header {
     display: inline-flex;
     align-items: center;
     flex-wrap: wrap;
     gap: 7px;
-    margin: 18px 0 12px 0;
+    margin: 14px 0 10px 0;
+    font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
+    font-size: 12px;
+}
+
+/* Minimalist Mode (Default): Clean, flat inline terminal prompt */
+html:not(.view-workstation) .terminal-directory-header {
+    padding: 2px 0;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+html:not(.view-workstation) .term-segment {
+    padding: 0 2px;
+    background: none !important;
+    border: none !important;
+    font-size: 12px;
+}
+
+html:not(.view-workstation) .term-segment.term-user {
+    color: #10b981;
+    font-weight: 600;
+}
+
+html:not(.view-workstation) .term-segment.term-path {
+    color: var(--secondary);
+}
+
+html:not(.view-workstation) .term-segment.term-git {
+    display: none !important;
+}
+
+/* Workstation Mode Only: Full Starship Segmented Badges */
+html.view-workstation .terminal-directory-header {
     padding: 7px 14px;
     background: rgba(15, 23, 42, 0.04);
     border: 1px solid var(--border);
     border-radius: 8px;
-    font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
-    font-size: 12.5px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-:root[data-theme="dark"] .terminal-directory-header {
+:root[data-theme="dark"] html.view-workstation .terminal-directory-header {
     background: rgba(15, 23, 42, 0.55);
     border-color: rgba(255, 255, 255, 0.09);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
-.terminal-directory-header:hover {
-    border-color: var(--accent);
-}
-
-.term-segment {
+html.view-workstation .term-segment {
     display: inline-flex;
     align-items: center;
     gap: 5px;
@@ -1156,40 +1235,39 @@ html {
     font-weight: 500;
 }
 
-.term-segment.term-user {
+html.view-workstation .term-segment.term-user {
     background: rgba(16, 185, 129, 0.12);
     color: #10b981;
     border: 1px solid rgba(16, 185, 129, 0.25);
     font-weight: 600;
 }
 
-:root[data-theme="dark"] .term-segment.term-user {
+:root[data-theme="dark"] html.view-workstation .term-segment.term-user {
     background: rgba(16, 185, 129, 0.18);
     color: #34d399;
 }
 
-.term-segment.term-path {
+html.view-workstation .term-segment.term-path {
     background: rgba(56, 189, 248, 0.1);
     color: #0284c7;
     border: 1px solid rgba(56, 189, 248, 0.25);
 }
 
-:root[data-theme="dark"] .term-segment.term-path {
+:root[data-theme="dark"] html.view-workstation .term-segment.term-path {
     background: rgba(56, 189, 248, 0.15);
     color: #38bdf8;
 }
 
-.term-segment.term-git {
+html.view-workstation .term-segment.term-git {
     background: rgba(168, 85, 247, 0.1);
     color: #9333ea;
     border: 1px solid rgba(168, 85, 247, 0.25);
 }
 
-:root[data-theme="dark"] .term-segment.term-git {
+:root[data-theme="dark"] html.view-workstation .term-segment.term-git {
     background: rgba(168, 85, 247, 0.15);
     color: #c084fc;
 }
-
 .git-icon {
     font-size: 12px;
 }
@@ -1269,15 +1347,20 @@ html {
     }
 }
 
-/* Desktop 3-Column Workstation Layout (>= 1280px) */
+/* In Minimal mode, hide the left filesystem rail on both desktop and mobile */
+html:not(.view-workstation) .post-left-sidebar {
+    display: none !important;
+}
+
+/* Desktop 3-Column Workstation Layout (>= 1280px) - Workstation Mode Only */
 @media (min-width: 1280px) {
-    .main:has(.post-layout-container) {
+    html.view-workstation .main:has(.post-layout-container) {
         max-width: 1440px !important;
         padding-left: 24px;
         padding-right: 24px;
     }
 
-    .post-layout-container {
+    html.view-workstation .post-layout-container {
         display: grid;
         grid-template-columns: 240px minmax(0, 1fr) 280px;
         gap: 36px;
@@ -1285,23 +1368,24 @@ html {
         width: 100%;
     }
 
-    .post-left-sidebar {
+    html.view-workstation .post-left-sidebar {
         order: unset;
         width: 100%;
+        display: block !important;
     }
 
-    .post-single {
+    html.view-workstation .post-single {
         order: unset;
         width: 100%;
         min-width: 0;
     }
 
-    .post-sidebar {
+    html.view-workstation .post-sidebar {
         order: unset;
         width: 100%;
     }
 
-    .sidebar-sticky {
+    html.view-workstation .sidebar-sticky {
         position: sticky;
         top: 80px;
         display: flex;

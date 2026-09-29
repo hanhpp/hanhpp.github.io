@@ -26,6 +26,9 @@
             <li class="{{ if in .RelPermalink "flareon-13-the-1000-node-asn1-labyrinth" }}active{{ end }}">
               <a href="{{ "/posts/flareon-13-the-1000-node-asn1-labyrinth/" | absURL }}"><span class="fs-icon">📄</span> 04-asn1-lab.md</a>
             </li>
+            <li class="{{ if in .RelPermalink "flareon-13-crux-and-neon-outrun" }}active{{ end }}">
+              <a href="{{ "/posts/flareon-13-crux-and-neon-outrun/" | absURL }}"><span class="fs-icon">📄</span> 05-crux-neon.md</a>
+            </li>
           </ul>
         </details>
         {{- end }}
@@ -216,9 +219,11 @@
             <span class="step-title">ASN.1 Labyrinth</span>
           </a>
         </li>
-        <li class="queued">
-          <span class="step-marker">5</span>
-          <span class="step-title">Crux &amp; Beyond (Queued)</span>
+        <li class="{{ if in .RelPermalink "crux-and-neon" }}active{{ else }}done{{ end }}">
+          <a href="{{ "/posts/flareon-13-crux-and-neon-outrun/" | absURL }}">
+            <span class="step-marker">5</span>
+            <span class="step-title">Wasm &amp; V8 Hooks</span>
+          </a>
         </li>
       </ul>
     </div>

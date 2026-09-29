@@ -8,3 +8,12 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
     onload="function runKaTeX(){if(window.renderMathInElement&&document.body){renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],throwOnError:false});}} runKaTeX(); document.addEventListener('DOMContentLoaded', runKaTeX);"></script>
 {{- end }}
+
+<script>
+(function() {
+    var mode = localStorage.getItem("pref-view-mode");
+    if (mode === "workstation") {
+        document.documentElement.classList.add("view-workstation");
+    }
+})();
+</script>
