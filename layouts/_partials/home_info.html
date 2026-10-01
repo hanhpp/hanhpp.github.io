@@ -17,6 +17,137 @@
         {{ $opts := dict "display" "block" }}
         {{ .Content | $.Page.RenderString $opts }}
     </div>
+    <div class="hero-mini-terminal" aria-label="Interactive terminal demo">
+        <div class="mini-term-header">
+            <span class="mini-term-dots"><i class="dot-red"></i><i class="dot-yellow"></i><i class="dot-green"></i></span>
+            <span class="mini-term-title">zsh: hanh@home (tty1)</span>
+            <span class="mini-term-badge">interactive</span>
+        </div>
+        <div class="mini-term-body" id="mini-term-body">
+            <div class="mini-term-history" id="mini-term-history">
+                <div class="mini-term-row"><span class="t-prompt">hanh@home:~$</span> <span class="t-cmd">whoami</span></div>
+                <div class="mini-term-out">hanh</div>
+                <div class="mini-term-row"><span class="t-prompt">hanh@home:~$</span> <span class="t-cmd">cat aboutme.md</span></div>
+                <div class="mini-term-out">Software engineer building distributed backends by day, breaking binaries in CTFs by night.</div>
+            </div>
+            <div class="mini-term-interactive-line">
+                <span class="t-prompt">hanh@home:~$</span>
+                <input type="text" id="mini-term-input" class="mini-term-input" placeholder='type "help" for commands...' autocomplete="off" spellcheck="false" aria-label="Terminal command input" />
+                <span class="t-cursor" aria-hidden="true"></span>
+            </div>
+            <div class="mini-term-quick-chips">
+                <button type="button" class="term-quick-chip" data-cmd="help">help</button>
+                <button type="button" class="term-quick-chip" data-cmd="ls">ls</button>
+                <button type="button" class="term-quick-chip" data-cmd="uname -a">uname</button>
+                <button type="button" class="term-quick-chip" data-cmd="clear">clear</button>
+            </div>
+        </div>
+    </div>
+    <div id="mini-term-player" class="mini-term-player is-hidden">
+        <div class="player-header">
+            <span class="player-title">&#x1F3B5; Workstation Soundtrack</span>
+            <button type="button" id="player-close-btn" class="player-close-btn" aria-label="Close music player">&#x2715; Close</button>
+        </div>
+        <div class="player-iframe-wrap">
+            <iframe id="player-iframe" src="" title="Workstation Soundtrack" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+    <script>
+    (function () {
+        var input = document.getElementById("mini-term-input");
+        var history = document.getElementById("mini-term-history");
+        var body = document.getElementById("mini-term-body");
+        if (!input || !history) return;
+
+        var CMDS = {
+            "help": "Commands: whoami, cat aboutme.md, ls, uname -a, date, clear (plus a few hidden easter eggs)",
+            "whoami": "hanh (systems & binary reverse engineer)",
+            "cat aboutme.md": "Software engineer building distributed backends by day, breaking binaries in CTFs by night.",
+            "ls": "aboutme.md   posts/   tags/   soundtrack.sh*   secret.txt",
+            "dir": "aboutme.md   posts/   tags/   soundtrack.sh*   secret.txt",
+            "cat secret.txt": "Nice try! No flags here, only hard-won engineering trade-offs.",
+            "cat flag": "Nice try! No flags here, only hard-won engineering trade-offs.",
+            "flag": "FLAG{congrats_on_finding_the_terminal_easter_egg}",
+            "uname": "ToasterOS 4.2 hanh-node x86_64/arm64 dual-arch",
+            "uname -a": "ToasterOS 4.2 hanh-node 6.9-quantum-potato #1 SMP PREEMPT x86_64/arm64 GNU/Hanh",
+            "date": new Date().toUTCString(),
+            "music": "Opening soundtrack in new tab...",
+            "clear": "CLEAR"
+        };
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        function runCmd(raw) {
+            var cmd = raw.trim().toLowerCase();
+            if (!cmd) return;
+
+            if (cmd === "clear") {
+                history.innerHTML = "";
+                input.value = "";
+                return;
+            }
+
+            var row = document.createElement("div");
+            row.className = "mini-term-row";
+            row.innerHTML = '<span class="t-prompt">hanh@home:~$</span> <span class="t-cmd">' + escapeHtml(raw) + "</span>";
+            history.appendChild(row);
+
+            var out = document.createElement("div");
+            out.className = "mini-term-out";
+            if (cmd === "music" || cmd === "./soundtrack.sh" || cmd === "sh soundtrack.sh" || cmd === "play") {
+                out.innerHTML = "&#x25B6; Embedding and playing soundtrack below... &#x1F3B5;";
+                var player = document.getElementById("mini-term-player");
+                var iframe = document.getElementById("player-iframe");
+                if (player && iframe) {
+                    iframe.src = "https://www.youtube.com/embed/umGQ57gqE0k?autoplay=1&list=RDPg39V_-aNPY&index=2";
+                    player.classList.remove("is-hidden");
+                    player.scrollIntoView({ behavior: "smooth", block: "nearest" });
+                }
+            } else if (CMDS[cmd]) {
+                out.innerText = CMDS[cmd];
+            } else {
+                out.innerText = 'zsh: command not found: ' + raw + ' (type "help" for commands)';
+            }
+
+            history.appendChild(out);
+            input.value = "";
+        }
+
+        input.addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+                runCmd(input.value);
+            }
+        });
+
+        if (body) {
+            body.addEventListener("click", function (e) {
+                if (!e.target.closest(".term-quick-chip")) {
+                    input.focus();
+                }
+            });
+        }
+
+        document.querySelectorAll(".term-quick-chip").forEach(function (btn) {
+            btn.addEventListener("click", function (e) {
+                e.stopPropagation();
+                runCmd(btn.dataset.cmd);
+            });
+        var closeBtn = document.getElementById("player-close-btn");
+        if (closeBtn) {
+            closeBtn.addEventListener("click", function () {
+                var player = document.getElementById("mini-term-player");
+                var iframe = document.getElementById("player-iframe");
+                if (player && iframe) {
+                    iframe.src = "";
+                    player.classList.add("is-hidden");
+                }
+            });
+        }
+        });
+    })();
+    </script>
     <footer class="entry-footer">
         {{ partial "social_icons.html" (dict "align" site.Params.homeInfoParams.AlignSocialIconsTo) }}
     </footer>

@@ -32,20 +32,29 @@
             </a>
             {{- end }}
 
-            <div class="logo-switches">
-                <button id="view-mode-toggle" class="view-mode-toggle" accesskey="v" title="Toggle Workstation / Minimal mode (Alt + V)" aria-label="Toggle view mode">
-                    <span class="mode-icon-minimal" title="Switch to Workstation mode">📟</span>
-                    <span class="mode-icon-workstation" title="Switch to Minimal mode">📖</span>
-                </button>
+            <div class="logo-switches header-controls-dock" aria-label="Display mode and theme controls">
+                <div class="view-mode-pill" role="radiogroup" aria-label="View mode">
+                    <button type="button" id="btn-mode-cyber" class="mode-segment mode-cyber active" data-mode="workstation" title="Switch to Cyber Workstation mode (Alt + V)">
+                        <span class="segment-icon">&#x26A1;</span>
+                        <span class="segment-label">Cyber</span>
+                    </button>
+                    <span class="segment-divider" aria-hidden="true"></span>
+                    <button type="button" id="btn-mode-minimal" class="mode-segment mode-minimal" data-mode="minimal" title="Switch to Minimal GitBook mode (Alt + V)">
+                        <span class="segment-icon">&#x1F4D6;</span>
+                        <span class="segment-label">Minimal</span>
+                    </button>
+                </div>
+
+                <span class="dock-separator" aria-hidden="true"></span>
 
                 {{- if (not site.Params.disableThemeToggle) }}
-                <button id="theme-toggle" class="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
-                    <svg class="moon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                <button id="theme-toggle" class="theme-toggle-btn" accesskey="t" title="Toggle dark/light theme (Alt + T)" aria-label="Toggle theme">
+                    <svg class="moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                     </svg>
-                    <svg class="sun" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                    <svg class="sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round">
                         <circle cx="12" cy="12" r="5"></circle>
@@ -60,7 +69,7 @@
                     </svg>
                 </button>
                 {{- end }}
-                
+            </div>
                 {{- if (not site.Params.disableLangToggle) }}
                     {{- $lang := .Lang}}
                     {{- with site.Home.Translations }}
@@ -116,11 +125,36 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    var btn = document.getElementById("view-mode-toggle");
-    if (!btn) return;
-    btn.addEventListener("click", function () {
-        var isWs = document.documentElement.classList.toggle("view-workstation");
-        localStorage.setItem("pref-view-mode", isWs ? "workstation" : "minimal");
+    var btnCyber = document.getElementById("btn-mode-cyber");
+    var btnMinimal = document.getElementById("btn-mode-minimal");
+    if (!btnCyber || !btnMinimal) return;
+
+    function syncButtons() {
+        var isWs = document.documentElement.classList.contains("view-workstation");
+        btnCyber.classList.toggle("active", isWs);
+        btnMinimal.classList.toggle("active", !isWs);
+    }
+
+    btnCyber.addEventListener("click", function () {
+        document.documentElement.classList.add("view-workstation");
+        localStorage.setItem("pref-view-mode", "workstation");
+        syncButtons();
     });
+
+    btnMinimal.addEventListener("click", function () {
+        document.documentElement.classList.remove("view-workstation");
+        localStorage.setItem("pref-view-mode", "minimal");
+        syncButtons();
+    });
+
+    window.addEventListener("keydown", function (e) {
+        if (e.altKey && (e.key === "v" || e.key === "V")) {
+            var isWs = document.documentElement.classList.toggle("view-workstation");
+            localStorage.setItem("pref-view-mode", isWs ? "workstation" : "minimal");
+            syncButtons();
+        }
+    });
+
+    syncButtons();
 });
 </script>

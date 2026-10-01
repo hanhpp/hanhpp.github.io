@@ -12,7 +12,7 @@
 <script>
 (function() {
     var mode = localStorage.getItem("pref-view-mode");
-    if (mode === "workstation") {
+    if (mode !== "minimal") {
         document.documentElement.classList.add("view-workstation");
     }
 })();

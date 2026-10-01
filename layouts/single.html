@@ -14,6 +14,9 @@
         <details class="fs-folder" open>
           <summary class="fs-folder-name">📁 flareon-13/</summary>
           <ul class="fs-files">
+            <li class="{{ if in .RelPermalink "finishing-flare-on-13" }}active{{ end }}">
+              <a href="{{ "/posts/finishing-flare-on-13/" | absURL }}"><span class="fs-icon">📄</span> 00-victory.md</a>
+            </li>
             <li class="{{ if in .RelPermalink "flareon-13-polyglots-and-traps" }}active{{ end }}">
               <a href="{{ "/posts/flareon-13-polyglots-and-traps/" | absURL }}"><span class="fs-icon">📄</span> 01-polyglots.md</a>
             </li>
@@ -32,6 +35,14 @@
           </ul>
         </details>
         {{- end }}
+        <details class="fs-folder" {{ if in .RelPermalink "turing" }}open{{ end }}>
+          <summary class="fs-folder-name">📁 theory-cs/</summary>
+          <ul class="fs-files">
+            <li class="{{ if in .RelPermalink "turing" }}active{{ end }}">
+              <a href="{{ "/posts/alan-turing-computable-numbers-entscheidungsproblem/" | absURL }}"><span class="fs-icon">📄</span> turing-1936.md</a>
+            </li>
+          </ul>
+        </details>
         <details class="fs-folder" {{ if in .RelPermalink "microservices" }}open{{ end }}>
           <summary class="fs-folder-name">📁 microservices/</summary>
           <ul class="fs-files">
