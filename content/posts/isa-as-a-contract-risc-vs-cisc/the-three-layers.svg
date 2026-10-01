@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460" width="100%" height="100%">
+  <defs>
+    <style>
+      .bg { fill: #0f172a; rx: 12px; }
+      .title { font-family: 'Poppins', system-ui, sans-serif; font-size: 16px; font-weight: 700; fill: #f8fafc; }
+      .subtitle { font-family: 'Source Code Pro', monospace; font-size: 12px; fill: #94a3b8; }
+      .layer-card { rx: 8px; stroke-width: 1.5; }
+      .layer-top { fill: #1e1b4b; stroke: #818cf8; }
+      .layer-mid { fill: #2e1065; stroke: #c084fc; }
+      .layer-bot { fill: #0f291e; stroke: #34d399; }
+      .layer-num { font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 700; }
+      .layer-title { font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 700; fill: #f8fafc; }
+      .layer-desc { font-family: 'Source Code Pro', monospace; font-size: 11px; fill: #cbd5e1; }
+      .chip { rx: 4px; font-family: 'Source Code Pro', monospace; font-size: 10px; font-weight: 600; }
+      .chip-indigo { fill: #312e81; stroke: #6366f1; fill-opacity: 0.6; }
+      .chip-purple { fill: #4c1d95; stroke: #a855f7; fill-opacity: 0.6; }
+      .chip-emerald { fill: #064e3b; stroke: #10b981; fill-opacity: 0.6; }
+      .chip-text { fill: #e2e8f0; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="460" class="bg" />
+
+  <!-- Headers -->
+  <text x="40" y="38" class="title">The Three Layers of the ISA in 2026</text>
+  <text x="40" y="58" class="subtitle">Where Microarchitecture Absorbed the Differences vs Where the Bill Is Still Paid</text>
+
+  <!-- Layer 3: Economics & Sovereignty -->
+  <g transform="translate(40, 85)">
+    <rect width="820" height="100" class="layer-card layer-top" />
+    <text x="24" y="30" class="layer-num" fill="#818cf8">LAYER 3: ECONOMICS &amp; SOVEREIGNTY</text>
+    <text x="24" y="50" class="layer-title">The Legal Instrument: Who Is Allowed to Build Silicon</text>
+    <text x="24" y="72" class="layer-desc">Architecture licenses (Qualcomm Oryon litigation) vs Core licensing vs Royalty-free open specs.</text>
+    <text x="24" y="88" class="layer-desc">RVA23 profiles unifying Linux binary compatibility; RISC-V dominance in accelerator control microcontrollers.</text>
+  </g>
+
+  <!-- Layer 2: The Software Contract -->
+  <g transform="translate(40, 200)">
+    <rect width="820" height="120" class="layer-card layer-mid" />
+    <text x="24" y="28" class="layer-num" fill="#c084fc">LAYER 2: THE SOFTWARE-VISIBLE CONTRACT</text>
+    <text x="24" y="48" class="layer-title">What the Compiler &amp; Kernel Cannot Optimize Away</text>
+    <text x="24" y="70" class="layer-desc">Memory Model: x86 Total Store Order (TSO) vs ARM Weak Ordering (LDAR / STLR).</text>
+    <text x="24" y="86" class="layer-desc">The Rosetta 2 Hardware Bit: Apple Silicon flips hardware TSO mode for x86 at a ~9% multi-thread penalty.</text>
+    <text x="24" y="102" class="layer-desc">Register File Sizing: 16 GPRs (x86-64 before APX) vs 31 GPRs (AArch64 / RISC-V) driving spill rates.</text>
+  </g>
+
+  <!-- Layer 1: Encoding & Microarchitecture -->
+  <g transform="translate(40, 335)">
+    <rect width="820" height="95" class="layer-card layer-bot" />
+    <text x="24" y="26" class="layer-num" fill="#34d399">LAYER 1: INSTRUCTION ENCODING</text>
+    <text x="24" y="46" class="layer-title">Absorbed by Modern Execution Backends</text>
+    <text x="24" y="66" class="layer-desc">Variable 1-15B vs Fixed 4B: Absorbed by 6K-entry uOp caches (Zen 5) or 192KB L1I caches (Firestorm).</text>
+    <text x="24" y="82" class="layer-desc">Instruction fusion, register renaming, out-of-order execution, and translation layers erase raw opcode differences.</text>
+  </g>
+</svg>
