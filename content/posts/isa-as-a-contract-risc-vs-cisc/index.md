@@ -1,6 +1,6 @@
 ---
 title: "The ISA Is a Contract, Not a Benchmark: What the Instruction Set Still Costs You in 2026"
-date: 2026-10-08T09:00:00+07:00
+date: 2026-10-01T10:00:00+07:00
 draft: false
 tags: ["hardware", "architecture", "compilers", "deep-dive"]
 summary: "Four decades of micro-op convergence absorbed the classic textbook differences between RISC and CISC, but the instruction set still bills you in three places you cannot optimize away: memory ordering contracts, frontend silicon budgets, and ecosystem sovereignty."

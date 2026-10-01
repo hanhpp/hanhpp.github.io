@@ -1,6 +1,6 @@
 ---
 title: "Can Every Problem Be Solved by an Algorithm? Alan Turing's 1936 Proof"
-date: 2026-10-05T09:00:00+07:00
+date: 2026-09-30T16:00:00+07:00
 draft: false
 math: true
 tags: ["computer-science", "math", "algorithms", "deep-dive"]
