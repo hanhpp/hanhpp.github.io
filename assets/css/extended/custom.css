@@ -1809,27 +1809,61 @@ body::before {
     display: none;
 }
 
+/* Minimalist Mode (Default): Clean centered layout */
+html:not(.view-workstation) .home-left-rail,
+html:not(.view-workstation) .home-right-rail {
+    display: none !important;
+}
+
+html:not(.view-workstation) .home-workstation-layout,
+.home-workstation-layout.no-rails,
+.home-workstation-layout:not(:has(.home-left-rail)) {
+    display: block !important;
+    max-width: 860px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+html:not(.view-workstation) .home-center-column,
+.home-workstation-layout.no-rails .home-center-column,
+.home-workstation-layout:not(:has(.home-left-rail)) .home-center-column {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* Workstation Mode Only: 3-Column Grid on Desktop */
 @media (min-width: 1280px) {
-    body.list .main {
+    html.view-workstation body.list:has(.home-workstation-layout.has-rails) .main {
         max-width: 1440px !important;
         padding-left: 20px;
         padding-right: 20px;
     }
 
-    .home-workstation-layout {
+    html.view-workstation .home-workstation-layout.has-rails {
         display: grid;
         grid-template-columns: 240px minmax(0, 1fr) 280px;
         gap: 36px;
         align-items: start;
     }
 
-    .home-left-rail,
-    .home-right-rail {
+    html.view-workstation .home-workstation-layout.has-rails .home-left-rail {
         display: block;
         width: 100%;
+        grid-column: 1;
+    }
+
+    html.view-workstation .home-workstation-layout.has-rails .home-center-column {
+        grid-column: 2;
+        width: 100%;
+        min-width: 0;
+    }
+
+    html.view-workstation .home-workstation-layout.has-rails .home-right-rail {
+        display: block;
+        width: 100%;
+        grid-column: 3;
     }
 }
-
 /* ── Telemetry & Toolbox Widgets (Homepage Left Rail) ── */
 .telemetry-list {
     list-style: none !important;

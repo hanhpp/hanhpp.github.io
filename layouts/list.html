@@ -51,9 +51,9 @@
 {{- partial "home_info.html" . }}
 {{- end }}
 
-<div class="home-workstation-layout">
+<div class="home-workstation-layout{{ if .IsHome }} has-rails{{ else }} no-rails{{ end }}">
   <!-- Left Rail: Telemetry & Toolbox (Desktop) -->
-  {{- if and .IsHome (eq $paginator.PageNumber 1) }}
+  {{- if .IsHome }}
   <aside class="home-left-rail" aria-label="System telemetry">
     <div class="sidebar-sticky">
       <div class="sidebar-widget telemetry-widget">
@@ -156,7 +156,7 @@
   </div>
 
   <!-- Right Rail: Topics & Series Tracker (Desktop) -->
-  {{- if and .IsHome (eq $paginator.PageNumber 1) }}
+  {{- if .IsHome }}
   <aside class="home-right-rail" aria-label="Featured topics and series">
     <div class="sidebar-sticky">
       <div class="sidebar-widget active-series-widget">
