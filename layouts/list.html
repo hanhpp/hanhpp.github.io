@@ -113,25 +113,22 @@
     {{- $class = "post-entry tag-entry" }}
     {{- end }}
 
-    {{- $postCats := slice }}
+    {{- $postCat := "blog" }}
     {{- with .Params.categories }}
-      {{- $postCats = . }}
+      {{- $postCat = index . 0 }}
     {{- else }}
       {{- $tags := .Params.tags | default slice }}
-      {{- if or (in $tags "ctf") (in $tags "writeup") (in $tags "milestone") }}
-        {{- $postCats = $postCats | append "writeup" }}
-      {{- end }}
-      {{- if or (in $tags "reverse-engineering") (in $tags "cryptography") (in $tags "malware-analysis") (in $tags "hardware") (in $tags "assembly") (in $tags "wasm") (in $tags "security") }}
-        {{- $postCats = $postCats | append "research" }}
-      {{- end }}
-      {{- if or (in $tags "computer-science") (in $tags "math") (in $tags "algorithms") (in $tags "architecture") (in $tags "distributed-systems") (in $tags "microservices") (in $tags "deep-dive") (in $tags "compilers") }}
-        {{- $postCats = $postCats | append "learning" }}
-      {{- end }}
-      {{- if or (in $tags "devops") (in $tags "kubernetes") (in $tags "docker") (in $tags "gitops") (in $tags "ci-cd") (in $tags "performance") (in $tags "database") (in $tags "postgres") (in $tags "sql") (in $tags "go") (in $tags "rust") (in $tags "cli") (in $tags "terminal") (in $tags "workflow") (in $tags "tooling") (in $tags "infrastructure") (eq (len $postCats) 0) }}
-        {{- $postCats = $postCats | append "blog" }}
+      {{- if or (in $tags "ctf") (in $tags "writeup") (in $tags "milestone") (in $tags "crackme") }}
+        {{- $postCat = "writeup" }}
+      {{- else if or (in $tags "reverse-engineering") (in $tags "cryptography") (in $tags "hardware") (in $tags "malware-analysis") (in $tags "assembly") (in $tags "wasm") (in $tags "vulnerability-research") }}
+        {{- $postCat = "research" }}
+      {{- else if or (in $tags "computer-science") (in $tags "math") (in $tags "algorithms") (in $tags "architecture") (in $tags "distributed-systems") (in $tags "microservices") (in $tags "compilers") }}
+        {{- $postCat = "learning" }}
+      {{- else }}
+        {{- $postCat = "blog" }}
       {{- end }}
     {{- end }}
-    <article class="{{ $class }}" data-tags="{{ with .Params.tags }}{{ delimit . " " | lower }}{{ end }}" data-categories="{{ delimit $postCats " " | lower }}">
+    <article class="{{ $class }}" data-tags="{{ with .Params.tags }}{{ delimit . " " | lower }}{{ end }}" data-categories="{{ $postCat }}">
       {{- $isHidden := (.Param "cover.hiddenInList") | default (.Param "cover.hidden") | default false }}
       {{- partial "cover.html" (dict "cxt" . "IsSingle" false "isHidden" $isHidden) }}
       <header class="entry-header">
