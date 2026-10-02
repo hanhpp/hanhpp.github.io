@@ -92,16 +92,13 @@
       <span class="term-prompt-cmd">ls -la</span>
       <span class="term-cursor" aria-hidden="true"></span>
     </div>
-    <nav class="topic-filter-bar" aria-label="Filter posts by topic">
-      <button class="filter-chip active" data-filter="all">🌐 All Posts</button>
-      <button class="filter-chip" data-filter="computer-science">💻 Computer Science</button>
-      <button class="filter-chip" data-filter="reverse-engineering">⚙️ Reverse-Engineering</button>
-      <button class="filter-chip" data-filter="cryptography">🔐 Cryptography</button>
-      <button class="filter-chip" data-filter="ctf">🚩 CTF</button>
-      <button class="filter-chip" data-filter="math">📐 Math</button>
-      <button class="filter-chip" data-filter="kubernetes">☸️ Kubernetes</button>
-      <button class="filter-chip" data-filter="go">🐹 Go</button>
-      <button class="filter-chip" data-filter="architecture">🏛️ Architecture</button>
+    <nav class="topic-filter-bar" aria-label="Filter posts by category">
+      <button class="filter-chip active" data-filter="all"><span class="chip-icon">&#x1F310;</span> All</button>
+      <button class="filter-chip" data-filter="learning"><span class="chip-icon">&#x1F4DA;</span> Learning</button>
+      <button class="filter-chip" data-filter="writeup"><span class="chip-icon">&#x1F6A9;</span> Writeup</button>
+      <button class="filter-chip" data-filter="research"><span class="chip-icon">&#x1F52C;</span> Research</button>
+      <button class="filter-chip" data-filter="blog"><span class="chip-icon">&#x1F4DD;</span> Blog</button>
+    </nav>
     {{- end }}
 
     <div class="posts-list-wrap">
@@ -116,7 +113,25 @@
     {{- $class = "post-entry tag-entry" }}
     {{- end }}
 
-    <article class="{{ $class }}" data-tags="{{ with .Params.tags }}{{ delimit . " " | lower }}{{ end }}">
+    {{- $postCats := slice }}
+    {{- with .Params.categories }}
+      {{- $postCats = . }}
+    {{- else }}
+      {{- $tags := .Params.tags | default slice }}
+      {{- if or (in $tags "ctf") (in $tags "writeup") (in $tags "milestone") }}
+        {{- $postCats = $postCats | append "writeup" }}
+      {{- end }}
+      {{- if or (in $tags "reverse-engineering") (in $tags "cryptography") (in $tags "malware-analysis") (in $tags "hardware") (in $tags "assembly") (in $tags "wasm") (in $tags "security") }}
+        {{- $postCats = $postCats | append "research" }}
+      {{- end }}
+      {{- if or (in $tags "computer-science") (in $tags "math") (in $tags "algorithms") (in $tags "architecture") (in $tags "distributed-systems") (in $tags "microservices") (in $tags "deep-dive") (in $tags "compilers") }}
+        {{- $postCats = $postCats | append "learning" }}
+      {{- end }}
+      {{- if or (in $tags "devops") (in $tags "kubernetes") (in $tags "docker") (in $tags "gitops") (in $tags "ci-cd") (in $tags "performance") (in $tags "database") (in $tags "postgres") (in $tags "sql") (in $tags "go") (in $tags "rust") (in $tags "cli") (in $tags "terminal") (in $tags "workflow") (in $tags "tooling") (in $tags "infrastructure") (eq (len $postCats) 0) }}
+        {{- $postCats = $postCats | append "blog" }}
+      {{- end }}
+    {{- end }}
+    <article class="{{ $class }}" data-tags="{{ with .Params.tags }}{{ delimit . " " | lower }}{{ end }}" data-categories="{{ delimit $postCats " " | lower }}">
       {{- $isHidden := (.Param "cover.hiddenInList") | default (.Param "cover.hidden") | default false }}
       {{- partial "cover.html" (dict "cxt" . "IsSingle" false "isHidden" $isHidden) }}
       <header class="entry-header">
@@ -209,8 +224,9 @@
     chip.classList.add("active");
 
     articles.forEach(function (article) {
+      var cats = (article.dataset.categories || "").split(" ");
       var tags = (article.dataset.tags || "").split(" ");
-      if (target === "all" || tags.indexOf(target) !== -1) {
+      if (target === "all" || cats.indexOf(target) !== -1 || tags.indexOf(target) !== -1) {
         article.classList.remove("is-filtered-out");
       } else {
         article.classList.add("is-filtered-out");
