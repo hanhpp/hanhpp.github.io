@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 540" width="100%" height="100%">
+  <defs>
+    <style>
+      .bg { fill: #0f172a; rx: 12px; }
+      .title { font-family: 'Poppins', system-ui, sans-serif; font-size: 16px; font-weight: 700; fill: #f8fafc; }
+      .subtitle { font-family: 'Source Code Pro', monospace; font-size: 12px; fill: #94a3b8; }
+      .layer-card { rx: 8px; stroke-width: 1.5; }
+      .layer-econ { fill: #31135e; stroke: #c084fc; }
+      .layer-dist { fill: #1e1b4b; stroke: #818cf8; }
+      .layer-phys { fill: #082f49; stroke: #38bdf8; }
+      .layer-comm { fill: #1c1917; stroke: #78716c; }
+      .layer-num { font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 700; }
+      .layer-title { font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 700; fill: #f8fafc; }
+      .layer-desc { font-family: 'Source Code Pro', monospace; font-size: 11px; fill: #cbd5e1; }
+      .tag-pill { rx: 4px; font-family: 'Source Code Pro', monospace; font-size: 10px; font-weight: 600; }
+      .tag-pill-high { fill: #581c87; stroke: #d8b4fe; fill-opacity: 0.8; }
+      .tag-pill-med { fill: #1e3a8a; stroke: #93c5fd; fill-opacity: 0.8; }
+      .tag-pill-low { fill: #292524; stroke: #a8a29e; fill-opacity: 0.8; }
+      .tag-text { fill: #ffffff; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="920" height="540" class="bg" />
+
+  <!-- Header -->
+  <text x="40" y="38" class="title">The Renaissance Developer Stack: Beyond the Syntax Commodity</text>
+  <text x="40" y="58" class="subtitle">Why AI LLMs Emit Syntax at Zero Cost While Systems Synthesis Remains the Human Moat</text>
+
+  <!-- Layer 4: Business Context & Unit Economics -->
+  <g transform="translate(40, 85)">
+    <rect width="840" height="95" class="layer-card layer-econ" />
+    <text x="24" y="26" class="layer-num" fill="#c084fc">LAYER 4: BUSINESS CONTEXT &amp; UNIT ECONOMICS</text>
+    <text x="24" y="46" class="layer-title">The Value Envelope: Why the System Exists and What It Can Afford</text>
+    <text x="24" y="68" class="layer-desc">Balancing cloud egress bills against replication latency; navigating trade-offs between 99.99% availability and infrastructure spend.</text>
+    <text x="24" y="84" class="layer-desc">Understanding organizational risk boundaries, compliance mandates, and operational on-call ergonomics that code never sees.</text>
+  </g>
+
+  <!-- Layer 3: Distributed State & Failure Modes -->
+  <g transform="translate(40, 195)">
+    <rect width="840" height="100" class="layer-card layer-dist" />
+    <text x="24" y="26" class="layer-num" fill="#818cf8">LAYER 3: DISTRIBUTED STATE &amp; FAILURE TOPOLOGIES</text>
+    <text x="24" y="46" class="layer-title">The Interaction Surface: Ripple Effects Across Network &amp; Storage Boundaries</text>
+    <text x="24" y="68" class="layer-desc">Consensus protocols (Raft, Paxos), idempotency keys, backpressure regulation, and cascading connection timeouts.</text>
+    <text x="24" y="84" class="layer-desc">Partial network partitions, split-brain survivability, database connection pool exhaustion, and thundering herd mitigation.</text>
+  </g>
+
+  <!-- Layer 2: Silicon & Hardware Physics -->
+  <g transform="translate(40, 310)">
+    <rect width="840" height="100" class="layer-card layer-phys" />
+    <text x="24" y="26" class="layer-num" fill="#38bdf8">LAYER 2: SILICON &amp; RUNTIME EXECUTION CONTRACTS</text>
+    <text x="24" y="46" class="layer-title">The Mechanical Truth: Where Abstract Logic Touches Physical Wires</text>
+    <text x="24" y="68" class="layer-desc">Memory ordering models (x86 TSO vs ARM weak ordering), cache-line false sharing, branch misprediction costs, and NUMA nodes.</text>
+    <text x="24" y="84" class="layer-desc">Kernel context switches, epoll vs io_uring syscall overhead, NVMe flash write amplification, and garbage collection pauses.</text>
+  </g>
+
+  <!-- Layer 1: Syntax & Implementation Glue -->
+  <g transform="translate(40, 425)">
+    <rect width="840" height="85" class="layer-card layer-comm" />
+    <text x="24" y="24" class="layer-num" fill="#a8a29e">LAYER 1: SYNTAX EMISSION &amp; GLUE LOGIC (COMMODITIZED BY AI)</text>
+    <text x="24" y="44" class="layer-title">The Implementation Surface: Fast to Generate, Dangerous to Trust Blindly</text>
+    <text x="24" y="64" class="layer-desc">Token emission: boilerplate CRUD endpoints, regex translations, unit test scaffolds, and framework glue code.</text>
+    <text x="24" y="78" class="layer-desc">High velocity, zero intrinsic awareness of external constraints, deadlocks, or long-term operational baggage.</text>
+  </g>
+</svg>

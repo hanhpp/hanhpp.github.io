@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 480" width="100%" height="100%">
+  <defs>
+    <style>
+      .bg { fill: #0f172a; rx: 12px; }
+      .title { font-family: 'Poppins', system-ui, sans-serif; font-size: 16px; font-weight: 700; fill: #f8fafc; }
+      .subtitle { font-family: 'Source Code Pro', monospace; font-size: 12px; fill: #94a3b8; }
+      .card { rx: 8px; stroke-width: 1.5; }
+      .epoch-1 { fill: #450a0a; stroke: #f87171; }
+      .epoch-2 { fill: #31135e; stroke: #fb923c; }
+      .epoch-3 { fill: #1e1b4b; stroke: #818cf8; }
+      .epoch-4 { fill: #082f49; stroke: #38bdf8; }
+      .epoch-header { font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 700; }
+      .epoch-title { font-family: 'Poppins', sans-serif; font-size: 12.5px; font-weight: 600; fill: #f8fafc; }
+      .epoch-desc { font-family: 'Source Code Pro', monospace; font-size: 11px; fill: #cbd5e1; }
+      .epoch-meta { font-family: 'Source Code Pro', monospace; font-size: 10.5px; font-weight: 600; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="920" height="480" class="bg" />
+
+  <!-- Header -->
+  <text x="40" y="38" class="title">The Cosmic Horizon: 13.8 Billion Years of Light</text>
+  <text x="40" y="58" class="subtitle">From the Primordial Plasma Fog to the 2.725 K Microwave Background of Today</text>
+
+  <!-- 4 Epoch Columns -->
+  <!-- Epoch 1: Plasma Fog -->
+  <g transform="translate(40, 85)">
+    <rect width="195" height="350" class="card epoch-1" />
+    <text x="16" y="28" class="epoch-header" fill="#f87171">THE PLASMA FOG</text>
+    <text x="16" y="48" class="epoch-meta" fill="#fca5a5">t &lt; 380,000 years</text>
+    <text x="16" y="74" class="epoch-title">Opaque Fireball</text>
+    <text x="16" y="100" class="epoch-desc">Free electrons scatter</text>
+    <text x="16" y="118" class="epoch-desc">photons continuously.</text>
+    <text x="16" y="142" class="epoch-desc">Light cannot escape</text>
+    <text x="16" y="160" class="epoch-desc">in straight lines.</text>
+    <text x="16" y="195" class="epoch-meta" fill="#fca5a5">Temperature:</text>
+    <text x="16" y="215" class="epoch-title">&gt; 3,000 K</text>
+    <text x="16" y="245" class="epoch-meta" fill="#fca5a5">State of Matter:</text>
+    <text x="16" y="265" class="epoch-desc">Ionized H &amp; He plasma</text>
+    <text x="16" y="300" class="epoch-desc" fill="#fca5a5">Optical Depth: Infinite</text>
+    <text x="16" y="320" class="epoch-desc" fill="#fca5a5">(Cannot see inside)</text>
+  </g>
+
+  <!-- Epoch 2: Recombination -->
+  <g transform="translate(255, 85)">
+    <rect width="195" height="350" class="card epoch-2" />
+    <text x="16" y="28" class="epoch-header" fill="#fb923c">RECOMBINATION</text>
+    <text x="16" y="48" class="epoch-meta" fill="#fdba74">t = 380,000 years</text>
+    <text x="16" y="74" class="epoch-title">The Fog Clears</text>
+    <text x="16" y="100" class="epoch-desc">Electrons bind with</text>
+    <text x="16" y="118" class="epoch-desc">protons into neutral H.</text>
+    <text x="16" y="142" class="epoch-desc">Photons decouple</text>
+    <text x="16" y="160" class="epoch-desc">and travel freely.</text>
+    <text x="16" y="195" class="epoch-meta" fill="#fdba74">Emitted Light:</text>
+    <text x="16" y="215" class="epoch-title">Visible Orange Glow</text>
+    <text x="16" y="245" class="epoch-meta" fill="#fdba74">Scale Factor:</text>
+    <text x="16" y="265" class="epoch-desc">a(t) = 1.0 (Baseline)</text>
+    <text x="16" y="300" class="epoch-desc" fill="#fdba74">CMB is released:</text>
+    <text x="16" y="320" class="epoch-desc" fill="#fdba74">The Oldest Light</text>
+  </g>
+
+  <!-- Epoch 3: Cosmic Dark Ages & First Stars -->
+  <g transform="translate(470, 85)">
+    <rect width="195" height="350" class="card epoch-3" />
+    <text x="16" y="28" class="epoch-header" fill="#818cf8">THE DARK AGES</text>
+    <text x="16" y="48" class="epoch-meta" fill="#c7d2fe">380 kyr to 1 Gyr</text>
+    <text x="16" y="74" class="epoch-title">Gravity at Work</text>
+    <text x="16" y="100" class="epoch-desc">Space stretches;</text>
+    <text x="16" y="118" class="epoch-desc">visible glow cools</text>
+    <text x="16" y="136" class="epoch-desc">into infrared.</text>
+    <text x="16" y="160" class="epoch-desc">Gas clouds collapse.</text>
+    <text x="16" y="195" class="epoch-meta" fill="#c7d2fe">First Stars Ignite:</text>
+    <text x="16" y="215" class="epoch-title">t ~ 200 Million yrs</text>
+    <text x="16" y="245" class="epoch-meta" fill="#c7d2fe">Cosmic Web:</text>
+    <text x="16" y="265" class="epoch-desc">Galaxies form</text>
+    <text x="16" y="300" class="epoch-desc" fill="#c7d2fe">Reionization begins:</text>
+    <text x="16" y="320" class="epoch-desc" fill="#c7d2fe">Stars light the sky</text>
+  </g>
+
+  <!-- Epoch 4: Today -->
+  <g transform="translate(685, 85)">
+    <rect width="195" height="350" class="card epoch-4" />
+    <text x="16" y="28" class="epoch-header" fill="#38bdf8">TODAY</text>
+    <text x="16" y="48" class="epoch-meta" fill="#bae6fd">t = 13.8 Billion years</text>
+    <text x="16" y="74" class="epoch-title">Microwave Sky</text>
+    <text x="16" y="100" class="epoch-desc">Space expanded</text>
+    <text x="16" y="118" class="epoch-desc">by 1,100 times.</text>
+    <text x="16" y="142" class="epoch-desc">Orange glow shifted</text>
+    <text x="16" y="160" class="epoch-desc">to 1.9 mm microwaves.</text>
+    <text x="16" y="195" class="epoch-meta" fill="#bae6fd">Measured Temp:</text>
+    <text x="16" y="215" class="epoch-title">2.725 K</text>
+    <text x="16" y="245" class="epoch-meta" fill="#bae6fd">Precision Proof:</text>
+    <text x="16" y="265" class="epoch-desc">COBE blackbody curve</text>
+    <text x="16" y="300" class="epoch-desc" fill="#bae6fd">Planck Satellite map:</text>
+    <text x="16" y="320" class="epoch-desc" fill="#bae6fd">1 in 100,000 ripples</text>
+  </g>
+</svg>

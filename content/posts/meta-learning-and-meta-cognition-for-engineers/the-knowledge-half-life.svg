@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 480" width="100%" height="100%">
+  <defs>
+    <style>
+      .bg { fill: #0f172a; rx: 12px; }
+      .title { font-family: 'Poppins', system-ui, sans-serif; font-size: 16px; font-weight: 700; fill: #f8fafc; }
+      .subtitle { font-family: 'Source Code Pro', monospace; font-size: 12px; fill: #94a3b8; }
+      .card { rx: 8px; stroke-width: 1.5; }
+      .card-durable { fill: #064e3b; stroke: #10b981; fill-opacity: 0.25; }
+      .card-perish { fill: #450a0a; stroke: #ef4444; fill-opacity: 0.25; }
+      .col-header { font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 700; }
+      .item-title { font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 600; fill: #f8fafc; }
+      .item-desc { font-family: 'Source Code Pro', monospace; font-size: 11px; fill: #cbd5e1; }
+      .badge { rx: 4px; font-family: 'Source Code Pro', monospace; font-size: 10px; font-weight: 700; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="920" height="480" class="bg" />
+
+  <!-- Header -->
+  <text x="40" y="38" class="title">The Half-Life of Engineering Knowledge</text>
+  <text x="40" y="58" class="subtitle">Why Memorizing AI-Commoditized Syntax Creates Cognitive Debt vs Durable Systems Primitives</text>
+
+  <!-- Left Column: Durable Primitives (High Leverage) -->
+  <g transform="translate(40, 85)">
+    <rect width="405" height="355" class="card card-durable" />
+    <text x="20" y="30" class="col-header" fill="#34d399">DURABLE PRIMITIVES (HALF-LIFE: 20+ YEARS)</text>
+    <text x="20" y="50" class="item-desc" fill="#a7f3d0">Compoundable mental models; invariant under technological churn.</text>
+
+    <!-- Item 1 -->
+    <g transform="translate(20, 70)">
+      <rect width="365" height="52" rx="6" fill="#022c22" stroke="#059669" stroke-width="1" />
+      <text x="14" y="20" class="item-title">State Machines &amp; Consensus</text>
+      <text x="14" y="38" class="item-desc">Deterministic transitions, Paxos, Raft, vector clocks, split-brain.</text>
+    </g>
+
+    <!-- Item 2 -->
+    <g transform="translate(20, 132)">
+      <rect width="365" height="52" rx="6" fill="#022c22" stroke="#059669" stroke-width="1" />
+      <text x="14" y="20" class="item-title">Memory &amp; Storage Layouts</text>
+      <text x="14" y="38" class="item-desc">Cache lines, B-trees vs LSM-trees, write amplification, memory order.</text>
+    </g>
+
+    <!-- Item 3 -->
+    <g transform="translate(20, 194)">
+      <rect width="365" height="52" rx="6" fill="#022c22" stroke="#059669" stroke-width="1" />
+      <text x="14" y="20" class="item-title">Concurrency &amp; Backpressure</text>
+      <text x="14" y="38" class="item-desc">Producer-consumer queues, mutex contention, token buckets, semaphores.</text>
+    </g>
+
+    <!-- Item 4 -->
+    <g transform="translate(20, 256)">
+      <rect width="365" height="52" rx="6" fill="#022c22" stroke="#059669" stroke-width="1" />
+      <text x="14" y="20" class="item-title">Network Physics &amp; Failure Modes</text>
+      <text x="14" y="38" class="item-desc">TCP head-of-line blocking, connection churn, tail latency amplification.</text>
+    </g>
+  </g>
+
+  <!-- Right Column: Perishable Syntax (Low Leverage) -->
+  <g transform="translate(475, 85)">
+    <rect width="405" height="355" class="card card-perish" />
+    <text x="20" y="30" class="col-header" fill="#f87171">PERISHABLE SYNTAX (HALF-LIFE: 12-18 MONTHS)</text>
+    <text x="20" y="50" class="item-desc" fill="#fecaca">Deprecating API glue; commoditized and best delegated to AI.</text>
+
+    <!-- Item 1 -->
+    <g transform="translate(20, 70)">
+      <rect width="365" height="52" rx="6" fill="#450a0a" stroke="#dc2626" stroke-width="1" />
+      <text x="14" y="20" class="item-title">Framework Routing Conventions</text>
+      <text x="14" y="38" class="item-desc">Next.js App Router vs Pages Router, Express vs Fastify middleware hooks.</text>
+    </g>
+
+    <!-- Item 2 -->
+    <g transform="translate(20, 132)">
+      <rect width="365" height="52" rx="6" fill="#450a0a" stroke="#dc2626" stroke-width="1" />
+      <text x="14" y="20" class="item-title">Configuration DSLs &amp; Tool Flags</text>
+      <text x="14" y="38" class="item-desc">Webpack configs, transient Kubernetes YAML CRDs, build tool options.</text>
+    </g>
+
+    <!-- Item 3 -->
+    <g transform="translate(20, 194)">
+      <rect width="365" height="52" rx="6" fill="#450a0a" stroke="#dc2626" stroke-width="1" />
+      <text x="14" y="20" class="item-title">Ephemeral SDK Client Wrappers</text>
+      <text x="14" y="38" class="item-desc">Vendor client library changes, renamed SDK parameters, method churn.</text>
+    </g>
+
+    <!-- Item 4 -->
+    <g transform="translate(20, 256)">
+      <rect width="365" height="52" rx="6" fill="#450a0a" stroke="#dc2626" stroke-width="1" />
+      <text x="14" y="20" class="item-title">CSS Utility Classes &amp; Boilerplate</text>
+      <text x="14" y="38" class="item-desc">Tailwind class strings, flexbox alignment quirks, boilerplate CRUD endpoints.</text>
+    </g>
+  </g>
+</svg>
