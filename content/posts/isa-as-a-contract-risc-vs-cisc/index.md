@@ -204,6 +204,7 @@ Unless your service is spending its life thrashing a 2MB instruction cache insid
 
 ---
 
+
 ### Sources & Technical References
 
 1. **Blem, Menon, Sankaralingam (2013):** *"Power Struggles: Revisiting the RISC vs. CISC Debate on Contemporary ARM and x86 Architectures"* (HPCA 2013). Empirical proof that ISA differences have negligible impact on performance compared to microarchitectural implementation.

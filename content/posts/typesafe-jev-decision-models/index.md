@@ -93,7 +93,7 @@ To fix this, TypeSafe engineered **Jev** around Daniel Kahneman's cognitive fram
 
 Jev is built strictly as a **System 1 model**. It deletes natural language generation entirely.
 
-```
+```text
 Traditional LLM:
   Context + Prompt  -->  Sequential Decoder  -->  "Here is the JSON: { ... }"  -->  Parser Error
 
@@ -170,7 +170,7 @@ Uncalibrated probabilities are useless for automated pipelines. If an LLM claims
 
 When probabilities are statistically calibrated, software architects can establish mathematical risk thresholds:
 
-```
+```text
                       +-----------------------------+
                       | Incoming Request / Event    |
                       +-----------------------------+
@@ -223,6 +223,7 @@ Decision models are not a replacement for general intelligence. Understanding wh
 Treating language models as monolithic black boxes that must handle everything from UI conversation down to database routing is a historical accident of how LLMs entered software.
 
 Text generation belongs at the human interface. Inside software architecture, strings are overhead; typed decisions are what matter.
+
 
 ---
 

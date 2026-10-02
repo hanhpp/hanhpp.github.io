@@ -47,7 +47,7 @@ primed to agree with it. Concretely, that means starting a **fresh**
 session/context (not continuing the one that wrote the fix) and handing
 it something like this:
 
-```
+```text
 You are reviewing a proposed fix, not writing one. You were not involved
 in producing it and don't know why it was written this way.
 
@@ -179,3 +179,4 @@ stopped treating "it said it works" as evidence of anything, and started
 treating a second, independently-framed check as the actual unit of
 confidence: the same discipline I'd want from any collaborator whose
 reasoning I can't fully see into.
+

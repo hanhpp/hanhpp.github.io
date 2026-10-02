@@ -154,3 +154,4 @@ The next time an AI assistant produces garbage, resist the urge to declare that 
 4. **Did the Model fail?** Was the algorithmic reasoning fundamentally flawed despite clean context and precise tools?
 
 Eighty percent of the time, the failure lives in Layers 2 and 3. When you understand the stack, you stop cargo-culting tools and start building an environment that actually survives a production codebase.
+

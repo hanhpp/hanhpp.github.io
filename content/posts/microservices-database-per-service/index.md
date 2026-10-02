@@ -6,7 +6,7 @@ tags: ["microservices", "architecture", "distributed-systems"]
 summary: "Each service owns its database. That's the rule. But when a report needs data from four services, or a customer wants to see their complete order history, you've got a query problem that a single SELECT can't solve. Here's how to handle it."
 ---
 
-The [sagas post](/posts/microservices-sagas-vs-two-phase-commit/)
+The [sagas post]({{< ref "microservices-sagas-vs-two-phase-commit" >}})
 covered why services shouldn't share database transactions. This post covers
 the architectural consequence of that rule: if each service owns its own
 database, how do you answer questions that span multiple services?
@@ -237,7 +237,7 @@ paying the coupling tax, whether you call it a shared database or not.
 
 ---
 
-The [sagas post](/posts/microservices-sagas-vs-two-phase-commit/)
+The [sagas post]({{< ref "microservices-sagas-vs-two-phase-commit" >}})
 covered how to keep writes consistent across services. This post covers how
 to keep reads performant. Together, they answer the full data question:
 writes use sagas for coordination, reads use composition, CQRS, or event

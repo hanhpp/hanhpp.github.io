@@ -181,3 +181,4 @@ Turing's 1936 paper is not ancient history: it draws the outer boundary of what 
 * **Turing Completeness as an Attack Surface:** Whenever a configuration format (YAML, CSS, PDF font engines, BPF, smart contracts) accidentally becomes Turing complete, verifying its safety in advance becomes impossible.
 
 Turing did not merely find a boundary in mathematics: by proving what algorithms cannot do, he built the first complete description of what all computers can do.
+

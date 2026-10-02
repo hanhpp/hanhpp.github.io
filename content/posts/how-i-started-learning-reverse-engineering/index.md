@@ -160,6 +160,7 @@ is smaller than it feels. The gap between "I can solve easy challenges"
 and "I can tackle anything" is enormous and never fully closes. That's
 what makes it fun.
 
+
 ## Resources that actually worked for me
 
 - **crackmes.one**: the practice ground. Start at difficulty 1/6.
