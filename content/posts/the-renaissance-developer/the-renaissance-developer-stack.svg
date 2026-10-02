@@ -32,8 +32,8 @@
     <rect width="840" height="95" class="layer-card layer-econ" />
     <text x="24" y="26" class="layer-num" fill="#c084fc">LAYER 4: BUSINESS CONTEXT &amp; UNIT ECONOMICS</text>
     <text x="24" y="46" class="layer-title">The Value Envelope: Why the System Exists and What It Can Afford</text>
-    <text x="24" y="68" class="layer-desc">Balancing cloud egress bills against replication latency; navigating trade-offs between 99.99% availability and infrastructure spend.</text>
-    <text x="24" y="84" class="layer-desc">Understanding organizational risk boundaries, compliance mandates, and operational on-call ergonomics that code never sees.</text>
+    <text x="24" y="68" class="layer-desc">Balancing egress bills, replication latency, and availability targets.</text>
+    <text x="24" y="84" class="layer-desc">Accounting for risk, compliance, and on-call load beyond the code.</text>
   </g>
 
   <!-- Layer 3: Distributed State & Failure Modes -->
@@ -41,8 +41,8 @@
     <rect width="840" height="100" class="layer-card layer-dist" />
     <text x="24" y="26" class="layer-num" fill="#818cf8">LAYER 3: DISTRIBUTED STATE &amp; FAILURE TOPOLOGIES</text>
     <text x="24" y="46" class="layer-title">The Interaction Surface: Ripple Effects Across Network &amp; Storage Boundaries</text>
-    <text x="24" y="68" class="layer-desc">Consensus protocols (Raft, Paxos), idempotency keys, backpressure regulation, and cascading connection timeouts.</text>
-    <text x="24" y="84" class="layer-desc">Partial network partitions, split-brain survivability, database connection pool exhaustion, and thundering herd mitigation.</text>
+    <text x="24" y="68" class="layer-desc">Consensus, idempotency, backpressure, and cascading timeouts.</text>
+    <text x="24" y="84" class="layer-desc">Partitions, split-brain, pool exhaustion, and thundering herds.</text>
   </g>
 
   <!-- Layer 2: Silicon & Hardware Physics -->
@@ -50,8 +50,8 @@
     <rect width="840" height="100" class="layer-card layer-phys" />
     <text x="24" y="26" class="layer-num" fill="#38bdf8">LAYER 2: SILICON &amp; RUNTIME EXECUTION CONTRACTS</text>
     <text x="24" y="46" class="layer-title">The Mechanical Truth: Where Abstract Logic Touches Physical Wires</text>
-    <text x="24" y="68" class="layer-desc">Memory ordering models (x86 TSO vs ARM weak ordering), cache-line false sharing, branch misprediction costs, and NUMA nodes.</text>
-    <text x="24" y="84" class="layer-desc">Kernel context switches, epoll vs io_uring syscall overhead, NVMe flash write amplification, and garbage collection pauses.</text>
+    <text x="24" y="68" class="layer-desc">Memory ordering, false sharing, branch costs, and NUMA nodes.</text>
+    <text x="24" y="84" class="layer-desc">Context switches, io_uring, NVMe writes, and GC pauses.</text>
   </g>
 
   <!-- Layer 1: Syntax & Implementation Glue -->
@@ -59,7 +59,7 @@
     <rect width="840" height="85" class="layer-card layer-comm" />
     <text x="24" y="24" class="layer-num" fill="#a8a29e">LAYER 1: SYNTAX EMISSION &amp; GLUE LOGIC (COMMODITIZED BY AI)</text>
     <text x="24" y="44" class="layer-title">The Implementation Surface: Fast to Generate, Dangerous to Trust Blindly</text>
-    <text x="24" y="64" class="layer-desc">Token emission: boilerplate CRUD endpoints, regex translations, unit test scaffolds, and framework glue code.</text>
-    <text x="24" y="78" class="layer-desc">High velocity, zero intrinsic awareness of external constraints, deadlocks, or long-term operational baggage.</text>
+    <text x="24" y="64" class="layer-desc">CRUD endpoints, regexes, test scaffolds, and framework glue.</text>
+    <text x="24" y="78" class="layer-desc">Fast to generate, blind to constraints, deadlocks, and operational cost.</text>
   </g>
 </svg>
