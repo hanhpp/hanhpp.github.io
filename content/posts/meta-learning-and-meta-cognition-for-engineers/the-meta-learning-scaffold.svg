@@ -26,27 +26,27 @@
   <g transform="translate(40, 85)">
     <rect width="395" height="270" class="card card-human" />
     <text x="20" y="28" class="col-header" fill="#818cf8">HUMAN METACOGNITIVE REGULATION</text>
-    <text x="20" y="48" class="item-desc" fill="#94a3b8">John Flavell (1979) • Thinking About How We Think</text>
+    <text x="20" y="48" class="item-desc" fill="#94a3b8">John Flavell (1979) • How We Think About Thinking</text>
 
     <!-- Item 1 -->
     <g transform="translate(20, 68)">
       <rect width="355" height="54" rx="6" fill="#0f172a" stroke="#6366f1" stroke-width="1" />
       <text x="14" y="20" class="item-title">1. Metacognitive Knowledge</text>
-      <text x="14" y="38" class="item-desc">Awareness of personal biases, limits, and knowledge gaps.</text>
+      <text x="14" y="38" class="item-desc">Awareness of personal biases, limits, and gaps.</text>
     </g>
 
     <!-- Item 2 -->
     <g transform="translate(20, 132)">
       <rect width="355" height="54" rx="6" fill="#0f172a" stroke="#6366f1" stroke-width="1" />
       <text x="14" y="20" class="item-title">2. Metacognitive Monitoring</text>
-      <text x="14" y="38" class="item-desc">Catching the Illusion of Competence before deploying code.</text>
+      <text x="14" y="38" class="item-desc">Catch the Illusion of Competence before shipping.</text>
     </g>
 
     <!-- Item 3 -->
     <g transform="translate(20, 196)">
       <rect width="355" height="54" rx="6" fill="#0f172a" stroke="#6366f1" stroke-width="1" />
       <text x="14" y="20" class="item-title">3. Strategy Regulation</text>
-      <text x="14" y="38" class="item-desc">Choosing when to calculate vs when to prompt and verify.</text>
+      <text x="14" y="38" class="item-desc">Choose when to calculate and when to prompt.</text>
     </g>
   </g>
 
@@ -54,27 +54,27 @@
   <g transform="translate(485, 85)">
     <rect width="395" height="270" class="card card-ai" />
     <text x="20" y="28" class="col-header" fill="#c084fc">PERSONAL AI DYNAMIC SCAFFOLD</text>
-    <text x="20" y="48" class="item-desc" fill="#e9d5ff">Extended Mind (Clark &amp; Chalmers 1998) • Zone of Proximal Dev</text>
+    <text x="20" y="48" class="item-desc" fill="#e9d5ff">Clark &amp; Chalmers 1998 • Dynamic Scaffolding</text>
 
     <!-- Item 1 -->
     <g transform="translate(20, 68)">
       <rect width="355" height="54" rx="6" fill="#0f172a" stroke="#a855f7" stroke-width="1" />
       <text x="14" y="20" class="item-title">1. Adversarial Hypothesis Probing</text>
-      <text x="14" y="38" class="item-desc">Probing assumptions, finding counterexamples to models.</text>
+      <text x="14" y="38" class="item-desc">Probe assumptions and find counterexamples.</text>
     </g>
 
     <!-- Item 2 -->
     <g transform="translate(20, 132)">
       <rect width="355" height="54" rx="6" fill="#0f172a" stroke="#a855f7" stroke-width="1" />
       <text x="14" y="20" class="item-title">2. Socratic Boundary Enforcement</text>
-      <text x="14" y="38" class="item-desc">Refusing passive answers; asking guiding diagnostic questions.</text>
+      <text x="14" y="38" class="item-desc">Refuse passive answers; ask diagnostic questions.</text>
     </g>
 
     <!-- Item 3 -->
     <g transform="translate(20, 196)">
       <rect width="355" height="54" rx="6" fill="#0f172a" stroke="#a855f7" stroke-width="1" />
       <text x="14" y="20" class="item-title">3. Persistent External Working Memory</text>
-      <text x="14" y="38" class="item-desc">Auditing historical cognitive blind spots and decision records.</text>
+      <text x="14" y="38" class="item-desc">Audit blind spots and prior decisions.</text>
     </g>
   </g>
 
@@ -82,8 +82,8 @@
   <g transform="translate(40, 375)">
     <rect width="840" height="115" class="card card-loop" />
     <text x="24" y="28" class="col-header" fill="#34d399">THE CYBERNETIC ADVANTAGE: CO-EVOLUTIONARY LEAP</text>
-    <text x="24" y="50" class="item-desc" fill="#e2e8f0">Passive Users: Outsource thinking to AI -> Suffer cognitive atrophy, loss of mental schemas, and blind overconfidence.</text>
-    <text x="24" y="70" class="item-desc" fill="#a7f3d0">Meta-Humans: Steer personal AI via metacognitive monitoring -> AI acts as an intellectual sparring partner, not a crutch.</text>
-    <text x="24" y="90" class="item-desc" fill="#cbd5e1">The human elevates the AI by defining invariants; the AI elevates the human by accelerating the metacognitive feedback loop.</text>
+    <text x="24" y="50" class="item-desc" fill="#e2e8f0">Passive Users: Outsource thinking -&gt; cognitive atrophy and blind confidence.</text>
+    <text x="24" y="70" class="item-desc" fill="#a7f3d0">Meta-Humans: Steer AI through monitoring -&gt; sparring partner, not crutch.</text>
+    <text x="24" y="90" class="item-desc" fill="#cbd5e1">Human defines invariants; AI accelerates the feedback loop.</text>
   </g>
 </svg>
