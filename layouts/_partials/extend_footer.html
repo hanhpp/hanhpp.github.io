@@ -92,27 +92,6 @@
 })();
 </script>
 
-{{- /* Page transition: fade out on navigation click, fade in on load */ -}}
-<script>
-(function () {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    if (!document.startViewTransition) return;
-
-    document.addEventListener("click", function (e) {
-        var link = e.target.closest("a[href]");
-        if (!link) return;
-        var url = new URL(link.href, location.origin);
-        if (url.origin !== location.origin) return;
-        if (url.pathname === location.pathname) return;
-        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-
-        e.preventDefault();
-        document.startViewTransition(function () {
-            window.location.href = link.href;
-        });
-    });
-})();
-</script>
 
 {{- if .IsPage }}
 <div id="reading-progress-bar" class="reading-progress-bar" aria-hidden="true"></div>

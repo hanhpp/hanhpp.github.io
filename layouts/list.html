@@ -101,7 +101,7 @@
     </nav>
     {{- end }}
 
-    <div class="posts-list-wrap">
+    <div id="posts-list" class="posts-list-wrap" data-next-page="{{ if $paginator.HasNext }}{{ $paginator.Next.URL }}{{ end }}">
     {{- $term := .Data.Term }}
     {{- range $index, $page := $paginator.Pages }}
 
@@ -205,21 +205,27 @@
   {{- end }}
 </div>
 
+{{- if $paginator.HasNext }}
+<section class="wide-post-stream" id="wide-post-stream" aria-labelledby="wide-post-stream-title" hidden>
+  <div class="wide-post-stream-header">
+    <span class="wide-post-stream-kicker">ARCHIVE STREAM</span>
+    <h2 id="wide-post-stream-title">More from the archive</h2>
+    <p>More posts, now spanning the full workspace.</p>
+  </div>
+  <div id="wide-posts-list" class="wide-post-grid"></div>
+  <div class="archive-load-status" id="archive-load-status" aria-live="polite" hidden>Loading more posts...</div>
+</section>
+<div class="wide-post-sentinel" id="wide-post-sentinel" aria-hidden="true"></div>
+{{- end }}
+
+
 <script>
 (function () {
   var filterBar = document.querySelector(".topic-filter-bar");
-  if (!filterBar) return;
-  var chips = filterBar.querySelectorAll(".filter-chip");
-  var articles = document.querySelectorAll(".posts-list-wrap .post-entry");
+  var chips = filterBar ? filterBar.querySelectorAll(".filter-chip") : [];
 
-  filterBar.addEventListener("click", function (e) {
-    var chip = e.target.closest(".filter-chip");
-    if (!chip) return;
-    var target = chip.dataset.filter;
-
-    chips.forEach(function (c) { c.classList.remove("active"); });
-    chip.classList.add("active");
-
+  function applyFilter(target) {
+    var articles = document.querySelectorAll(".posts-list-wrap .post-entry, .wide-post-grid .post-entry");
     articles.forEach(function (article) {
       var cats = (article.dataset.categories || "").split(" ");
       var tags = (article.dataset.tags || "").split(" ");
@@ -229,7 +235,130 @@
         article.classList.add("is-filtered-out");
       }
     });
-  });
+  }
+
+  if (filterBar) {
+    filterBar.addEventListener("click", function (e) {
+      var chip = e.target.closest(".filter-chip");
+      if (!chip) return;
+      var target = chip.dataset.filter;
+
+      chips.forEach(function (c) { c.classList.remove("active"); });
+      chip.classList.add("active");
+      applyFilter(target);
+    });
+  }
+
+  var list = document.querySelector(".posts-list-wrap");
+  var wideSection = document.getElementById("wide-post-stream");
+  var wideList = document.getElementById("wide-posts-list");
+  var sentinel = document.getElementById("wide-post-sentinel");
+  var status = document.getElementById("archive-load-status");
+  if (!list || !wideSection || !wideList || !sentinel || !status) return;
+
+  function hidePagination() {
+    var pageFooter = document.querySelector(".page-footer");
+    if (pageFooter) {
+      pageFooter.hidden = true;
+      pageFooter.style.display = "none";
+      pageFooter.classList.add("is-js-hidden");
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", hidePagination);
+  } else {
+    hidePagination();
+  }
+
+  var nextUrl = list.dataset.nextPage;
+  var prefetched = null;
+  var isLoading = false;
+  var observer = null;
+
+  function fetchPage(url) {
+    return fetch(url, { credentials: "same-origin" }).then(function (response) {
+      if (!response.ok) throw new Error("Unable to load more posts");
+      return response.text();
+    }).then(function (html) {
+      return new DOMParser().parseFromString(html, "text/html");
+    });
+  }
+
+  function prefetch() {
+    if (!nextUrl || prefetched) return;
+    prefetched = fetchPage(nextUrl).catch(function () {
+      prefetched = null;
+      return null;
+    });
+  }
+
+  function loadNextPage() {
+    if (!nextUrl || isLoading) return;
+    isLoading = true;
+    status.hidden = false;
+    status.textContent = "Loading more posts...";
+
+    var pageRequest = prefetched || fetchPage(nextUrl);
+    prefetched = null;
+    pageRequest.then(function (doc) {
+      var nextList = doc.querySelector(".posts-list-wrap");
+      var nextArticles = nextList ? nextList.querySelectorAll(":scope > .post-entry") : [];
+      if (!nextList || !nextArticles.length) throw new Error("No posts returned");
+
+      var fragment = document.createDocumentFragment();
+      nextArticles.forEach(function (article, index) {
+        var clone = document.importNode(article, true);
+        var delay = index * 70;
+        clone.classList.add("is-new");
+        clone.style.setProperty("--append-delay", delay + "ms");
+        fragment.appendChild(clone);
+        window.setTimeout(function () {
+          clone.classList.remove("is-new");
+          clone.style.removeProperty("--append-delay");
+        }, 900 + delay);
+      });
+      wideList.appendChild(fragment);
+      wideSection.hidden = false;
+      status.hidden = true;
+
+      nextUrl = nextList.dataset.nextPage;
+      list.dataset.nextPage = nextUrl || "";
+      var activeChip = filterBar && filterBar.querySelector(".filter-chip.active");
+      if (activeChip) applyFilter(activeChip.dataset.filter);
+
+      if (nextUrl) {
+        prefetch();
+      } else {
+        if (observer) observer.disconnect();
+        sentinel.remove();
+      }
+    }).catch(function () {
+      wideSection.hidden = false;
+      status.hidden = false;
+      status.textContent = "Trying the archive again...";
+      window.setTimeout(loadNextPage, 3000);
+    }).then(function () {
+      isLoading = false;
+    });
+  }
+
+  prefetch();
+  if ("IntersectionObserver" in window) {
+    var sentinelReady = true;
+    observer = new IntersectionObserver(function (entries) {
+      var entry = entries[0];
+      if (!entry.isIntersecting) {
+        sentinelReady = true;
+        return;
+      }
+      if (!sentinelReady) return;
+      sentinelReady = false;
+      loadNextPage();
+    }, { rootMargin: "500px 0px" });
+    observer.observe(sentinel);
+  } else {
+    loadNextPage();
+  }
 })();
 </script>
 

@@ -34,6 +34,33 @@ html {
 @view-transition {
     navigation: auto;
 }
+/* Keep persistent chrome stable while the main content changes. */
+.header-nav {
+    view-transition-name: site-header;
+}
+
+.main {
+    view-transition-name: page-main;
+}
+
+::view-transition-old(page-main) {
+    animation: vt-page-out 0.22s ease-in forwards;
+}
+
+::view-transition-new(page-main) {
+    animation: vt-page-in 0.3s ease-out;
+}
+
+@keyframes vt-page-out {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(5px); }
+}
+
+@keyframes vt-page-in {
+    from { opacity: 0; transform: translateY(-5px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
 
 ::view-transition-old(root) {
     animation: vt-fade-out 0.25s ease-in forwards;
@@ -53,22 +80,77 @@ html {
     to   { opacity: 1; transform: scale(1); filter: blur(0); }
 }
 
-/* ── Staggered post entry animations ── */
-.post-entry {
-    animation: stagger-in 0.4s ease-out both;
+/* Keep cards stable on first paint. Only appended archive cards animate. */
+.post-entry.is-new {
+    --append-delay: 0ms;
+    animation: card-append-in 0.58s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: var(--append-delay);
 }
 
-.post-entry:nth-child(1) { animation-delay: 0s; }
-.post-entry:nth-child(2) { animation-delay: 0.05s; }
-.post-entry:nth-child(3) { animation-delay: 0.1s; }
-.post-entry:nth-child(4) { animation-delay: 0.15s; }
-.post-entry:nth-child(5) { animation-delay: 0.2s; }
-.post-entry:nth-child(6) { animation-delay: 0.25s; }
-
-@keyframes stagger-in {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
+@keyframes card-append-in {
+    0% {
+        opacity: 0;
+        transform: translateY(18px) scale(0.985);
+        filter: blur(1.5px) saturate(1.15);
+        box-shadow: 0 0 0 rgba(109, 40, 217, 0);
+    }
+    58% {
+        opacity: 1;
+        transform: translateY(-2px) scale(1.01);
+        filter: blur(0) saturate(1);
+        box-shadow: 0 0 24px rgba(109, 40, 217, 0.22);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: none;
+        box-shadow: 0 0 0 rgba(109, 40, 217, 0);
+    }
 }
+
+.post-entry.is-new::after {
+    content: "";
+    position: absolute;
+    top: 18px;
+    right: 24px;
+    z-index: 2;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow:
+        -18px -8px 0 -1px #d8b4fe,
+        -27px 8px 0 -1px #60a5fa,
+        -6px -20px 0 -1px #f0abfc,
+        14px -15px 0 -1px #34d399,
+        25px 4px 0 -1px #f59e0b,
+        8px 18px 0 -1px #a78bfa;
+    pointer-events: none;
+    animation: archive-particle-burst 0.82s ease-out both;
+    animation-delay: var(--append-delay);
+}
+
+@keyframes archive-particle-burst {
+    0% {
+        opacity: 0;
+        transform: scale(0.2) rotate(0deg);
+    }
+    18% {
+        opacity: 0.95;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1.18) rotate(22deg);
+    }
+}
+
+/* Let the browser skip layout and paint work for cards below the fold. */
+.posts-list-wrap > .post-entry,
+.wide-post-grid > .post-entry {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 260px;
+}
+
 
 /* ── Hero content entrance ── */
 .home-info-hero .entry-header {
@@ -611,13 +693,19 @@ html.view-workstation .post-tags a[href*="/tags/compilers/"]::before, html.view-
     margin: 1.5em 0;
 }
 
-/* ── Figure captions ── */
-.md-content figure > figcaption,
-.md-content figure > figcaption > p {
-    text-align: center;
-    font-style: italic;
-    font-size: 0.85em;
-    color: var(--secondary);
+/* ── Responsive figure containment ── */
+.md-content figure {
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+}
+
+.md-content figure > img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto !important;
+    object-fit: contain;
 }
 
 /* ── Tables ── */
@@ -676,6 +764,7 @@ html.view-workstation .post-tags a[href*="/tags/compilers/"]::before, html.view-
     html               { scroll-behavior: auto; }
 
     .post-entry,
+    .post-entry.is-new,
     .home-info-hero .entry-header,
     .home-info-hero .entry-content,
     .home-info-hero .entry-footer,
@@ -685,8 +774,15 @@ html.view-workstation .post-tags a[href*="/tags/compilers/"]::before, html.view-
         animation: none;
     }
 
+    .post-entry.is-new::after {
+        display: none;
+        animation: none;
+    }
+
     ::view-transition-old(root),
-    ::view-transition-new(root) {
+    ::view-transition-new(root),
+    ::view-transition-old(page-main),
+    ::view-transition-new(page-main) {
         animation: none;
     }
 }
@@ -1262,6 +1358,98 @@ html.view-workstation .post-tags a[href*="/tags/compilers/"]::before, html.view-
 
 :root[data-theme="dark"] .post-entry:hover {
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 16px rgba(216, 180, 254, 0.06);
+}
+
+/* ── Automatic archive loading ── */
+.archive-load-status {
+    margin: 24px auto 0;
+    color: var(--secondary);
+    font: 600 12px/1 "Source Code Pro", ui-monospace, monospace;
+    letter-spacing: 0.04em;
+    text-align: center;
+}
+
+.archive-load-status[hidden] {
+    display: none !important;
+}
+
+.wide-post-sentinel {
+    width: 100%;
+    height: 1px;
+}
+
+.page-footer.is-js-hidden {
+    display: none !important;
+}
+
+.wide-post-stream {
+    width: 100%;
+    margin-top: 52px;
+}
+
+.wide-post-stream[hidden] {
+    display: none !important;
+}
+
+.wide-post-stream-header {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.wide-post-stream-kicker {
+    color: var(--accent);
+    font: 600 11px/1 "Source Code Pro", ui-monospace, monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.wide-post-stream-header h2 {
+    margin: 8px 0 4px;
+    color: var(--primary);
+    font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+    font-size: clamp(20px, 2.4vw, 30px);
+    letter-spacing: -0.02em;
+}
+
+.wide-post-stream-header p {
+    margin: 0;
+    color: var(--secondary);
+    font-size: 13px;
+}
+
+.wide-post-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+}
+
+@media (min-width: 700px) {
+    .wide-post-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1280px) {
+    .wide-post-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1140px) {
+    html.view-workstation .home-center-column .posts-list-wrap {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+    }
+
+    html.view-workstation .home-center-column .post-entry,
+    html.view-workstation .home-center-column .first-entry {
+        margin-bottom: 0;
+    }
+
+    html.view-workstation .home-center-column .first-entry {
+        grid-column: 1 / -1;
+    }
 }
 
 /* ── Tags Rendered on Article Cards ── */
