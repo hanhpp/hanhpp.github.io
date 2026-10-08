@@ -1,0 +1,13 @@
+{{- /* Shim for PaperMod's opengraph.html.
+
+       templates/opengraph.html calls `partial "_funcs/get-page-images"` (a
+       relative name), while templates/twitter_cards.html calls
+       `partial "templates/_funcs/get-page-images"` (an absolute name). Hugo
+       resolves those two calls to DIFFERENT files, which is why twitter:image
+       had an image while og:image was silently absent.
+
+       This file exists purely so the relative call also lands on the project
+       implementation rather than the theme's. Keep it a one line delegate so
+       there is exactly one implementation to maintain.
+*/ -}}
+{{- return (partial "templates/_funcs/get-page-images.html" .) }}

@@ -3,11 +3,10 @@
 // this project through the Vercel Marketplace integration, which injects the
 // URL/token env vars below. Returns { slug, count }.
 //
-// Both the GitHub Pages site and the Vercel copy call this endpoint, so a
-// post's number reflects total readership rather than being split per domain.
+// The canonical site is hanhpham.vercel.app. The old hanhpp.github.io host now
+// serves a redirect stub only, so it no longer calls this endpoint.
 
 const ALLOWED_ORIGINS = new Set([
-  "https://hanhpp.github.io",
   "https://hanhpham.vercel.app",
   "http://localhost:1313",
   "http://127.0.0.1:1313",

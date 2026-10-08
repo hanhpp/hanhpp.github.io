@@ -1,0 +1,37 @@
+{{- /* Project override of PaperMod's templates/_funcs/get-page-images.html.
+
+       Consumed by BOTH templates/opengraph.html and templates/twitter_cards.html,
+       so this is where og:image and twitter:image are decided.
+
+       Resolution order:
+         1. explicit `images` frontmatter, so author intent always wins
+         2. the generated card for this page (see og-image.html)
+         3. the site-wide default card
+
+       Returns a slice of dicts with Image / RelPermalink / Permalink keys, which
+       is the shape both theme partials expect.
+*/ -}}
+{{- $imgs := slice }}
+{{- $page := . }}
+
+{{- range .Params.images }}
+  {{- $img := . }}
+  {{- $url := urls.Parse $img }}
+  {{- if eq $url.Scheme "" }}
+    {{- with $page.Resources.GetMatch $img }}
+      {{- $imgs = $imgs | append (dict "Image" . "RelPermalink" .RelPermalink "Permalink" .Permalink) }}
+    {{- else }}
+      {{- $imgs = $imgs | append (dict "RelPermalink" (relURL $img) "Permalink" (absURL $img)) }}
+    {{- end }}
+  {{- else }}
+    {{- $imgs = $imgs | append (dict "RelPermalink" $img "Permalink" $img) }}
+  {{- end }}
+{{- end }}
+
+{{- if not $imgs }}
+  {{- with partial "og-image.html" $page }}
+    {{- $imgs = $imgs | append (dict "Image" . "RelPermalink" .RelPermalink "Permalink" .Permalink) }}
+  {{- end }}
+{{- end }}
+
+{{- return $imgs }}

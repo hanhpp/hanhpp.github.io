@@ -1,0 +1,6 @@
+# This host is a redirect stub only. The canonical site is
+# https://hanhpham.vercel.app/
+# Crawlers are told to ignore this copy so it cannot compete with the
+# canonical host as duplicate content.
+User-agent: *
+Disallow: /

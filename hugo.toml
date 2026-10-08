@@ -5,6 +5,9 @@ theme = 'PaperMod'
 
 enableRobotsTXT = true
 enableEmoji = true
+# Populates .Lastmod from git commit dates so the sitemap reports real per-post
+# modification times instead of one uniform build date.
+enableGitInfo = true
 pygmentsCodeFences = true
 pygmentsUseClasses = true
 
@@ -19,6 +22,11 @@ pygmentsUseClasses = true
   title = "Hanh Pham's Blog"
   description = "Notes on code, security, and whatever else I'm poking at."
   author = "Hanh Pham"
+  # Search engine verification and social attribution. These are read by
+  # layouts/_partials/extend_head.html and stay inert while unset.
+  # googleSiteVerification = ""   # content value from Search Console, HTML tag method
+  # bingSiteVerification = ""     # content value from Bing Webmaster Tools
+  # twitterHandle = "@hanhpp"     # emits twitter:site and twitter:creator
   defaultTheme = 'auto'
   ShowReadingTime = true
   ShowShareButtons = false

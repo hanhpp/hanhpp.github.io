@@ -1,0 +1,39 @@
+name: Pages redirect stub
+
+# The repository is named hanhpp.github.io, so GitHub will not let Pages be
+# deactivated for it. Hugo no longer deploys here. This workflow publishes a
+# redirect stub instead, so the old host stops serving a second copy of the
+# site and cannot compete with the canonical host in search results.
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload redirect stub
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./.pages-redirect
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

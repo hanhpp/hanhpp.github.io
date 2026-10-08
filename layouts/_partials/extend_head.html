@@ -1,6 +1,24 @@
 {{- /* View Transitions API: enables smooth crossfade on same-origin navigation. */ -}}
 <meta name="view-transition" content="same-origin">
 
+{{- /* Search engine ownership verification. Both are inert until the values are
+       set in hugo.toml under [params]. The tokens come from the webmaster
+       consoles themselves and cannot be generated on your behalf. */ -}}
+{{- with site.Params.googleSiteVerification }}
+<meta name="google-site-verification" content="{{ . }}">
+{{- end }}
+{{- with site.Params.bingSiteVerification }}
+<meta name="msvalidate.01" content="{{ . }}">
+{{- end }}
+
+{{- /* Social attribution. PaperMod only emits twitter:site when params.social is
+       a map, and this site uses the array form for the icon row, so the tag has
+       to be emitted here. Inert until params.twitterHandle is set. */ -}}
+{{- with site.Params.twitterHandle }}
+<meta name="twitter:site" content="{{ . }}">
+<meta name="twitter:creator" content="{{ . }}">
+{{- end }}
+
 {{- /* KaTeX math rendering: loads only when math delimiters or .Params.math are present */ -}}
 {{- if or .Params.math site.Params.math (findRE `\$\$` .Content) (findRE `\\\[` .Content) (findRE `\\\(` .Content) }}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
