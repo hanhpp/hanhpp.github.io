@@ -11,6 +11,8 @@
 //
 // Requirements: rsvg-convert. Poppins is vendored in tools/og/fonts and exposed
 // to fontconfig through tools/og/fonts.conf, so no system font install is needed.
+// Poppins is redistributed unmodified under the SIL Open Font License 1.1;
+// see tools/og/fonts/OFL.txt.
 
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
