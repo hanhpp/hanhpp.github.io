@@ -13,6 +13,10 @@
     --code-chip-bg: #fef2f2;
     --code-chip-text: #dc2626;
     --code-chip-border: #fecaca;
+    /* Code blocks keep a dark surface in both themes (matches the Chroma
+       palette loaded by PaperMod), so the foreground must stay light in
+       both themes. Do not bind this to --primary. */
+    --code-fg: #cad3f5;
 }
 
 :root[data-theme="dark"] {
@@ -678,7 +682,7 @@ html.view-workstation .post-tags a[href*="/tags/compilers/"]::before, html.view-
     background: transparent !important;
     border: none !important;
     padding: 0 !important;
-    color: var(--primary) !important;
+    color: var(--code-fg) !important;
     font-family: "Source Code Pro", ui-monospace, "Fira Code", monospace;
     font-size: 13px !important;
     line-height: 1.6 !important;
