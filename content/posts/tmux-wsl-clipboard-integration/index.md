@@ -286,3 +286,13 @@ When you yank text into `clip.exe`, Windows adds that string to its clipboard. I
 | **Terminal Bypass** | Hold `Shift` while selecting or clicking | Bypasses tmux mouse capture to use native Windows Terminal selection |
 
 In [the previous post on pane and window management]({{< ref "tmux-pane-window-management" >}}), we looked at how to organize panes and navigate layouts quickly. Pairing those navigation keys with a sanitized clipboard pipeline eliminates the paper cuts of jumping between Windows editors and terminal shells inside WSL2.
+
+## References
+
+[1] [Microsoft Documentation: Windows Subsystem for Linux (WSL) Interoperability](https://learn.microsoft.com/en-us/windows/wsl/interop): official reference for executing Windows binaries from Linux distributions and filesystem path translation.
+
+[2] [ECMA-48 Standard: Control Functions for Coded Character Sets](https://ecma-international.org/publications-and-standards/standards/ecma-48/): international standard defining ANSI escape sequences, including terminal operating system commands (OSC 52).
+
+[3] [OpenBSD tmux Manual](https://man.openbsd.org/tmux.1): canonical command and configuration reference for buffers, hooks, and mouse event bindings.
+
+[4] [win32yank](https://github.com/equalsraf/win32yank): open-source Windows clipboard helper CLI designed for Neovim and WSL integration.

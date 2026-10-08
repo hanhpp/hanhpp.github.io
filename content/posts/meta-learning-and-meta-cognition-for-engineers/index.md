@@ -160,3 +160,8 @@ We have examined the systems engineer's role in the AI era ([Part 1]({{< ref "th
 In the final chapter of this series, we turn our gaze from human minds to the physical universe itself:
 
 * Read [Part 3: The Oldest Light: How We Measure 13.8 Billion Years Without a Stopwatch]({{< ref "the-oldest-light" >}}) for an exploration of observational cosmology, how light from the early universe traveled 13.8 billion years to reach us, and an interactive simulation of cosmic expansion and redshift.
+## References
+
+[1] John H. Flavell, [*Metacognition and Cognitive Monitoring: A New Area of Cognitive-Developmental Inquiry*](https://psycnet.apa.org/record/1980-09322-001) (*American Psychologist*, 1979): foundational paper establishing the psychological components of metacognitive knowledge and cognitive monitoring.
+
+[2] Andy Clark and David Chalmers, [*The Extended Mind*](https://consc.net/papers/extended.html) (*Analysis*, 1998): philosophical treatise on active externalism and cognitive coupling between humans and external tools.

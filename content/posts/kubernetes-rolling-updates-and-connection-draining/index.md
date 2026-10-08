@@ -230,7 +230,16 @@ spec:
 ```
 
 ### The Rules to Remember
-1. **Never set `maxUnavailable` > 0 on business-critical APIs:** Always surge capacity before retiring old pods.
-2. **`terminationGracePeriodSeconds` must be calculated mathematically:**
-   $$\text{Grace Period} = \text{Propagation Buffer (2s)} + \text{Max Request Duration} + \text{DB Cleanup Buffer (5s)}$$
-3. **Application runtimes must handle signals directly:** If your container entrypoint is `ENTRYPOINT ["/bin/sh", "-c", "./server"]`, bash absorbs `SIGTERM` and fails to forward it to your Go binary, forcing Kubernetes to kill your application with `SIGKILL` after 30 seconds. Always use the exec format: `ENTRYPOINT ["./server"]`.
+1. **Prefer `maxUnavailable: 0` when serving capacity cannot tolerate dips:** If cluster headroom allows, surge new replicas (`maxSurge: 25%` or higher) before evicting healthy instances on strict latency SLOs.
+2. **Size `terminationGracePeriodSeconds` to your longest in-flight workload:** Account for empirical network propagation time (allowing kube-proxy and ingress controllers to observe EndpointSlice state updates) alongside maximum request timeout and database connection pool cleanup budgets.
+3. **Ensure signals reach the application process directly:** Shell wrappers (such as `ENTRYPOINT ["/bin/sh", "-c", "..."]`) often do not forward `SIGTERM` to child processes unless `exec` is used, causing Kubernetes to fall back to `SIGKILL` after the grace period expires. Prefer the direct exec form: `ENTRYPOINT ["./server"]`.
+
+## References
+
+[1] [Kubernetes Documentation: Pod Lifecycle and Termination](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-termination): official specification of graceful pod termination sequences, preStop hook execution, and SIGKILL escalation.
+
+[2] [Kubernetes Documentation: Container Lifecycle Hooks](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/): reference guide on preStop handler behaviors, blocking semantics, and execution budgets.
+
+[3] [Kubernetes Documentation: EndpointSlices](https://kubernetes.io/docs/concepts/services-networking/endpoint-slices/): networking reference on network endpoint tracking, terminating status flags, and kube-proxy connection routing.
+
+[4] [Go Standard Library: os/signal](https://pkg.go.dev/os/signal): documentation on process signal handling, notification context lifecycle, and SIGTERM capture in Go runtimes.

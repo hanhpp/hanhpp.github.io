@@ -314,3 +314,11 @@ custom VM emulation, obfuscation), but the core process stays the same:
 run it, find the check, read the comparison, extract the answer. The next
 post covers Ghidra in depth: how to read its decompiler output confidently
 and use it to understand binaries you've never seen before.
+
+## References
+
+[1] [pwndbg](https://github.com/pwndbg/pwndbg): open-source GDB extension providing enhanced disassembly, register telemetry, and stack visualization for reverse engineering.
+
+[2] [GNU Debugger (GDB) Documentation](https://www.sourceware.org/gdb/documentation/): official reference manual covering breakpoint mechanics, memory inspection, and runtime register manipulation.
+
+[3] [Ghidra Releases and Documentation](https://github.com/NationalSecurityAgency/ghidra/releases): official software reverse engineering suite releases and platform documentation.

@@ -219,3 +219,9 @@ this." The first time you rename a variable and the decompiler output
 suddenly makes sense, you'll understand why people use it. The next post
 covers a more advanced topic: the custom virtual machines that show up in
 CTF reversing challenges, and how to reverse them.
+
+## References
+
+[1] [Ghidra Releases and Documentation](https://github.com/NationalSecurityAgency/ghidra/releases): official release artifacts, installation notes, and platform requirements.
+
+[2] [Ghidra Decompiler Module Source](https://github.com/NationalSecurityAgency/ghidra/tree/master/Ghidra/Features/Decompiler): official module source and architecture for p-code translation, control-flow recovery, and type propagation.

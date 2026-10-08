@@ -207,3 +207,11 @@ anti-debugging. The best way to get better is to practice: pick a CTF
 challenge, set a timer for an hour, and work through it. When you get stuck,
 look at other people's writeups to learn techniques you missed. The cycle
 of try, get stuck, read a writeup, try again is how everyone learns this.
+
+## References
+
+[1] [Linux Programmer's Manual: ptrace(2)](https://man7.org/linux/man-pages/man2/ptrace.2.html): official documentation for process tracing and tracer attachment semantics.
+
+[2] [Microsoft Learn: IsDebuggerPresent function](https://learn.microsoft.com/en-us/windows/win32/api/debugapi/nf-debugapi-isdebuggerpresent): specification for Windows user-mode debugger detection via Process Environment Block inspection.
+
+[3] [Microsoft Learn: Process Environment Block (PEB)](https://learn.microsoft.com/en-us/windows/win32/api/winternl/ns-winternl-peb): documentation on Windows internal process metadata structures and debugging flags.

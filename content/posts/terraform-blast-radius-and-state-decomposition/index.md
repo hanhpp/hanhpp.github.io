@@ -173,3 +173,13 @@ resource "aws_security_group" "app" {
 - **Least-Privilege Security:** Application engineers only need read access to `/production/network/*` in SSM. They never get read permissions on the Foundation state file containing KMS keys or root credentials.
 - **Independent State Evolution:** Upstream stacks can refactor their internal modules, rename resources, or switch from Terraform to OpenTofu without altering the SSM contract. Downstream stacks never experience breaking changes.
 - **Zero Circular Deadlocks:** Inter-stack dependencies are resolved through standard cloud primitives rather than state file parsing.
+
+## References
+
+[1] [HashiCorp Terraform Documentation: Remote State Data Source](https://developer.hashicorp.com/terraform/language/state/remote-state-data): official reference on cross-stack state access and access-control limitations.
+
+[2] [HashiCorp Terraform Documentation: State Locking](https://developer.hashicorp.com/terraform/language/state/locking): specification of backend concurrency control, lock acquisition, and corruption prevention.
+
+[3] [OpenTofu Documentation: State Management](https://opentofu.org/docs/language/state/): architecture overview of open-source declarative infrastructure state storage and backend implementations.
+
+[4] [AWS Systems Manager Documentation: Parameter Store Overview](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html): technical guide for managing hierarchical configuration contracts and decoupled cross-stack parameters.

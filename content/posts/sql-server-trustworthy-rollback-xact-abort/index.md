@@ -242,3 +242,13 @@ diagnostics can vanish along with everything else.
 If you've got a script that calls other scripts without `SET XACT_ABORT
 ON`, or a `CATCH` block that logs before it rolls back, it's worth five
 minutes to go check which of these you're sitting on.
+
+## References
+
+[1] [Microsoft Learn: SET XACT_ABORT (Transact-SQL)](https://learn.microsoft.com/en-us/sql/t-sql/statements/set-xact-abort-transact-sql): official documentation on automatic transaction rollback rules upon runtime errors.
+
+[2] [Microsoft Learn: XACT_STATE (Transact-SQL)](https://learn.microsoft.com/en-us/sql/t-sql/functions/xact-state-transact-sql): reference on transaction state reporting, uncommittable transaction detection, and active transaction management.
+
+[3] [Microsoft Learn: TRY...CATCH (Transact-SQL)](https://learn.microsoft.com/en-us/sql/t-sql/language-elements/try-catch-transact-sql): specification of structured exception handling in T-SQL batches and stored procedures.
+
+[4] [Microsoft Learn: @@TRANCOUNT (Transact-SQL)](https://learn.microsoft.com/en-us/sql/t-sql/functions/trancount-transact-sql): documentation on tracking nested transaction nesting levels and statement-level rollback semantics.

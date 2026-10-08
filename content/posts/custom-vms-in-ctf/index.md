@@ -276,3 +276,7 @@ program counter, an instruction stream, and a dispatch mechanism. Find
 those three things and you can reverse the instruction set. The next post
 covers anti-debugging: techniques binaries use to detect that you're
 debugging them, and how to get around it.
+
+## References
+
+[1] [Ghidra Decompiler Module](https://github.com/NationalSecurityAgency/ghidra/tree/master/Ghidra/Features/Decompiler): official module source and architecture for p-code translation, switch statement recovery, and computed jump-table analysis.

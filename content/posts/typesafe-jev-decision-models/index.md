@@ -227,10 +227,14 @@ Text generation belongs at the human interface. Inside software architecture, st
 
 ---
 
-## References & Further Reading
+## References
 
-- [Fireship: An ex-OpenAI researcher just deleted language from the LLM](https://www.youtube.com/watch?v=TbkUKCm3CHQ) (Video teardown of TypeSafe AI and the Jev architecture).
-- [TypeSafe AI Official Site](https://typesafe.ai/) (System 1 models and non-autoregressive decision infrastructure).
-- [Training language models to follow instructions with human feedback (InstructGPT)](https://arxiv.org/abs/2203.02155) (Ouyang, Almeida, et al., 2022: the foundational RLHF paper).
-- [Brier Score and Probability Calibration](https://en.wikipedia.org/wiki/Brier_score) (Verification of probabilistic accuracy in decision models).
-- [Know Your Meme: My Name Is Jeff](https://knowyourmeme.com/memes/my-name-is-jeff) (Cultural origin of the 22 Jump Street quote).
+[1] [Fireship: An ex-OpenAI researcher just deleted language from the LLM](https://www.youtube.com/watch?v=TbkUKCm3CHQ): video teardown of TypeSafe AI and the Jev architecture.
+
+[2] [TypeSafe AI Official Site](https://typesafe.ai/): System 1 models and non-autoregressive decision infrastructure.
+
+[3] [Training language models to follow instructions with human feedback (InstructGPT)](https://arxiv.org/abs/2203.02155): Ouyang, Almeida, et al., 2022; the foundational RLHF paper.
+
+[4] [Brier Score and Probability Calibration](https://en.wikipedia.org/wiki/Brier_score): verification of probabilistic accuracy in decision models.
+
+[5] [Know Your Meme: My Name Is Jeff](https://knowyourmeme.com/memes/my-name-is-jeff): cultural origin of the 22 Jump Street quote.

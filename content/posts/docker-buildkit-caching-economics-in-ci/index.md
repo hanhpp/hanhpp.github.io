@@ -158,3 +158,13 @@ ENTRYPOINT ["/app/server"]
    Use remote caching only for packages downloaded from public registries (npm, pip, go modules). Avoid exporting intermediate compilation caches (`.cache/go-build`, `target/`) over the network unless running on a persistent local runner.
 3. **Use Self-Hosted Ephemeral Runners with Shared Local Cache Volumes:**
    If build times exceed 10 minutes on large mono-repos, stop optimizing network layer caches. Deploy Kubernetes-based runner controllers (e.g. Actions Runner Controller - ARC) with persistent NVMe SSD cache volumes mounted into the builder pod. You eliminate network transit entirely while enjoying sub-second incremental builds.
+
+## References
+
+[1] [Docker BuildKit Documentation: Cache Storage Backends](https://docs.docker.com/build/cache/backends/): official reference on inline, registry, local, and GitHub Actions cache exporter backends.
+
+[2] [Dockerfile Reference: RUN Instruction Cache Mounts](https://docs.docker.com/reference/dockerfile/): specification for `--mount=type=cache` directories and compiler cache persistence across build stages.
+
+[3] [Open Container Initiative: Image Format Specification](https://github.com/opencontainers/image-spec): standards definition for container image layers, manifests, and tar archive distribution.
+
+[4] [GitHub Actions Documentation: Actions Runner Controller](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners-with-actions-runner-controller/about-actions-runner-controller): architecture guide for scaling self-hosted Kubernetes runner pods with shared storage volumes.

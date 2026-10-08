@@ -193,6 +193,14 @@ Configure node-level allocations in Kubelet:
 If an application enters an infinite loop, it bursts across available worker cores, but can never starve Kubelet or system daemons. Kubernetes continues to report metrics and can safely evict or restart workloads.
 
 ### 3. Use Linux CPU Shares for Contention Arbitration
-When all pods on a node burst simultaneously, the Linux kernel uses **CPU shares** (derived directly from `resources.requests.cpu`) to allocate compute proportionally:
-- Pod A (`requests.cpu: 2000m`) receives twice as many CPU cycles as Pod B (`requests.cpu: 1000m`).
-- Compute allocation remains fair and mathematically bounded without triggering arbitrary 100ms CFS sleep freezes.
+When pods on a node compete under CPU contention, the Linux kernel uses CPU shares (cgroups v1 `cpu.shares` or v2 `cpu.weight`, mapped from `resources.requests.cpu`) to distribute available cycles proportionally among runnable tasks without hard quota throttling.
+
+## References
+
+[1] [Linux Kernel Documentation: CFS Bandwidth Control](https://www.kernel.org/doc/html/latest/scheduler/sched-bwc.html): official documentation on Completely Fair Scheduler quota allocation, enforcement periods, and task throttling.
+
+[2] [Kubernetes Documentation: Resource Management for Pods and Containers](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/): official reference on CPU requests, limits, CFS shares, and container memory ceilings.
+
+[3] [Go Issue 33803: runtime.NumCPU returns host core count in container](https://github.com/golang/go/issues/33803): tracking issue detailing why default runtime thread allocation oversubscribes CPU quotas in cgroups.
+
+[4] [uber-go/automaxprocs](https://github.com/uber-go/automaxprocs): open-source library automatically setting `GOMAXPROCS` to match Linux container CPU quota limits.

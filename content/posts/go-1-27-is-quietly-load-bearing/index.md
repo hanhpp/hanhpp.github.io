@@ -366,8 +366,8 @@ is close to free, and the vet check catches real bugs. But it means this is
 a release to upgrade *deliberately* (read the notes, run the checklist,
 then move) rather than one to bump on a Friday and see what happens.
 
----
+## References
 
-**Sources:** [Go 1.27 Release Notes](https://go.dev/doc/go1.27) ·
-[Go 1.27 is released](https://go.dev/blog/go1.27) · The Go Blog,
-19 August 2026
+[1] [Go 1.27 Release Notes](https://go.dev/doc/go1.27): official documentation covering language changes, generic methods, and standard library updates.
+
+[2] The Go Blog: [Go 1.27 is released](https://go.dev/blog/go1.27): release announcement and overview of tooling changes.

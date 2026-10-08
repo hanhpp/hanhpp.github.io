@@ -182,3 +182,12 @@ Turing's 1936 paper is not ancient history: it draws the outer boundary of what 
 
 Turing did not merely find a boundary in mathematics: by proving what algorithms cannot do, he built the first complete description of what all computers can do.
 
+## References
+
+[1] Alan M. Turing, [*On Computable Numbers, with an Application to the Entscheidungsproblem*](https://www.cs.virginia.edu/~robins/Turing_Paper_1936.pdf) (*Proceedings of the London Mathematical Society*, 1936): original paper introducing the mechanical computing machine, the Halting Problem, and the proof that first-order logic is undecidable.
+
+[2] Kurt Gödel, [*Über formal unentscheidbare Sätze der Principia Mathematica und verwandter Systeme I*](https://doi.org/10.1007/BF01700692) (*Monatshefte für Mathematik und Physik*, 1931): the Incompleteness Theorems proving that sufficiently powerful consistent axiomatic systems contain unprovable true statements.
+
+[3] Alonzo Church, [*An Unsolvable Problem of Elementary Number Theory*](https://www.jstor.org/stable/2371045) (*American Journal of Mathematics*, 1936): contemporaneous proof of undecidability using the untyped lambda calculus, establishing the Church-Turing thesis.
+
+[4] Henry Gordon Rice, [*Classes of Recursively Enumerable Sets and Their Decision Problems*](https://www.ams.org/journals/tran/1953-074-02/S0002-9947-1953-0053041-6/) (*Transactions of the American Mathematical Society*, 1953): formal theorem proving that any non-trivial semantic property of partial recursive functions is undecidable.

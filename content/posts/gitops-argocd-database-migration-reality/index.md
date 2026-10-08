@@ -186,3 +186,13 @@ spec:
       jsonPointers:
         - /metadata/annotations/service.beta.kubernetes.io~1aws-load-balancer-arn
 ```
+
+## References
+
+[1] [Argo CD Documentation: Sync Phases and Waves](https://argo-cd.readthedocs.io/en/stable/user-guide/sync-waves/): official guide on controlling manifest application ordering across negative and positive wave phases.
+
+[2] [Argo CD Documentation: Resource Hooks](https://argo-cd.readthedocs.io/en/stable/user-guide/resource_hooks/): specification for PreSync, Sync, and PostSync lifecycle hook execution in Kubernetes delivery pipelines.
+
+[3] Martin Fowler and Pramod Sadalage, [Evolutionary Database Design](https://martinfowler.com/articles/evodb.html): foundational architecture methodology for backward-compatible schema migrations and expand/contract patterns.
+
+[4] [golang-migrate/migrate](https://github.com/golang-migrate/migrate): open-source database schema migration CLI and library supporting versioned DDL transitions across relational databases.

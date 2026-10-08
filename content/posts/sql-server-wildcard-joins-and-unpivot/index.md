@@ -277,3 +277,9 @@ settled it.
 That still leaves one more failure mode in this neighborhood: what actually
 happens to a multi-step script's data when one step fails partway through,
 covered in [the next post]({{< ref "sql-server-trustworthy-rollback-xact-abort" >}}).
+
+## References
+
+[1] [Microsoft Learn: FROM Clause with PIVOT and UNPIVOT](https://learn.microsoft.com/en-us/sql/t-sql/queries/from-using-pivot-and-unpivot): official Transact-SQL reference on rotating table-valued expressions into columns and normalizing wide columns into normalized rows.
+
+[2] [Microsoft Learn: Display an Actual Execution Plan](https://learn.microsoft.com/en-us/sql/relational-databases/performance/display-an-actual-execution-plan): guide on graphical query execution plans, operator subtree cost analysis, and predicate search arguments (SARGability).

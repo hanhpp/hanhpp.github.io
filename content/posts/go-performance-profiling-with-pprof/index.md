@@ -282,3 +282,13 @@ If you're interested in seeing how profiling works at a lower level
 (reading binary output, tracing execution without source code), check out
 the [reverse engineering series]({{< ref "how-i-started-learning-reverse-engineering" >}}), which covers Ghidra, GDB, and binary
 analysis.
+
+## References
+
+[1] [Go Standard Library: package net/http/pprof](https://pkg.go.dev/net/http/pprof): official documentation for serving runtime profiling data via HTTP endpoints.
+
+[2] [Go Standard Library: package runtime/pprof](https://pkg.go.dev/runtime/pprof): specification for writing runtime profiling data for CPU, heap, goroutines, and block events.
+
+[3] The Go Blog: [Profiling Go Programs](https://go.dev/blog/pprof): foundational profiling tutorial by Russ Cox demonstrating CPU and memory optimization methodology.
+
+[4] Brendan Gregg: [Flame Graphs](https://www.brendangregg.com/flamegraphs.html): visualization methodology for hierarchical profile call stacks.
