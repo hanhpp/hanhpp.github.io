@@ -7,9 +7,9 @@ description: "Notes on lower layers, security, and whatever I'm digging into."
 
 I build things with code and sometimes break things on purpose.
 
-I like digging deeper. When something works, I want to know why, which
-usually means going down a layer or two until the answer stops being
-"because that is what the framework does".
+I like understanding the inner workings of things, which usually means
+going down a layer or two until the answer stops being "because that is
+what the framework does".
 
 I like games too. Probably where the habit started.
 
@@ -18,8 +18,8 @@ run engagements. What I write reflects that: mechanisms, dead ends, and the
 naive attempt before the working one.
 
 This blog is where I write down the things I learn so I don't forget them.
-Mostly technical: systems, security, and whatever I am currently digging
-into. Sometimes not.
+Mostly technical: systems, security, and whatever holds my attention at the
+moment. Sometimes not.
 
 ## What I'm into
 
