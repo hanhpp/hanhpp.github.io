@@ -86,7 +86,7 @@ If `strings` doesn't give you the answer, keep reading.
 
 ## Step 2: find the check in Ghidra
 
-Open the binary in Ghidra. Create a new project, import the binary, and
+Open the binary in Ghidra [3]. Create a new project, import the binary, and
 let it analyze (say yes to all the analysis options). The decompiler view
 will open automatically.
 
@@ -182,7 +182,7 @@ Just read the characters off: `flag{...}`.
 
 ## Step 3: see it happening in GDB
 
-Ghidra tells you *what* the program does. GDB lets you watch it *do* it.
+Ghidra tells you *what* the program does. GDB lets you watch it *do* it [2].
 This is where reverse engineering becomes debugging without source code.
 
 ### Setup
@@ -227,7 +227,7 @@ breakpoint:
 Breakpoint 1, check_password (input=0x7fffffffe040 "test\n")
 ```
 
-`pwndbg` automatically shows you the registers and the arguments. `input`
+`pwndbg` automatically shows you the registers and the arguments [1]. `input`
 points to your input string. One of the other registers or stack values
 holds the expected password.
 

@@ -10,7 +10,7 @@ Your team adopts GitOps with ArgoCD. The pitch from conferences and vendor blogs
 
 "Everything is code. Git is your single source of truth. If a production release fails, just revert the Git commit or click 'Rollback' in the ArgoCD UI, and the cluster self-heals back to safety."
 
-You deploy version 2.4.0 of your core billing service. The GitOps pipeline detects the commit, runs a pre-sync Kubernetes Job to execute database migrations, and updates the deployment manifest.
+You deploy version 2.4.0 of your core billing service. The GitOps pipeline detects the commit, runs a pre-sync Kubernetes Job to execute database migrations [2], and updates the deployment manifest.
 
 Ten minutes later, a critical application bug surfaces in version 2.4.0: an edge-case calculation causes payment timeouts. The on-call engineer navigates to the ArgoCD dashboard and clicks **Rollback to v2.3.0**.
 
@@ -32,7 +32,7 @@ The database migration job in v2.4.0 renamed `billing_account_status` to `status
 
 GitOps is an exceptional tool for managing stateless declarations. When applied blindly to stateful database dependencies, it creates dangerous failure modes.
 
-> **The 30-Second Architecture:** Git commits can be reverted in milliseconds; database mutations cannot. Automated GitOps rollbacks fail because Kubernetes containers are ephemeral, while databases are persistent and append-only. When a pre-sync migration modifies schema destructively, reverting the Git deployment manifest deploys legacy application code against a mutated database. Staff engineers decouple application deployment from database migration lifecycle: schema migrations must strictly follow the Expand/Contract pattern, guaranteeing that database schema version N is backward-compatible with application versions N and N-1 simultaneously before any GitOps sync triggers.
+> **The 30-Second Architecture:** Git commits can be reverted in milliseconds; database mutations cannot. Automated GitOps rollbacks fail because Kubernetes containers are ephemeral, while databases are persistent and append-only. When a pre-sync migration modifies schema destructively, reverting the Git deployment manifest deploys legacy application code against a mutated database. Staff engineers decouple application deployment from database migration lifecycle: schema migrations must strictly follow the Expand/Contract pattern, guaranteeing that database schema version N is backward-compatible with application versions N and N-1 simultaneously before any GitOps sync triggers [3].
 
 ---
 
@@ -65,10 +65,10 @@ If version 2 fails, Git cannot "revert" the database. Reverting a Git commit sim
 
 ## The Sync Wave & Hook Ordering Traps
 
-To coordinate complex multi-tier applications, ArgoCD provides **Sync Waves** and **Resource Hooks**. While powerful, they introduce three systems-level failure modes at scale:
+To coordinate complex multi-tier applications, ArgoCD provides **Sync Waves** and **Resource Hooks** [1][2]. While powerful, they introduce three systems-level failure modes at scale:
 
 ### 1. The Deadlock of the Failed PreSync Job
-ArgoCD sync waves execute in strictly sequential phases:
+ArgoCD sync waves execute in strictly sequential phases [1]:
 
 ```yaml
 apiVersion: batch/v1
@@ -136,7 +136,7 @@ To build a reliable delivery architecture, you must decouple the database lifecy
 ```
 
 ### 1. The Three-Phase Expand/Contract Rule
-Never rename or drop a column in a single migration. Every destructive schema change must span three distinct deployments:
+Never rename or drop a column in a single migration [3]. Every destructive schema change must span three distinct deployments:
 
 1. **Step 1 (Expand):** Add the new column `status_code` alongside the old column `billing_account_status`. Make the new column nullable. Deploy application code that reads from `billing_account_status` but writes to **both** columns.
 2. **Step 2 (Backfill):** Run an asynchronous background script to copy historical data from the old column to the new column.
@@ -145,7 +145,7 @@ Never rename or drop a column in a single migration. Every destructive schema ch
 If a bug occurs in Step 3, you can safely roll back to Step 2 or Step 1: the database supports both application versions simultaneously.
 
 ### 2. Solving the CRD Race with Negative Sync Waves
-To prevent API server schema rejection during operator deployments, use negative sync waves to force CRDs to establish before Custom Resources compile:
+To prevent API server schema rejection during operator deployments, use negative sync waves to force CRDs to establish before Custom Resources compile [1]:
 
 ```yaml
 # In CRD definition:
@@ -165,7 +165,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "0"
 ```
 
-ArgoCD guarantees that wave `-2` is completely applied and registered with the API server before wave `0` begins evaluation.
+ArgoCD guarantees that wave `-2` is completely applied and registered with the API server before wave `0` begins evaluation [1].
 
 ### 3. Configure `ignoreDifferences` for Dynamic Controllers
 When Kubernetes controllers mutate resources dynamically, ArgoCD detects unexpected drift and triggers continuous sync loops.
@@ -194,5 +194,3 @@ spec:
 [2] [Argo CD Documentation: Resource Hooks](https://argo-cd.readthedocs.io/en/stable/user-guide/resource_hooks/): specification for PreSync, Sync, and PostSync lifecycle hook execution in Kubernetes delivery pipelines.
 
 [3] Martin Fowler and Pramod Sadalage, [Evolutionary Database Design](https://martinfowler.com/articles/evodb.html): foundational architecture methodology for backward-compatible schema migrations and expand/contract patterns.
-
-[4] [golang-migrate/migrate](https://github.com/golang-migrate/migrate): open-source database schema migration CLI and library supporting versioned DDL transitions across relational databases.

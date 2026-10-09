@@ -9,7 +9,7 @@ math: true
 
 A team notices that their continuous integration (CI) pipeline takes four minutes to build and test a Go microservice container.
 
-An engineer reads a blog post about Docker BuildKit's remote cache backends. They add two flags to the `docker buildx build` command in GitHub Actions:
+An engineer reads a blog post about Docker BuildKit's remote cache backends. They add two flags to the `docker buildx build` command in GitHub Actions [1]:
 
 ```yaml
 - name: Build and push
@@ -86,7 +86,7 @@ RUN go build -o server ./cmd/server
 In the Dockerfile above, editing a comment in `README.md` changes the checksum of `COPY . .`. Docker throws away the cached `RUN go mod download` layer and re-downloads every dependency from the public internet on every commit.
 
 ### The Optimized Multi-Stage Dockerfile
-Structure instructions from lowest rate of change to highest rate of change, and use BuildKit cache mounts:
+Structure instructions from lowest rate of change to highest rate of change, and use BuildKit cache mounts [2]:
 
 ```dockerfile
 # Syntax directive enables modern BuildKit features
@@ -134,7 +134,7 @@ ENTRYPOINT ["/app/server"]
 
 ### Why This Wins
 - **Dependency Isolation:** `go.mod` is copied separately. Editing application code in `./cmd/server` leaves lines 1 through 10 fully cached.
-- **Cache Mounts (`--mount=type=cache`):** Unlike layer caching (which packages files into image layers and exports them over the network), BuildKit cache mounts keep `/go/pkg/mod` and `/root/.cache/go-build` directly on the runner's local filesystem. Even when a code edit forces recompilation, the Go compiler uses local cached object files (`.a`) to re-link in seconds.
+- **Cache Mounts (`--mount=type=cache`):** Unlike layer caching (which packages files into image layers and exports them over the network) [1][3], BuildKit cache mounts keep `/go/pkg/mod` and `/root/.cache/go-build` directly on the runner's local filesystem. Even when a code edit forces recompilation, the Go compiler uses local cached object files (`.a`) to re-link in seconds.
 - **Distroless Attack Surface Reduction:** The final image contains zero package managers (`apk`, `apt`), zero shells (`/bin/sh`, `/bin/bash`), and zero build tools. The final image size drops from 400MB to **18MB**, speeding up deployment registry pulls across your Kubernetes cluster.
 
 ---
@@ -157,7 +157,7 @@ ENTRYPOINT ["/app/server"]
 2. **Cache Dependencies, Not Build Artifacts:**
    Use remote caching only for packages downloaded from public registries (npm, pip, go modules). Avoid exporting intermediate compilation caches (`.cache/go-build`, `target/`) over the network unless running on a persistent local runner.
 3. **Use Self-Hosted Ephemeral Runners with Shared Local Cache Volumes:**
-   If build times exceed 10 minutes on large mono-repos, stop optimizing network layer caches. Deploy Kubernetes-based runner controllers (e.g. Actions Runner Controller - ARC) with persistent NVMe SSD cache volumes mounted into the builder pod. You eliminate network transit entirely while enjoying sub-second incremental builds.
+   If build times exceed 10 minutes on large mono-repos, stop optimizing network layer caches. Deploy Kubernetes-based runner controllers (e.g. Actions Runner Controller - ARC) with persistent NVMe SSD cache volumes mounted into the builder pod [4]. You eliminate network transit entirely while enjoying sub-second incremental builds.
 
 ## References
 

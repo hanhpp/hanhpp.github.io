@@ -6,7 +6,7 @@ tags: ["reverse-engineering", "ctf"]
 summary: "Ghidra's decompiler turns machine code into something that looks like C. But the output is full of strange variable names, weird casts, and functions that look nothing like what you'd write. Here's how to read it anyway."
 ---
 
-Ghidra is the free decompiler from the NSA. You open a binary, it shows you
+Ghidra is the free decompiler from the NSA [1]. You open a binary, it shows you
 C-like code. The problem: the code looks like it was written by someone who
 hates you. Variables are named `iVar1` and `local_48`. Functions are named
 `FUN_00401230`. There are casts everywhere. Nothing has a type. You know
@@ -19,7 +19,7 @@ feature, just the 20% you'll use 80% of the time.
 
 Ghidra's decompiler doesn't have source code. It's reconstructing C from
 machine code. Machine code doesn't have variable names, types, or
-comments. So Ghidra makes up names based on what it can figure out:
+comments. So Ghidra makes up names based on what it can figure out [2]:
 
 - **`iVar1`**: an integer variable. The `i` prefix means integer, `v` is
   the variable, `1` is the number Ghidra assigned. It does this because it
@@ -191,7 +191,7 @@ you'll never go back to reading unnamed `iVar1` variables.
 ## Common gotchas
 
 **Ghidra's decompiler isn't always right.** It reconstructs types from
-machine code, and sometimes it guesses wrong. If something looks weird (a
+machine code, and sometimes it guesses wrong [2]. If something looks weird (a
 function taking 12 parameters, a nonsensical cast, a loop that doesn't make
 sense), check the disassembly view. The decompiler is a convenience layer;
 the disassembly is what the CPU actually sees.
@@ -203,7 +203,7 @@ compiler did things you wouldn't expect. Try `-O0` binaries first.
 
 **C++ binaries are harder.** Name mangling (`_ZN3Foo3barEv`), vtables
 (function pointers in structs), and template instantiation make C++ binaries
-more complex. Ghidra can demangle names and identify vtables, but you need
+more complex. Ghidra can demangle names and identify vtables [1], but you need
 to understand how C++ compiles to really read them.
 
 **Stripped binaries have no names.** "Stripped" means the function names

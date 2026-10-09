@@ -8,7 +8,7 @@ summary: "Piping tmux selections directly to clip.exe leaves trailing pane paddi
 
 Yank five lines from a 120-column tmux pane inside WSL2, paste them into a Python file or YAML manifest in your editor, and your linter immediately flags eighty trailing spaces. Copy a command from your shell history, paste it into bash, and the shell halts with `command not found: \u00a0...` because your prompt injected an invisible non-breaking space. Copy a multi-line snippet back from Windows, and bare carriage returns mangle your terminal line breaks.
 
-Standard Linux clipboard utilities like `xclip` or `wl-copy` fail out of the box in headless WSL2 because there is no X11 or Wayland display server. The standard advice online is piping tmux selections directly to `/mnt/c/WINDOWS/system32/clip.exe`. That works for about ten minutes, until the trailing whitespace, broken prompt glyphs, and line ending mismatches turn daily development into death by a thousand paper cuts.
+Standard Linux clipboard utilities like `xclip` or `wl-copy` fail out of the box in headless WSL2 because there is no X11 or Wayland display server. The standard advice online is piping tmux selections directly to `/mnt/c/WINDOWS/system32/clip.exe` [1]. That works for about ten minutes, until the trailing whitespace, broken prompt glyphs, and line ending mismatches turn daily development into death by a thousand paper cuts.
 
 A clean setup needs a bidirectional pipeline: sanitize text on the way out, normalize line endings on the way in, and complete in single-digit milliseconds so mouse dragging never stutters.
 
@@ -239,7 +239,7 @@ Bridging an untrusted host clipboard to a shell running with user privileges req
 Terminal emulators rely on bracketed paste delimiters (`\e[200~` and `\e[201~`) to signal when input should be treated as literal text rather than typed commands. However, naive filtering presents two immediate evasion vectors:
 
 - **Nested Delimiter Smuggling:** A simple single-pass substitution (`s/\x1b\[201~//g`) is vulnerable to nesting. If an attacker crafts `\e[\e[201~201~`, stripping the inner token reconstructs `\e[201~` in the output stream. The sanitizer resolves this by wrapping substitution in a loop (`1 while s/...//g`).
-- **8-Bit C1 CSI Controls:** In addition to the standard two-byte 7-bit escape (`\e[` or `\x1b[`), terminal emulators support single-byte 8-bit C1 CSI sequences (`\x9b` or UTF-8 `\xc2\x9b`). An attacker using `\x9b201~` bypasses filters that only look for `\x1b[`. The regex covers both variants.
+- **8-Bit C1 CSI Controls:** In addition to the standard two-byte 7-bit escape (`\e[` or `\x1b[`), terminal emulators support single-byte 8-bit C1 CSI sequences (`\x9b` or UTF-8 `\xc2\x9b`) [2]. An attacker using `\x9b201~` bypasses filters that only look for `\x1b[`. The regex covers both variants.
 - **Mode Deactivation (`\e[?2004l`):** Terminals track bracketed paste status using DEC Private Mode 2004. An escape sequence containing `\e[?2004l` instructs the terminal to turn off bracketed paste mode immediately. Stripping this sequence preserves terminal state.
 
 ### 2. PowerShell 5.1 default ASCII output encoding
@@ -248,7 +248,7 @@ On Windows 10 and 11, the built-in Windows PowerShell 5.1 host defaults `$Output
 
 ### 3. Server-wide event loop lockups: synchronous vs background `run-shell`
 
-In tmux, `run-shell` without the `-b` flag runs synchronously, halting the entire tmux server event loop until the invoked script exits. Because `tmux-paste-wsl` crosses the virtualization boundary into Windows PowerShell, any host clipboard mutex contention, disk spike, or antivirus scan would freeze all panes, windows, and attached sessions.
+In tmux, `run-shell` without the `-b` flag runs synchronously, halting the entire tmux server event loop until the invoked script exits [3]. Because `tmux-paste-wsl` crosses the virtualization boundary into Windows PowerShell, any host clipboard mutex contention, disk spike, or antivirus scan would freeze all panes, windows, and attached sessions.
 
 Two safeguards eliminate this risk:
 1. Keybindings use `run-shell -b`, spawning the helper asynchronously so tmux continues handling user keystrokes.
@@ -256,7 +256,7 @@ Two safeguards eliminate this risk:
 
 ### 4. Child process bracketed paste support
 
-`tmux paste-buffer -p` only wraps pasted text in bracketed paste sequences if the application running inside the pane has requested bracketed paste mode (such as modern bash with readline, zsh, fish, vim, or python). If you paste into a legacy application or raw shell prompt that does not enable mode 2004, the text is emitted raw.
+`tmux paste-buffer -p` only wraps pasted text in bracketed paste sequences if the application running inside the pane has requested bracketed paste mode (such as modern bash with readline, zsh, fish, vim, or python) [3]. If you paste into a legacy application or raw shell prompt that does not enable mode 2004, the text is emitted raw.
 
 ### 5. WSL2 PATH precedence hijacking
 
@@ -294,5 +294,3 @@ In [the previous post on pane and window management]({{< ref "tmux-pane-window-m
 [2] [ECMA-48 Standard: Control Functions for Coded Character Sets](https://ecma-international.org/publications-and-standards/standards/ecma-48/): international standard defining ANSI escape sequences, including terminal operating system commands (OSC 52).
 
 [3] [OpenBSD tmux Manual](https://man.openbsd.org/tmux.1): canonical command and configuration reference for buffers, hooks, and mouse event bindings.
-
-[4] [win32yank](https://github.com/equalsraf/win32yank): open-source Windows clipboard helper CLI designed for Neovim and WSL integration.

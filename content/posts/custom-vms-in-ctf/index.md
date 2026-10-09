@@ -34,7 +34,7 @@ state.
 
 ## How to spot a VM
 
-When you open a binary in Ghidra and see this pattern, it's probably a VM:
+When you open a binary in Ghidra and see this pattern, it's probably a VM [1]:
 
 **A big switch statement in main (or a called function):**
 
@@ -264,7 +264,7 @@ xor r0, r1   // r0 = 0x03
 they use computed jumps (`goto *(&jump_table + opcode * 8)`), so the
 decompiler can't show you the switch directly. You need to follow the
 jump table manually. In Ghidra, look for arrays of function pointers in
-the data section.
+the data section [1].
 
 **Multi-stage VMs** run one VM, then use its output as input to another
 VM. You need to reverse both stages.

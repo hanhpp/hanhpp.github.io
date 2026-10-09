@@ -84,7 +84,7 @@ post.
 > Wrapping a comparison in `ISNULL()` blocks SQL Server from using an index
 > to jump straight to matching rows; it has to evaluate the function
 > against every row instead. This is called **non-sargable**, and it's
-> invisible unless you actually read the execution plan. A `CREATE INDEX`
+> invisible unless you actually read the execution plan [2]. A `CREATE INDEX`
 > line is not proof that the index is being used the way you think.
 
 The ~1.9× gain here came from the index reorganizing physical storage on
@@ -96,7 +96,7 @@ needs one more change.
 The other half of that query checks one column against ten separate lookup
 columns, because the hierarchy table was modeled wide instead of tall.
 `UNPIVOT` turns that around: "one row, ten columns to compare" becomes "up
-to ten rows, one column, seekable":
+to ten rows, one column, seekable" [1]:
 
 ```sql
 ;WITH ScopeLevels AS (

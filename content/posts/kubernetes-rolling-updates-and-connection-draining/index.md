@@ -26,7 +26,7 @@ Six months later, during a major flash sale or marketing campaign, the errors re
 
 Using `preStop: sleep 5` is not zero-downtime architecture; it is an unprincipled heuristic masking a distributed control plane race condition.
 
-> **The 30-Second Architecture:** When a Pod terminates, Kubernetes runs two independent asynchronous operations in parallel: local container teardown (`SIGTERM` from the Kubelet) and distributed network deregistration (EndpointSlice updates to `kube-proxy` and ingress controllers across all worker nodes). A `sleep 5` hook attempts to guess the duration of that distributed network update. True zero-downtime deployments require application-level connection draining: intercepting `SIGTERM`, signaling upstream proxies via `Connection: close` (HTTP/1.1) or `GOAWAY` (HTTP/2), completing active requests, and exiting only when queues are dry.
+> **The 30-Second Architecture:** When a Pod terminates, Kubernetes runs two independent asynchronous operations in parallel: local container teardown (`SIGTERM` from the Kubelet) and distributed network deregistration (EndpointSlice updates to `kube-proxy` and ingress controllers across all worker nodes) [1][3]. A `sleep 5` hook attempts to guess the duration of that distributed network update. True zero-downtime deployments require application-level connection draining: intercepting `SIGTERM`, signaling upstream proxies via `Connection: close` (HTTP/1.1) or `GOAWAY` (HTTP/2), completing active requests, and exiting only when queues are dry.
 
 ---
 
@@ -59,14 +59,14 @@ When a rolling update creates a new replica and targets an old replica for remov
 ### Path A: The Local Node Teardown
 1. The Kubelet on the local node observes that the Pod status is set to `Terminating`.
 2. The Kubelet removes the Pod from its local readiness checks.
-3. If a `preStop` hook is defined, the Kubelet executes it.
+3. If a `preStop` hook is defined, the Kubelet executes it [2].
 4. Once `preStop` finishes (or immediately if none is defined), the Kubelet sends a `SIGTERM` signal to process ID 1 inside the container.
-5. If the container process has not exited after `terminationGracePeriodSeconds` (default 30 seconds), the Kubelet issues `SIGKILL` to force termination.
+5. If the container process has not exited after `terminationGracePeriodSeconds` (default 30 seconds), the Kubelet issues `SIGKILL` to force termination [1].
 
 ### Path B: The Distributed Network Deregistration
 1. The `EndpointSlice` controller detects the Pod's deletion timestamp.
 2. The controller updates the `EndpointSlice` API object to mark the Pod as unready.
-3. Every worker node running `kube-proxy` detects the API change via its informer loop.
+3. Every worker node running `kube-proxy` detects the API change via its informer loop [3].
 4. Each `kube-proxy` rewrites its local iptables chains, IPVS tables, or Cilium eBPF map entries to stop routing new Service traffic to the Pod's IP.
 5. The Ingress Controller (Envoy, Traefik, or Nginx Ingress) receives the event and updates its upstream connection routing pool.
 
@@ -141,7 +141,7 @@ To achieve true zero-downtime deployments without arbitrary sleeps, implement **
 ```
 
 ### Go Implementation Pattern
-Here is how to implement deterministic connection draining in a Go HTTP service:
+Here is how to implement deterministic connection draining in a Go HTTP service [4]:
 
 ```go
 package main

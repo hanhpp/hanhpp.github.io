@@ -19,9 +19,9 @@ This post covers the most common techniques and how to get around them.
 
 ## ptrace: the classic
 
-On Linux, a process can only be debugged by one other process at a time.
+On Linux, a process can only be debugged by one other process at a time [1].
 If the binary calls `ptrace(PTRACE_TRACEME)` on itself, it's asking to be
-traced; but if it's already being traced (by GDB), the call fails. If
+traced; but if it's already being traced (by GDB), the call fails [1]. If
 it's NOT being traced, the call succeeds. The binary can check the return
 value:
 
@@ -180,7 +180,7 @@ Common function calls to look for in Ghidra:
 - `ptrace`: the classic check
 - `fopen` with `/proc/self/` paths: reading process info
 - `gettimeofday` or `clock_gettime`: timing checks
-- `IsDebuggerPresent`: Windows-specific (PE binaries)
+- `IsDebuggerPresent`: Windows-specific (PE binaries) [2][3]
 - `CheckRemoteDebuggerPresent`: Windows
 
 ## The mindset

@@ -40,7 +40,7 @@ is unresponsive" or "goroutine leak."
 ### Way 1: the net/http/pprof endpoint (for running services)
 
 The simplest way to profile a running Go service: import `net/http/pprof`
-and expose it on an HTTP endpoint. If your service already runs an HTTP
+and expose it on an HTTP endpoint [1]. If your service already runs an HTTP
 server, this is a two-line change:
 
 ```go
@@ -71,7 +71,7 @@ no special build flags.
 ### Way 2: runtime/pprof in code (for benchmarks and CLIs)
 
 For programs that don't run an HTTP server (CLI tools, batch jobs, tests),
-write the profile directly:
+write the profile directly [2]:
 
 ```go
 import "runtime/pprof"
@@ -110,12 +110,12 @@ Showing nodes accounting for 3.2s, 80% of 4s
 ```
 
 **`flat`** is the time spent in the function itself (not its callees).
-**`cum`** is the time spent in the function plus everything it calls. A
+**`cum`** is the time spent in the function plus everything it calls [3]. A
 function with high `flat` is doing expensive work directly. A function with
 high `cum` but low `flat` is calling expensive functions; the bottleneck
 is in one of its callees.
 
-The pattern to look for: **high `cum` with low `flat`**. That means the
+The pattern to look for: **high `cum` with low `flat`** [3]. That means the
 function is slow because something it calls is slow. Drill down with
 `list <function>` to see which line:
 
@@ -138,7 +138,7 @@ you're marshaling, or use a faster JSON library like `json-iterator` or
 ## Reading a memory profile
 
 A heap profile shows where your program allocates memory. The interactive
-commands are the same (`top`, `list`, `web`) but the numbers mean
+commands are the same (`top`, `list`, `web` [4]) but the numbers mean
 something different:
 
 ```

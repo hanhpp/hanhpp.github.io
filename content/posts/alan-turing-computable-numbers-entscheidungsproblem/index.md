@@ -10,7 +10,7 @@ summary: "A step-by-step deconstruction of Alan Turing's 1936 paper: how formali
 Every software engineer eventually hits a wall with static analysis. You write a linter rule, build an automated vulnerability scanner, or write a compiler pass, and you wonder: why can't a tool definitively tell me whether this loop terminates, whether this pointer ever dereferences null, or whether two arbitrary functions produce the same output? The answer was proved in 1936, before physical computers even existed.
 
 > **The Core Takeaway:**
-> In his landmark 1936 paper *"On Computable Numbers, with an Application to the Entscheidungsproblem"*, 24-year-old Alan Turing answered David Hilbert's decision problem with a definitive **NO**. To do so, he invented the mathematical blueprint for modern computers (the Universal Turing Machine), proved that the Halting Problem is undecidable via a fatal self-referential diagonal contradiction, and demonstrated that mathematical truth outstrips mechanical computation.
+> In his landmark 1936 paper *"On Computable Numbers, with an Application to the Entscheidungsproblem"*, 24-year-old Alan Turing answered David Hilbert's decision problem with a definitive **NO** [1]. To do so, he invented the mathematical blueprint for modern computers (the Universal Turing Machine), proved that the Halting Problem is undecidable via a fatal self-referential diagonal contradiction, and demonstrated that mathematical truth outstrips mechanical computation.
 
 ---
 
@@ -18,8 +18,8 @@ Every software engineer eventually hits a wall with static analysis. You write a
 
 In 1928, mathematician David Hilbert challenged the mathematical world to resolve three foundational questions about formal axiomatic systems:
 
-1. **Is mathematics complete?** Can every true statement be proved from axioms? (Answered **NO** by Kurt Gödel in 1931: any consistent system capable of arithmetic contains true statements that cannot be proven within the system).
-2. **Is mathematics consistent?** Can we prove that the axioms never lead to a contradiction like \( 0 = 1 \)? (Answered **NO** by Gödel's Second Theorem: a system cannot prove its own consistency).
+1. **Is mathematics complete?** Can every true statement be proved from axioms? (Answered **NO** by Kurt Gödel in 1931: any consistent system capable of arithmetic contains true statements that cannot be proven within the system) [2].
+2. **Is mathematics consistent?** Can we prove that the axioms never lead to a contradiction like \( 0 = 1 \)? (Answered **NO** by Gödel's Second Theorem: a system cannot prove its own consistency) [2].
 3. **Is mathematics decidable?** (*Das Entscheidungsproblem*, or The Decision Problem):
    > Is there an effective mechanical procedure (an algorithm) that takes any statement in first-order logic and decides, in a finite number of steps, whether it is universally valid?
 
@@ -48,7 +48,7 @@ In 1936, the word "computer" referred to a human clerk performing calculations o
                     +---------+
 ```
 
-Turing termed this an **a-machine (automatic machine)**. Despite having only four basic physical actions (read, write, move left/right, change state), this abstract construct can simulate any algorithm ever conceived.
+Turing termed this an **a-machine (automatic machine)**. Despite having only four basic physical actions (read, write, move left/right, change state), this abstract construct can simulate any algorithm ever conceived [1][3].
 
 Turing then classified real numbers:
 * A real number in the interval \([0, 1]\) is **computable** if its digits can be printed sequentially on the tape by an a-machine.
@@ -82,7 +82,7 @@ If a program is just an integer, a machine can read another program as data.
 Turing designed a single, specific machine, \(\mathcal{U}\), which accepts two inputs on its tape: the Description Number \( D.N.(M) \) of any arbitrary machine \( M \), and an input string \( x \). Machine \(\mathcal{U}\) reads the rules of \( M \) from the tape and simulates its execution step by step:
 $$\mathcal{U}(D.N.(M), x) \equiv M(x)$$
 
-This is the invention of the **stored-program computer**. Before Turing, hardware was built to do one task (a cash register added; a loom wove). Turing showed that a single physical piece of hardware could execute any arbitrary software program.
+This is the invention of the **stored-program computer** [1]. Before Turing, hardware was built to do one task (a cash register added; a loom wove). Turing showed that a single physical piece of hardware could execute any arbitrary software program.
 
 ---
 
@@ -90,7 +90,7 @@ This is the invention of the **stored-program computer**. Before Turing, hardwar
 
 With the Universal Machine established, Turing addressed the core question: **can a machine determine whether another machine will run forever or stall?**
 
-Today this is known as the **Halting Problem** (Turing formulated it as determining whether a machine is "circle-free"):
+Today this is known as the **Halting Problem** [1] (Turing formulated it as determining whether a machine is "circle-free"):
 
 ### The Hypothesis (Proof by Contradiction)
 Assume there exists an algorithm: a Turing machine \(\mathcal{D}\) that can inspect any machine Description Number \( n \) and decide whether it is circle-free:
@@ -176,7 +176,7 @@ Therefore, **first-order logic is undecidable**. There is no algorithm that can 
 
 Turing's 1936 paper is not ancient history: it draws the outer boundary of what every compiler, linter, and security analyzer can ever achieve:
 
-* **Rice's Theorem (1953):** Any non-trivial semantic property of a program (e.g. *"does this function ever leak memory?"*, *"is this API route vulnerable to SQL injection?"*, *"does this routine return 403?"*) is undecidable.
+* **Rice's Theorem (1953):** Any non-trivial semantic property of a program (e.g. *"does this function ever leak memory?"*, *"is this API route vulnerable to SQL injection?"*, *"does this routine return 403?"*) is undecidable [4].
 * **Why Static Analysis Employs Approximations:** Linters and scanners cannot be simultaneously sound (no false negatives) and complete (no false positives). Every security tool is mathematically forced to make trade-offs: either flag benign code (false alarms) or miss real bugs (false sense of security).
 * **Turing Completeness as an Attack Surface:** Whenever a configuration format (YAML, CSS, PDF font engines, BPF, smart contracts) accidentally becomes Turing complete, verifying its safety in advance becomes impossible.
 

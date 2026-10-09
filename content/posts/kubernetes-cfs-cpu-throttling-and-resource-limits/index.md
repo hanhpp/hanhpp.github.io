@@ -17,7 +17,7 @@ Meanwhile, another service replica abruptly disappears from the cluster without 
 
 Both failures originate from the exact same architectural misunderstanding: treating Kubernetes CPU and memory limits as generic resource boundaries rather than Linux kernel cgroup primitives.
 
-> **The 30-Second Architecture:** Kubernetes CPU limits do not cap clock frequency; they enforce rigid Completely Fair Scheduler (CFS) quotas in 100ms period windows. Multi-threaded runtimes (Go, JVM, Node) handling concurrent bursts consume their entire period quota in a fraction of a wall-clock second, causing the kernel to freeze the process for the remainder of the period. For latency-critical microservices, hard CPU limits are an anti-pattern: set deterministic CPU requests, leave CPU limits unset (`limits.cpu: null`), and use Linux CPU shares (`cpu.weight`) to allocate contested compute. For memory, enforce hard container limits and pair them with Go's `GOMEMLIMIT` at 85% capacity to trigger aggressive garbage collection before the kernel invokes `oom_score_adj`.
+> **The 30-Second Architecture:** Kubernetes CPU limits do not cap clock frequency; they enforce rigid Completely Fair Scheduler (CFS) quotas in 100ms period windows [1]. Multi-threaded runtimes (Go, JVM, Node) handling concurrent bursts consume their entire period quota in a fraction of a wall-clock second, causing the kernel to freeze the process for the remainder of the period. For latency-critical microservices, hard CPU limits are an anti-pattern: set deterministic CPU requests, leave CPU limits unset (`limits.cpu: null`), and use Linux CPU shares (`cpu.weight`) to allocate contested compute. For memory, enforce hard container limits and pair them with Go's `GOMEMLIMIT` at 85% capacity to trigger aggressive garbage collection before the kernel invokes `oom_score_adj`.
 
 ---
 
@@ -25,11 +25,11 @@ Both failures originate from the exact same architectural misunderstanding: trea
 
 To understand why a pod running at 20% average CPU experiences 300ms latency spikes, you must inspect how the Linux kernel throttles cgroups.
 
-In Kubernetes, setting `resources.limits.cpu: "1000m"` translates directly into two Linux cgroup parameters:
-- `cpu.cfs_period_us`: The quota measurement window, configured globally by Kubelet to **100,000 microseconds (100 milliseconds)**.
+In Kubernetes, setting `resources.limits.cpu: "1000m"` translates directly into two Linux cgroup parameters [2]:
+- `cpu.cfs_period_us`: The quota measurement window, configured globally by Kubelet to **100,000 microseconds (100 milliseconds)** [1].
 - `cpu.cfs_quota_us`: The total CPU runtime allocated to the container within that window. For `1000m` (1 core), this is set to **100,000 microseconds**. For `2000m` (2 cores), this is **200,000 microseconds**.
 
-The critical mechanics: **quota is cumulative across all threads, but the period window is bound to wall-clock time.**
+The critical mechanics: **quota is cumulative across all threads, but the period window is bound to wall-clock time [1].**
 
 ```text
 Period Window: 100ms (Wall Clock)
@@ -86,7 +86,7 @@ If this metric exceeds 5% on a synchronous service, your p99 latency spikes are 
 
 If you deploy a Go microservice to Kubernetes without explicitly configuring `GOMAXPROCS`, the problem amplifies exponentially.
 
-By default, the Go runtime calls `runtime.NumCPU()` on boot to determine how many operating system scheduler threads (\(M\)) to spin up. In containerized environments, `runtime.NumCPU()` reads `/sys/devices/system/cpu/online` from the host node.
+By default, the Go runtime calls `runtime.NumCPU()` on boot to determine how many operating system scheduler threads (\(M\)) to spin up. In containerized environments, `runtime.NumCPU()` reads `/sys/devices/system/cpu/online` from the host node [3].
 
 If your pod runs on an AWS `c6i.16xlarge` worker node with 64 physical CPU cores, the Go runtime defaults to:
 $$\text{GOMAXPROCS} = 64$$
@@ -94,7 +94,7 @@ $$\text{GOMAXPROCS} = 64$$
 If your pod specification sets `resources.limits.cpu: "2000m"` (2 cores), Go still attempts to schedule goroutines across 64 concurrent OS threads. When traffic arrives, 64 threads wake up simultaneously, burn through the 200ms container quota in **3 milliseconds**, and the kernel freezes the container for the remaining 97 milliseconds of the period.
 
 ### The Fix: Automatic Cgroup Detection
-Import `uber-go/automaxprocs` in your `main.go`:
+Import `uber-go/automaxprocs` in your `main.go` [4]:
 
 ```go
 package main
@@ -121,7 +121,7 @@ Unlike CPU, memory cannot be throttled. When a container exceeds its memory ceil
 ### The Anatomy of Exit Code 137
 When Kubernetes terminates a pod with Exit Code 137 (\(128 + 9 = \text{SIGKILL}\)), it does not allow the process to flush logs, write error traces, or trigger graceful shutdown handlers.
 
-The termination decision is governed by kernel cgroup memory accounting:
+The termination decision is governed by kernel cgroup memory accounting [2]:
 - **Anonymous Memory (RSS):** Heap allocations, stack frames, goroutine structures. This memory cannot be evicted to disk.
 - **Page Cache:** In-memory cached file reads, shared library segments, stdout/stderr socket buffers.
 
@@ -193,7 +193,7 @@ Configure node-level allocations in Kubelet:
 If an application enters an infinite loop, it bursts across available worker cores, but can never starve Kubelet or system daemons. Kubernetes continues to report metrics and can safely evict or restart workloads.
 
 ### 3. Use Linux CPU Shares for Contention Arbitration
-When pods on a node compete under CPU contention, the Linux kernel uses CPU shares (cgroups v1 `cpu.shares` or v2 `cpu.weight`, mapped from `resources.requests.cpu`) to distribute available cycles proportionally among runnable tasks without hard quota throttling.
+When pods on a node compete under CPU contention, the Linux kernel uses CPU shares (cgroups v1 `cpu.shares` or v2 `cpu.weight`, mapped from `resources.requests.cpu`) to distribute available cycles proportionally among runnable tasks without hard quota throttling [1][2].
 
 ## References
 

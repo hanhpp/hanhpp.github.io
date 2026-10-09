@@ -26,7 +26,7 @@ To understand how to build an effective personal AI learning system, we must mov
 
 ### 1. Flavell (1979): Metacognition and Cognitive Monitoring
 
-In his landmark paper *"Metacognition and cognitive monitoring: A new area of cognitive-developmental inquiry"* (*American Psychologist*, 1979), developmental psychologist John H. Flavell coined the term **metacognition**. He divided human thinking into four interacting components:
+In his landmark paper *"Metacognition and cognitive monitoring: A new area of cognitive-developmental inquiry"* (*American Psychologist*, 1979), developmental psychologist John H. Flavell coined the term **metacognition** [1]. He divided human thinking into four interacting components:
 * **Metacognitive Knowledge:** What you know about your own mind: your cognitive strengths, personal biases, and knowledge limits.
 * **Metacognitive Experiences:** The conscious, internal feeling of cognitive friction: that sharp feeling of confusion when a code block does not make sense, or the sudden realization that an assumption is flawed.
 * **Goals (Tasks):** The actual intellectual objective you want to achieve.
@@ -36,7 +36,7 @@ When an engineer blindly prompts an LLM with *"Write a script to do X,"* they co
 
 ### 2. Clark & Chalmers (1998): The Extended Mind Hypothesis
 
-In their 1998 paper *"The Extended Mind"* (*Analysis*), philosophers Andy Clark and David Chalmers challenged the boundary that cognition stops at the biological skull:
+In their 1998 paper *"The Extended Mind"* (*Analysis*), philosophers Andy Clark and David Chalmers challenged the boundary that cognition stops at the biological skull [2]:
 
 > *"If, as we confront some task, a part of the world functions as a process which, were it done in the head, we would have no hesitation in recognizing as part of the cognitive process, then that part of the world is part of the cognitive process."*
 

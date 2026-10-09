@@ -13,7 +13,7 @@ inserts a row, hits a divide-by-zero error, then (in source code, never in
 practice, because the error stops it) tries to insert a second row. Here's
 the real ledger output from each run: not paraphrased, not estimated.
 
-> **The 10-Second Takeaway:** In SQL Server, `BEGIN TRAN` without `SET XACT_ABORT ON` does not roll back on runtime error by default; it silently commits partial data. For trustworthy multi-step migrations, always prepend `SET XACT_ABORT, NOCOUNT ON;` and use a structured `BEGIN TRY ... BEGIN TRAN ... COMMIT TRAN END TRY BEGIN CATCH IF @@TRANCOUNT > 0 ROLLBACK TRAN; THROW; END CATCH` block.
+> **The 10-Second Takeaway:** In SQL Server, `BEGIN TRAN` without `SET XACT_ABORT ON` does not roll back on runtime error by default; it silently commits partial data [1]. For trustworthy multi-step migrations, always prepend `SET XACT_ABORT, NOCOUNT ON;` and use a structured `BEGIN TRY ... BEGIN TRAN ... COMMIT TRAN END TRY BEGIN CATCH IF @@TRANCOUNT > 0 ROLLBACK TRAN; THROW; END CATCH` block [3][4].
 
 ## Scenario 1: plain `BEGIN TRAN`, no error handling
 
@@ -103,13 +103,13 @@ Getting here needed one fix mid-testing: my first attempt logged the error
 *before* rolling back, same as scenario 2's mistake, and that log line
 vanished too. Once a transaction is **doomed** (hit an error severe enough
 that it can no longer be committed), nothing else it does can be written
-until it's rolled back. Rollback has to come first in the `CATCH` block,
+until it's rolled back [2]. Rollback has to come first in the `CATCH` block,
 always.
 
 > `XACT_ABORT ON` is the setting doing the real work here. It's what turns
 > "an error happened somewhere in this chain" into "the whole transaction
 > is instantly, automatically undone", with no dependency on execution
-> ever reaching your `ROLLBACK` line. Without it, as scenario 1 showed, a
+> ever reaching your `ROLLBACK` line [1]. Without it, as scenario 1 showed, a
 > runtime error can be entirely survivable from the engine's point of view,
 > even though it's exactly the kind of thing you'd want to stop everything
 > for.

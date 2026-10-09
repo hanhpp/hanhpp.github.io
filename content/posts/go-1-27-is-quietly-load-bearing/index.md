@@ -10,7 +10,7 @@ Most Go releases are easy to summarize: a few library additions, a compiler
 improvement, a port dropped. You skim the notes, note the one thing relevant
 to you, and move on.
 
-Go 1.27, released on 19 August 2026, is not that. Several changes in this
+Go 1.27, released on 19 August 2026, is not that [1][2]. Several changes in this
 release alter how your program behaves **without you writing a single new
 line of code**: the JSON package you already import, the allocator
 underneath every `make`, the HTTP/2 server you already run, and the vet
@@ -27,14 +27,14 @@ If you read nothing else:
 
 - **Generic methods landed.** Methods can now declare their own type
   parameters. This closes the most-cited hole left open when generics
-  shipped in 1.18.
+  shipped in 1.18 [1].
 - **`encoding/json/v2` exists, and you're already running it.** The v1
   package is now a compatibility layer over v2. You don't have to migrate.
-  You are nonetheless on new code.
+  You are nonetheless on new code [1].
 - **UUIDs are in the standard library.** One of the most reflexively-added
   dependencies in the ecosystem just became an import.
 - **Small allocations got up to 30% faster**, on by default, costing a flat
-  ~60 KB of binary.
+  ~60 KB of binary [1].
 - **`goroutineleak` profiling is generally available**, and it works by
   reusing the garbage collector's reachability analysis, which is genuinely
   clever.
@@ -57,7 +57,7 @@ func (r *Rand) N[Int intType](n Int) Int
 ```
 
 The standard library uses it immediately: `math/rand/v2` gains a generic
-`Rand.N` matching the behavior of the existing top-level `N`.
+`Rand.N` matching the behavior of the existing top-level `N` [1].
 
 But the interesting part is what you *still* can't do:
 
@@ -135,7 +135,7 @@ very large number of `go.mod` files over the next year.
 
 ## The allocator, and a rare shape of trade-off
 
-The compiler now emits size-specialized allocation routines. The numbers:
+The compiler now emits size-specialized allocation routines [1]. The numbers:
 
 | | |
 |---|---|
@@ -158,7 +158,7 @@ it, treat that as a bug report to file, not a setting to keep.
 ## Goroutine leak detection, and its blind spot
 
 The `goroutineleak` profile graduates from experiment to generally
-available, exposed through `runtime/pprof` and `/debug/pprof/goroutineleak`:
+available, exposed through `runtime/pprof` and `/debug/pprof/goroutineleak` [1]:
 
 ```sh
 go tool pprof http://localhost:6060/debug/pprof/goroutineleak
@@ -185,7 +185,7 @@ was reading goroutine dumps by hand at 2am.
 
 ## Post-quantum signatures
 
-New `crypto/mldsa` implements ML-DSA (FIPS 204). `crypto/x509` handles
+New `crypto/mldsa` implements ML-DSA (FIPS 204) [1]. `crypto/x509` handles
 ML-DSA keys and signatures. `crypto/tls` negotiates them in TLS 1.3 through
 `MLDSA44`, `MLDSA65` and `MLDSA87`, and adds `MLKEM1024` key exchange.
 
@@ -231,7 +231,7 @@ behavior, and 1.27 is where you find out.
 
 It reports uses of standard library symbols newer than the Go version in
 force for that file (determined by the `go` directive in `go.mod` plus
-build tags). That's a real correctness win: it catches the class of bug where
+build tags) [1][2]. That's a real correctness win: it catches the class of bug where
 your code compiles locally and fails on an older toolchain.
 
 It will also turn some currently-green builds red on first upgrade. Budget
@@ -247,7 +247,7 @@ it has to change.
 ### 5. HTTP/2 now honours client priority signals
 
 The HTTP/2 server implements RFC 9218 and will prioritize streams the client
-marks as higher priority, instead of the previous round-robin. For most
+marks as higher priority, instead of the previous round-robin [1]. For most
 services this is an improvement you'd have asked for. But it is a change in
 *which response finishes first* under concurrent load, arriving by default,
 and if you have latency assertions or a load test tuned against round-robin

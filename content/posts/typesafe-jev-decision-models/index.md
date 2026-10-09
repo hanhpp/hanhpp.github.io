@@ -68,7 +68,7 @@ You are burning compute to force a text writer to act as an AST parser.
 
 The origin of Jev makes the architectural critique compelling.
 
-TypeSafe AI was founded by **Diogo Almeida**, a former OpenAI researcher, co-author of the original *InstructGPT* paper, and co-inventor of Reinforcement Learning from Human Feedback (RLHF), the alignment technique that enabled ChatGPT and GPT-4.
+TypeSafe AI was founded by **Diogo Almeida**, a former OpenAI researcher, co-author of the original *InstructGPT* paper, and co-inventor of Reinforcement Learning from Human Feedback (RLHF), the alignment technique that enabled ChatGPT and GPT-4 [1][3].
 
 Almeida spent years building the mechanisms that taught language models to talk to people. Then he left to build an AI model that does not talk at all.
 
@@ -91,7 +91,7 @@ To fix this, TypeSafe engineered **Jev** around Daniel Kahneman's cognitive fram
 - **System 2 (Slow, Deliberative):** Frontier reasoning models (OpenAI o3, DeepSeek R1, Gemini 2.0 Thinking) that generate thousands of internal reasoning tokens to solve novel mathematical proofs or architect multi-file migrations.
 - **System 1 (Fast, Instinctive):** Automated pattern recognition, classification, routing, and policy checks executed in milliseconds.
 
-Jev is built strictly as a **System 1 model**. It deletes natural language generation entirely.
+Jev is built strictly as a **System 1 model** [2]. It deletes natural language generation entirely.
 
 ```text
 Traditional LLM:
@@ -144,7 +144,7 @@ It cannot. It literally lacks an autoregressive language decoder.
 
 {{< figure src="my-name-is-jev.jpg" alt="My Name is Jev Meme" caption="When developers attempt to use a non-autoregressive decision model as a conversational chatbot." >}}
 
-In the 2014 comedy *22 Jump Street*, Channing Tatum attempts to infiltrate a high-stakes meeting with Mexican cartel leaders by adopting a terrible accent and repeating a single phrase: "My name is Jeff." When pressed for details or complex conversation, the facade instantly breaks down.
+In the 2014 comedy *22 Jump Street*, Channing Tatum attempts to infiltrate a high-stakes meeting with Mexican cartel leaders by adopting a terrible accent and repeating a single phrase: "My name is Jeff [5]." When pressed for details or complex conversation, the facade instantly breaks down.
 
 Jev has the same relationship with natural language generation. If you feed it a writing prompt, it has no mechanism to output sentences. It does not converse; it evaluates state against typed predicates and returns probabilities.
 
@@ -157,7 +157,7 @@ The architectural engine that makes Jev useful is not merely speed; it is **Rein
 In standard RLHF, the reward model trains on human preference pairs:
 $$\text{Reward} = f(\text{Human A prefers Response 1 over Response 2})$$
 
-In RLCD, the model trains against ground-truth outcomes evaluated on scoring rules like the Brier score or binary log-loss:
+In RLCD, the model trains against ground-truth outcomes evaluated on scoring rules like the Brier score or binary log-loss [4]:
 
 $$\text{BS} = \frac{1}{N} \sum_{t=1}^{N} (f_t - o_t)^2$$
 

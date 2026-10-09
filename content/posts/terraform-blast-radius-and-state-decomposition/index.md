@@ -8,7 +8,7 @@ summary: "Splitting a monolithic terraform.tfstate into fifty micro-states speed
 
 A platform engineer wants to update a single DNS record or tweak an ingress annotation. They run `terraform apply`.
 
-Twelve minutes later, the plan finishes refreshing 840 cloud resources across three AWS regions. During those twelve minutes, the remote state lock on DynamoDB blocks every other engineer in the department from deploying. Even worse, an edge-case provider bug marks a shared transit gateway route as tainted, and the apply destroys network connectivity for six unrelated microservices.
+Twelve minutes later, the plan finishes refreshing 840 cloud resources across three AWS regions. During those twelve minutes, the remote state lock on DynamoDB blocks every other engineer in the department from deploying [2]. Even worse, an edge-case provider bug marks a shared transit gateway route as tainted, and the apply destroys network connectivity for six unrelated microservices.
 
 The immediate reaction from leadership is predictable: "Our state file is too large. Break the monolith into micro-states."
 
@@ -16,7 +16,7 @@ Teams spend the next two quarters decomposing the infrastructure into fifty isol
 
 Then the integration tax arrives.
 
-> **The 30-Second Architecture:** Splitting state reduces the blast radius of a single apply, but moving state across directory boundaries shifts complexity into cross-stack data sharing. Using `terraform_remote_state` creates tight read-coupling, leaks root infrastructure secrets to application teams, and creates circular dependency deadlocks. Senior engineers split state to optimize plan execution speed. Staff engineers decouple state boundaries using typed, versioned parameter contracts (SSM Parameter Store, Vault) so stacks never inspect each other's raw state files.
+> **The 30-Second Architecture:** Splitting state reduces the blast radius of a single apply, but moving state across directory boundaries shifts complexity into cross-stack data sharing. Using `terraform_remote_state` creates tight read-coupling, leaks root infrastructure secrets to application teams, and creates circular dependency deadlocks [1]. Senior engineers split state to optimize plan execution speed. Staff engineers decouple state boundaries using typed, versioned parameter contracts (SSM Parameter Store, Vault) so stacks never inspect each other's raw state files.
 
 ---
 
@@ -144,7 +144,7 @@ Segment state strictly by rate of change and team blast radius:
 3. **Tier 3: Workloads (Daily/Hourly changes):** Microservice deployments, database instances, SQS queues, S3 buckets. Managed by product squads.
 
 ### 2. Decouple Reads with Typed Parameter Contracts
-Ban `data.terraform_remote_state` in your linter. Upstream stacks publish their outputs as typed parameters in AWS SSM Parameter Store, Consul, or Vault:
+Ban `data.terraform_remote_state` in your linter. Upstream stacks publish their outputs as typed parameters in AWS SSM Parameter Store, Consul, or Vault [4]:
 
 ```hcl
 # Upstream (Foundation VPC Stack): Publish the contract
@@ -171,7 +171,7 @@ resource "aws_security_group" "app" {
 
 ### Why This Wins
 - **Least-Privilege Security:** Application engineers only need read access to `/production/network/*` in SSM. They never get read permissions on the Foundation state file containing KMS keys or root credentials.
-- **Independent State Evolution:** Upstream stacks can refactor their internal modules, rename resources, or switch from Terraform to OpenTofu without altering the SSM contract. Downstream stacks never experience breaking changes.
+- **Independent State Evolution:** Upstream stacks can refactor their internal modules, rename resources, or switch from Terraform to OpenTofu without altering the SSM contract [3]. Downstream stacks never experience breaking changes.
 - **Zero Circular Deadlocks:** Inter-stack dependencies are resolved through standard cloud primitives rather than state file parsing.
 
 ## References
