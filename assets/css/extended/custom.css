@@ -992,25 +992,6 @@ html.view-workstation .post-tags a[href*="/tags/compilers/"]::before, html.view-
     font-weight: 600;
 }
 
-/* ── About page ── */
-.about-interests {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin: 1.5rem 0;
-}
-
-.about-interests .tag {
-    font-family: "Source Code Pro", ui-monospace, monospace;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--accent);
-    background: var(--accent-bg);
-    border: 1px solid var(--accent-border);
-    border-radius: 20px;
-    padding: 0.3em 0.8em;
-}
-
 /* -- Reading Progress Bar -- */
 .reading-progress-bar {
     position: fixed;

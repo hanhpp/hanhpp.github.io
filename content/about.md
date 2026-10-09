@@ -2,7 +2,7 @@
 title: "About"
 date: 2026-07-24T00:00:00+07:00
 draft: false
-description: "Notes on lower layers, security, and whatever I'm digging into."
+description: "Notes on lower layers, security, and whatever I end up curious about."
 ---
 
 I build things with code and sometimes break things on purpose.
@@ -20,19 +20,6 @@ naive attempt before the working one.
 This blog is where I write down the things I learn so I don't forget them.
 Mostly technical: systems, security, and whatever holds my attention at the
 moment. Sometimes not.
-
-## What I'm into
-
-<div class="about-interests">
-  <span class="tag">reverse engineering</span>
-  <span class="tag">binary analysis</span>
-  <span class="tag">security</span>
-  <span class="tag">AI</span>
-  <span class="tag">software engineering</span>
-  <span class="tag">blockchain</span>
-  <span class="tag">games</span>
-  <span class="tag">manga</span>
-</div>
 
 I believe the best way to learn something is to build it, break it, and
 then write about it so future-me doesn't have to figure it out again.
