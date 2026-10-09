@@ -2,24 +2,24 @@
 title: "About"
 date: 2026-07-24T00:00:00+07:00
 draft: false
-description: "Software engineer by day, hobbyist reverse engineer by night. Notes on binary reversing, Go, and security."
+description: "Notes on lower layers, security, and whatever I'm digging into."
 ---
 
 I build things with code and sometimes break things on purpose.
 
-By day, I'm a software engineer, working with Go, distributed systems,
-and the occasional smart contract.
+I like digging deeper. When something works, I want to know why, which
+usually means going down a layer or two until the answer stops being
+"because that is what the framework does".
 
-By night I take binaries apart, usually because I want to know how a thing
-works and reading the disassembly turns out to be faster than guessing.
+I like games too. Probably where the habit started.
 
 Hobbyist pentester, and I mean the hobbyist part. I don't sell findings or
 run engagements. What I write reflects that: mechanisms, dead ends, and the
 naive attempt before the working one.
 
 This blog is where I write down the things I learn so I don't forget them.
-Mostly technical: reverse engineering, binary analysis, security, whatever
-I'm currently obsessed with. Sometimes not.
+Mostly technical: systems, security, and whatever I am currently digging
+into. Sometimes not.
 
 ## What I'm into
 
