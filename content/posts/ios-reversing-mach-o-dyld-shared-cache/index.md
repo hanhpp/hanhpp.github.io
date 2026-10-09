@@ -39,7 +39,7 @@ architecture 1
     cputype 16777228
 ```
 
-`0xfeedfacf` is `MH_MAGIC_64`. `16777223` is `0x01000007`, `CPU_TYPE_X86_64`, with subtype `3` (`CPU_SUBTYPE_X86_64_ALL`). The arch at index `1` is `16777228` = `0x0100000C` = `CPU_TYPE_ARM64`. So `otool -h` answered a question I did not ask: it described slice zero, and slice zero is the Intel one. When a tool shows you exactly one header for a file with `nfat_arch 2`, that is a signal to stop and look at the fat header first.
+`0xfeedfacf` is `MH_MAGIC_64` [2][4]. `16777223` is `0x01000007`, `CPU_TYPE_X86_64`, with subtype `3` (`CPU_SUBTYPE_X86_64_ALL`). The arch at index `1` is `16777228` = `0x0100000C` = `CPU_TYPE_ARM64`. So `otool -h` answered a question I did not ask: it described slice zero, and slice zero is the Intel one. When a tool shows you exactly one header for a file with `nfat_arch 2`, that is a signal to stop and look at the fat header first.
 
 The same trap exists in build tooling. On an Apple Silicon machine, `xcrun -f clang` resolved to a universal binary whose active architecture was `x86_64`, and it produced this:
 
@@ -52,7 +52,7 @@ The host was arm64. The compiler was an x86_64 slice running under translation, 
 
 ## What a Mach-O header and its load commands give you
 
-The header is small: magic, CPU type, CPU subtype, file type, command count, flags. The load commands that follow are the real table of contents. Each one is a typed record with a size, which is why a malformed `cmdsize` is a parsing bug class in its own right for anything that reads Mach-O files.
+The header is small: magic, CPU type, CPU subtype, file type, command count, flags. The load commands that follow are the real table of contents [2]. Each one is a typed record with a size, which is why a malformed `cmdsize` is a parsing bug class in its own right for anything that reads Mach-O files [2][4].
 
 | Load command | Value | What it gives you |
 |---|---|---|
@@ -93,13 +93,13 @@ Two things to note. `__auth_stubs` and `__auth_got` exist only on authenticated-
 
 ## arm64e is not "arm64 with a flag"
 
-`CPU_SUBTYPE_ARM64E` is `2`. The subtype field is not just a number: `CPU_SUBTYPE_MASK` is `0xff000000` and `CPU_SUBTYPE_PTRAUTH_ABI` is `0x80000000`, so `otool` prints an arm64e slice as subtype `2` with caps `0x80`. That bit is the pointer-authentication ABI tag, and it answers a concrete question: does this image expect the loader to sign and re-sign pointers as it binds them?
+`CPU_SUBTYPE_ARM64E` is `2`. The subtype field is not just a number: `CPU_SUBTYPE_MASK` is `0xff000000` and `CPU_SUBTYPE_PTRAUTH_ABI` is `0x80000000`, so `otool` prints an arm64e slice as subtype `2` with caps `0x80` [4]. That bit is the pointer-authentication ABI tag, and it answers a concrete question: does this image expect the loader to sign and re-sign pointers as it binds them?
 
 Pointer authentication changes what a pointer means in a binary. Return addresses are signed on the stack and checked before return. Function pointers and `vtable`-style dispatch targets are signed with a discriminator, so the same address signed in two places produces two different values. Instructions like `pacia`, `autia`, `retab`, and the authenticated branch forms are visible in disassembly, but the important consequence for reading a binary is elsewhere: the literal bytes you see for a pointer are not the address of the target, and two binaries built with different ABI versions can sign identically named symbols differently.
 
 The same caution applies to modern fixups. A chained fixup entry is a delta plus a type plus a next offset, not an absolute address, and the type can mark an entry as authenticated. If you are correlating a value in a `__DATA` section with an address in `__TEXT`, do it through the fixup chain or through a loader that understands it. Ghidra's Mach-O loader has handled chained fixups and authenticated pointers for several releases.
 
-> **Gotcha:** `MH_DYLIB_IN_CACHE` (`0x80000000` in the header flags) tells you an image was extracted from the dyld shared cache. For those files, the segment file offsets came from the shared region, not from a standalone file, so offset to address math from the raw bytes will not match a standalone dylib. Read the cache's mapping table before you trust any address.
+> **Gotcha:** `MH_DYLIB_IN_CACHE` (`0x80000000` in the header flags) tells you an image was extracted from the dyld shared cache. For those files, the segment file offsets came from the shared region, not from a standalone file, so offset to address math from the raw bytes will not match a standalone dylib [1]. Read the cache's mapping table before you trust any address.
 
 ## Objective-C metadata is structured data, not a string table
 
@@ -118,7 +118,7 @@ Objective-C binaries carry their own runtime description: class lists, method li
 
 Selectors are just strings in `__objc_methname`, and method lists may be stored in a relative form, so the entries are offsets rather than absolute addresses. The practical payout is that a method list plus a class list plus an ivar list gives you the object model before you read a single instruction: which class declares a method, which category adds one, and which framework the class came from.
 
-Inside the shared cache, some of this gets relocated into optimized tables. If you read only `__objc_classlist` from a cache image, expect fewer classes than the runtime actually sees; the optimization sections are the difference, and `ipsw dyld objc` exists to read them.
+Inside the shared cache, some of this gets relocated into optimized tables. If you read only `__objc_classlist` from a cache image, expect fewer classes than the runtime actually sees; the optimization sections are the difference, and `ipsw dyld objc` exists to read them [3].
 
 ## Swift metadata survives stripping
 
@@ -139,11 +139,11 @@ Two of these matter more than the rest. `__swift5_fieldmd` gives you exact struc
 swift demangle --compact '_$s10Foundation4DataV'
 ```
 
-For a cache image the same information is available without extracting anything, through `ipsw dyld swift --types --metadata --demangle`. Swift in the cache also carries conformance data that a stripped `__LINKEDIT` alone would not reveal, and the foreign conformance list is how you find Swift code that conforms to Objective-C protocols.
+For a cache image the same information is available without extracting anything, through `ipsw dyld swift --types --metadata --demangle` [3]. Swift in the cache also carries conformance data that a stripped `__LINKEDIT` alone would not reveal, and the foreign conformance list is how you find Swift code that conforms to Objective-C protocols.
 
 ## The dyld shared cache is most of the operating system
 
-On iOS, `/System/Library/Frameworks/UIKit.framework/UIKit` is not a standalone file holding that framework's code. Framework images are merged into one prelinked, prebound blob that the loader maps once and shares across every process. One header, one slide, one mapping, and fixups already resolved for the shared layout. That is why there is no jailbreak required to read system libraries: the same artifact the device uses is inside the IPSW you can download.
+On iOS, `/System/Library/Frameworks/UIKit.framework/UIKit` is not a standalone file holding that framework's code. Framework images are merged into one prelinked, prebound blob that the loader maps once and shares across every process [1]. One header, one slide, one mapping, and fixups already resolved for the shared layout. That is why there is no jailbreak required to read system libraries: the same artifact the device uses is inside the IPSW you can download.
 
 Modern caches are split. The main file is small and holds the headers and text of all images, and the rest of the content lives in subcaches whose names carry their role: numbered data subcaches, plus `.dylddata`, `.dyldreadonly`, `.dyldlinkedit`, and optional `.symbols`, `.atlas`, and `.map` files. A directory listing on a current macOS install looks like this:
 
@@ -159,7 +159,7 @@ dyld_shared_cache_arm64e.atlas
 dyld_shared_cache_arm64e.map
 ```
 
-Do not assume a fixed file set. The count, suffixes, and numbering depend on the OS version and how the cache was built, and the authoritative source is Apple's own `dyld` documentation for cache layout. Read the header instead of hardcoding names. `ipsw dyld info` prints it:
+Do not assume a fixed file set. The count, suffixes, and numbering depend on the OS version and how the cache was built, and the authoritative source is Apple's own `dyld` documentation for cache layout [1]. Read the header instead of hardcoding names. `ipsw dyld info` prints it:
 
 ```text
 Magic          = "dyld_v1  arm64e"
@@ -216,7 +216,7 @@ $ ipsw macho lipo --arch arm64e --output artifacts/slices ./Universal
    ⨯ failed to create file Universal.arm64e: open artifacts/slices/Universal.arm64e: no such file or directory
 ```
 
-The same symbol lookup answers differently depending on where you ask. Resolving `_malloc` against a cache without naming an image matched the local symbol table and reported `(local|regular)`; adding `--image libsystem_malloc.dylib` matched the export and reported `(export|regular)`. Local symbols exist because the cache was built with them, exports exist because the image publishes them. Two different claims, one address, and worth keeping straight when you write a note.
+The same symbol lookup answers differently depending on where you ask. Resolving `_malloc` against a cache without naming an image matched the local symbol table and reported `(local|regular)`; adding `--image libsystem_malloc.dylib` matched the export and reported `(export|regular)`. Local symbols exist because the cache was built with them, exports exist because the image publishes them [1][5]. Two different claims, one address, and worth keeping straight when you write a note.
 
 Useful smaller helpers, all from the same subcommand tree: `ipsw dyld str` to search the cache for a literal, `ipsw dyld a2s` to resolve an address to a symbol, `ipsw dyld stubs` for stub islands, `ipsw dyld softlinks` for weak-linked globals, and `ipsw dyld info --diff` plus `ipsw class-dump --diff` to compare one OS version against another.
 
@@ -235,7 +235,7 @@ $ codesign -d --entitlements :- ./hello
 ./hello: code object is not signed at all
 ```
 
-Read the entitlement plist as a claim, not as an outcome. Three separate things can disagree: the entitlements embedded in the signature, a `.xcent` or provisioning file shipped next to the app, and the set the kernel honors at runtime after AMFI, the trust cache, and platform-binary policy have had their say. DER entitlements are a separate encoding from the XML plist and can be read with `ipsw macho info --ent-der`. If you are mapping a privilege boundary, the question is never "does this string appear" but "which component reads this key, under which platform policy, for which signing identity".
+Read the entitlement plist as a claim, not as an outcome. Three separate things can disagree: the entitlements embedded in the signature, a `.xcent` or provisioning file shipped next to the app, and the set the kernel honors at runtime after AMFI, the trust cache, and platform-binary policy have had their say. DER entitlements are a separate encoding from the XML plist and can be read with `ipsw macho info --ent-der` [3]. If you are mapping a privilege boundary, the question is never "does this string appear" but "which component reads this key, under which platform policy, for which signing identity".
 
 ## An evidence table for static claims
 
@@ -284,7 +284,7 @@ Static reading of firmware you are entitled to hold is low risk, but the surroun
 
 The payoff of the static path is not glamour. It is that you can map a system boundary across an entire firmware image, diff it against the next release, and know exactly which claims your evidence supports, all without a jailbreak and without executing a single byte of the target.
 
-Next in the series, the patch-margin work (forthcoming) applies this same evidence discipline to XNU source diffs: how a scanner turns hundreds of changed files into a ranked candidate queue, why a regression test is a calibration control rather than a finding, and where the line sits between a hardening change and a reportable bug.
+Next in the series, [the patch-margin work]({{< ref "xnu-patch-margin-research" >}}) applies this same evidence discipline to XNU source diffs: how a scanner turns hundreds of changed files into a ranked candidate queue, why a regression test is a calibration control rather than a finding, and where the line sits between a hardening change and a reportable bug.
 
 ## References
 

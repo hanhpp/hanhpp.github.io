@@ -73,7 +73,7 @@ Read the table top to bottom as a sequence of trust handoffs, and bottom to top 
 
 ## The app and extension boundary
 
-An iOS app is not a process with a user account. It is a process with a container, a code signature, a set of entitlements, and a sandbox profile, and all four are decided before `main` runs.
+An iOS app is not a process with a user account. It is a process with a container, a code signature, a set of entitlements, and a sandbox profile, and all four are decided before `main` runs [1].
 
 The extension model adds a second, subtler boundary. Extensions share the containing app's signature and often share an app group container, but they run as separate processes with their own sandbox profiles and their own lifecycle. A shared container is a data channel between two processes that were written by the same team and are still subject to different policy. When you audit one, list what the container exposes, which side writes each file, and whether either side validates what it reads.
 
@@ -93,7 +93,7 @@ This is also where static analysis gets useful fastest. Mach-O load commands tel
 
 Underneath XPC is Mach IPC, and Mach IPC is a capability system wearing a messaging API.
 
-A Mach port name is a local index into a task's port namespace. What you can do with it depends on the right you hold: send, receive, send-once. Two processes can both name the same underlying port and have completely different powers over it. That is why "I found the service name" and "I can send to the service" are different claims, and why "I can send" and "I can receive a reply" are different claims again.
+A Mach port name is a local index into a task's port namespace [2][5]. What you can do with it depends on the right you hold: send, receive, send-once. Two processes can both name the same underlying port and have completely different powers over it. That is why "I found the service name" and "I can send to the service" are different claims, and why "I can send" and "I can receive a reply" are different claims again.
 
 ```c
 typedef struct {
@@ -106,13 +106,13 @@ typedef struct {
 } mach_msg_header_t;
 ```
 
-Every one of those fields is a place where a validation error can become a boundary error. `msgh_size` is attacker-controlled and drives how much data the receiver trusts. `msgh_bits` carries the disposition of port rights, including send-once, which moves a right rather than copying it. `msgh_id` selects the handler, and on the kernel side that handler is usually a MIG-generated stub that converts a wire structure into a kernel structure. `msgh_voucher_port` ties the message to a voucher, which is a lifetime and accounting object in its own right.
+Every one of those fields is a place where a validation error can become a boundary error. `msgh_size` is attacker-controlled and drives how much data the receiver trusts. `msgh_bits` carries the disposition of port rights, including send-once, which moves a right rather than copying it. `msgh_id` selects the handler, and on the kernel side that handler is usually a MIG-generated stub that converts a wire structure into a kernel structure [2][5]. `msgh_voucher_port` ties the message to a voucher, which is a lifetime and accounting object in its own right [2].
 
 XPC wraps this in a friendlier API and adds serialization, but the underlying questions do not change: who may connect, what right do they hold, what does the receiver assume about the sender, and what does the parser assume about the bytes.
 
 ## Privileged daemons and launchd
 
-Most of the interesting policy on iOS is enforced in userland, by daemons that `launchd` starts with a fixed identity, a fixed sandbox profile, and a fixed set of entitlements. Those daemons are the bridge between an app's narrow world and system resources: files, credentials, protected user data, network configuration, device state.
+Most of the interesting policy on iOS is enforced in userland, by daemons that `launchd` starts with a fixed identity, a fixed sandbox profile, and a fixed set of entitlements [5]. Those daemons are the bridge between an app's narrow world and system resources: files, credentials, protected user data, network configuration, device state.
 
 When I map one, I write six lines before reading any code.
 
@@ -137,11 +137,11 @@ These three get collapsed into one idea in casual writing, and that collapse cau
 | Entitlement | Code signing plus runtime checks | Which capabilities this signed binary may claim | A capability check that fails despite a valid signature |
 | TCC | Consent database plus per-resource policy | Whether the user has authorized access to a protected resource | A prompt, or a denial with no prompt |
 
-They interact. An app with the right entitlement still needs a sandbox allowance to reach the daemon that serves the resource, and the daemon still needs a TCC authorization on the user's behalf. A bug that lets you skip one of the three is not the same as a bug that skips the others, and reporting one as the others is a common way to be wrong in public.
+They interact. An app with the right entitlement still needs a sandbox allowance to reach the daemon that serves the resource, and the daemon still needs a TCC authorization on the user's behalf [1]. A bug that lets you skip one of the three is not the same as a bug that skips the others, and reporting one as the others is a common way to be wrong in public.
 
 ## Code signing decides what may run at all
 
-Before any of the policy above applies, the system decides whether a binary may execute and which of its entitlements are honored. Signature validity, entitlement contents, platform binary status, library validation, and dynamic code exceptions are separate properties, and a malformed signature is not automatically a bypass. The question is always where the decision is made, which artifact the attacker controls, and whether the decision happens before or after attacker-controlled parsing.
+Before any of the policy above applies, the system decides whether a binary may execute and which of its entitlements are honored. Signature validity, entitlement contents, platform binary status, library validation, and dynamic code exceptions are separate properties, and a malformed signature is not automatically a bypass [1]. The question is always where the decision is made, which artifact the attacker controls, and whether the decision happens before or after attacker-controlled parsing.
 
 ## XNU is four subsystems wearing one name
 
@@ -156,7 +156,7 @@ XNU looks monolithic from the outside and is not, from the inside. Splitting it 
 
 Two examples from my own recent work show how the subsystem choice changes the evidence you need.
 
-A SysV message control race in `bsd/kern/sysv_msg.c` dropped the subsystem lock across a `copyin` and then mutated a queue object that could have been reused. The evidence that matters is not "there is a race here." It is the exact lock scope before and after, the reuse window, and the caller context. The same file also demonstrates the value of sibling checks: the semaphore and shared memory `IPC_SET` paths already held their locks across the same copy, which turns the message path from a hypothesis into an asymmetry you can state precisely.
+A SysV message control race in `bsd/kern/sysv_msg.c` dropped the subsystem lock across a `copyin` and then mutated a queue object that could have been reused [2]. The evidence that matters is not "there is a race here." It is the exact lock scope before and after, the reuse window, and the caller context. The same file also demonstrates the value of sibling checks: the semaphore and shared memory `IPC_SET` paths already held their locks across the same copy, which turns the message path from a hypothesis into an asymmetry you can state precisely.
 
 In the VM subsystem, a guard on the copyin strategy selector classified address domains by numeric range before checking whether the map was a kernel map. Reading the caller graph showed that user maps and kernel maps both reach the shared infrastructure, but that the observed difference was a kernel buffer copy versus a virtual copy. No permission grant, no cross-map read, no tag bypass followed from it. The honest classification was hardening, not a vulnerability, and the reusable output was the audit pattern for address-domain classifiers.
 
@@ -166,16 +166,16 @@ Both stories have the same shape: the subsystem tells you which invariant to che
 
 Modern Apple silicon moves a meaningful share of integrity enforcement below the kernel, and that changes which bugs are worth chasing.
 
-- **Pointer authentication (PAC)** makes control-flow targets hard to forge by signing pointers with a per-context key and validating on use. It raises the cost of the classic "overwrite a return address" primitive.
-- **Memory Integrity Enforcement (MIE)**, built on memory tagging, targets use-after-free and cross-allocation corruption by tagging allocations and checking tags on access. Its practical effect is to devalue bugs that operate on the wrong object of the right type at the right time.
-- **SPTM**, the system page table monitor, protects kernel page tables and related state from kernel software itself, which turns some "kernel writes a page table" primitives into dead ends.
-- **SEP**, the Secure Enclave, holds keys and performs operations that software cannot observe, which moves whole classes of key-extraction work out of reach of ordinary reversing.
+- **Pointer authentication (PAC)** makes control-flow targets hard to forge by signing pointers with a per-context key and validating on use [4]. It raises the cost of the classic "overwrite a return address" primitive.
+- **Memory Integrity Enforcement (MIE)**, built on memory tagging, targets use-after-free and cross-allocation corruption by tagging allocations and checking tags on access [1][4]. Its practical effect is to devalue bugs that operate on the wrong object of the right type at the right time.
+- **SPTM**, the system page table monitor, protects kernel page tables and related state from kernel software itself, which turns some "kernel writes a page table" primitives into dead ends [1].
+- **SEP**, the Secure Enclave, holds keys and performs operations that software cannot observe, which moves whole classes of key-extraction work out of reach of ordinary reversing [1].
 
 The consequence for research is a change in target selection, not a change in method. If tagging kills cross-allocation corruption, the durable classes are intra-allocation type confusion, missing or wrong validation, integer overflow in range arithmetic, lock and copy ordering races, and authorization asymmetry between two paths that should agree. Those are exactly the classes that a boundary map helps you find, because they are defined by an invariant that a caller and a callee disagree about.
 
 ## Boot trust: the chain that establishes everything above
 
-Everything above rests on a boot sequence in which each stage authenticates the next, starting from hardware-anchored trust that software cannot rewrite. For most independent work the useful part of that chain is not the cryptography but the policy handoff: which component consumes attacker-controlled metadata, at what point in the sequence, and whether the decision is made before or after that metadata is parsed. The same question appears at every layer of this post, which is why the boot chain belongs in the frame even when it is not the current target.
+Everything above rests on a boot sequence in which each stage authenticates the next, starting from hardware-anchored trust that software cannot rewrite [1]. For most independent work the useful part of that chain is not the cryptography but the policy handoff: which component consumes attacker-controlled metadata, at what point in the sequence, and whether the decision is made before or after that metadata is parsed. The same question appears at every layer of this post, which is why the boot chain belongs in the frame even when it is not the current target.
 
 ## The one sentence that starts every investigation
 
@@ -199,7 +199,7 @@ Before I call anything a finding, I want four gates satisfied and four safety co
 And the safety conditions, which are not optional and are not negotiable:
 
 - No panic-capable or state-corrupting test on a machine I depend on. Validation happens in a snapshot-backed virtual machine or on an authorized isolated device, and the machine is restorable afterward.
-- No instrumentation of current retail devices without explicit authorization for that environment.
+- No instrumentation of current retail devices without explicit authorization for that environment [3].
 - No claim of a vulnerability from a patch diff alone. A diff tells you a fix exists. It does not tell you the unpatched version is reachable.
 - No spending on external validation infrastructure until static work has produced a concrete candidate that actually needs dynamic confirmation.
 
@@ -225,7 +225,7 @@ Notice that six of the seven are described by a boundary and an invariant rather
 
 - **Part 1 (this post):** the stack and its boundaries. What trusts what, and what evidence you need before you claim a crossing.
 - **Part 2:** [iOS Reversing: Mach-O and the dyld Shared Cache]({{< ref "ios-reversing-mach-o-dyld-shared-cache" >}}). How the code of layers 1 through 4 is actually stored, how to enumerate it from an authorized system artifact, and how to map a service to its callers without a debugger.
-- **Part 3 (forthcoming):** XNU Patch-Margin Research. How to read Apple's own fixes as a research signal, how to separate hardening from a reachable bug, and how to keep a candidate queue honest.
+- **Part 3:** [XNU Patch-Margin Research]({{< ref "xnu-patch-margin-research" >}}). How to read Apple's own fixes as a research signal, how to separate hardening from a reachable bug, and how to keep a candidate queue honest.
 
 Read in order, they go from the shape of the system, to the representation of the code, to the discipline of the evidence. Read individually, each stands alone.
 
