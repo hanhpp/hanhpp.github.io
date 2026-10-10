@@ -1,3 +1,8 @@
 public/
 resources/_gen/
 .hugo_build.lock
+
+# Held Flare-On 13 series: solutions to live challenges. The write-ups live in
+# knowledge/personal/blog-holds/ until the scoreboard freezes, so remove this
+# rule only when they are ready to publish.
+content/posts/flareon-13-*/
