@@ -48,16 +48,16 @@ Haversine and get something trustworthy; you have to actually route.
 
 | Component | Role |
 |---|---|
-| [OpenStreetMap (OSM)](https://www.openstreetmap.org/) | Free, community-maintained map data: roads, turn restrictions, speed limits |
+| [OpenStreetMap (OSM)](https://www.openstreetmap.org/) | Free, community-maintained map data: roads, turn restrictions, speed limits[1] |
 | [Geofabrik](https://download.geofabrik.de/) | Hosts daily per-country OSM extracts as `.osm.pbf` files |
 | [OSRM](https://project-osrm.org/) | Preprocesses OSM data into a routing graph, answers distance/duration queries in milliseconds |
 
 You need Docker and a `.osm.pbf` extract for whatever region you're routing
-in. Nothing here calls out to a paid service.
+in[2]. Nothing here calls out to a paid service.
 
 ## Getting the map data
 
-Geofabrik publishes extracts per country. For Thailand:
+Geofabrik publishes extracts per country[3]. For Thailand:
 
 ```bash
 mkdir -p osm-data
@@ -66,12 +66,12 @@ curl -L -o osm-data/thailand-latest.osm.pbf \
 ```
 
 This file is roughly 300–400 MB: most of a country's entire road network,
-free to download, no account required.
+free to download, no account required[3].
 
 ## Preprocessing: extract, partition, customize
 
 OSRM doesn't route directly against the raw PBF; it has to build a routing
-graph first, in three steps. This is the part that actually costs CPU time
+graph first, in three steps[4]. This is the part that actually costs CPU time
 (a few minutes), and it only needs to happen once per map version:
 
 ```yaml
@@ -108,10 +108,10 @@ volumes:
 
 - **`osrm-extract`** reads the PBF and a routing profile (`car.lua` ships
   with the image) to build the base graph; this is where "which roads can
-  cars use, and at what speed" gets decided.
+  cars use, and at what speed" gets decided[5].
 - **`osrm-partition`** and **`osrm-customize`** prepare the graph for the
   `mld` (multi-level Dijkstra) query algorithm, which is what makes queries
-  against a country-sized graph return in milliseconds instead of seconds.
+  against a country-sized graph return in milliseconds instead of seconds[6].
 - The `osrm` service only starts once `osrm-init` exits successfully, so a
   single `docker compose up -d` handles first-run preprocessing and every
   subsequent restart correctly; restarts skip straight to serving, since the
@@ -127,7 +127,7 @@ OSRM is ready when it's listening on `http://localhost:5000`.
 ## Querying it
 
 OSRM's HTTP API takes coordinates in `lon,lat` order: the GeoJSON
-convention, and the opposite of the `lat,lon` order most map UIs use. This is
+convention, and the opposite of the `lat,lon` order most map UIs use[8]. This is
 the single easiest mistake to make integrating against it:
 
 ```bash
@@ -200,7 +200,7 @@ func (c *Client) RoadDistanceKm(ctx context.Context, fromLat, fromLon, toLat, to
 
 `overview=false` skips returning the full route geometry, worth setting
 explicitly if all you need is the distance number, since the polyline for a
-40km route is a lot of payload you'd otherwise discard.
+40km route is a lot of payload you'd otherwise discard[8].
 
 ## What this costs instead of money
 
@@ -208,8 +208,8 @@ Nothing per-request, but it isn't free in the way "no external dependency"
 sounds:
 
 - **Disk and memory** for the processed graph: a whole-country graph is
-  sized in gigabytes, not megabytes.
-- **Map freshness is on you**: Geofabrik extracts update daily, but your
+  sized in gigabytes, not megabytes[7].
+- **Map freshness is on you**: Geofabrik extracts update daily[3], but your
   running graph is frozen until you re-run extract/partition/customize
   against a newer PBF.
 - **You own the failure mode**: if the container falls over, that's your
@@ -228,3 +228,21 @@ expense claims, say), even a millisecond round-trip adds up, and there's no
 reason to recompute a route that hasn't changed. The next post covers caching
 these queries in a plain Postgres table, without reaching for a specialized
 geo database.
+
+## References
+
+[1] OpenStreetMap Foundation, [*Licence*](https://osmfoundation.org/wiki/Licence) (OSM Foundation wiki): states that data extracted from OpenStreetMap after September 2012 is licensed under the Open Database License, ODbL 1.0.
+
+[2] OpenStreetMap contributors, [*Osmpbf: Java/C++ library for the OpenStreetMap PBF format*](https://github.com/openstreetmap/OSM-binary) (OSM PBF Format specification): defines `.osm.pbf`, the Protocol Buffer binary format that OSM extracts such as the Geofabrik downloads are distributed in.
+
+[3] Geofabrik, [*Data Extracts: Technical Details*](https://download.geofabrik.de/technical.html) (Geofabrik documentation): documents the per-region `.osm.pbf` extracts, the roughly daily rebuild cycle, and the `.osc.gz` diff updates for keeping a local extract current.
+
+[4] Project OSRM, [*Running OSRM*](https://github.com/Project-OSRM/osrm-backend/wiki/Running-OSRM) (osrm-backend wiki): specifies the MLD preprocessing pipeline as extract, partition, customize, then serve, and contrasts MLD with Contraction Hierarchies.
+
+[5] Project OSRM, [*OSRM profiles*](https://project-osrm.org/docs/v26.6.1/profiles) (OSRM API Documentation): explains that Lua profiles such as `car.lua` are applied during preprocessing, not at query time, to decide which ways are routable and at what speed.
+
+[6] Daniel Delling, Andrew V. Goldberg, Thomas Pajor, and Renato F. Werneck, [*Customizable Route Planning in Road Networks*](https://doi.org/10.1287/trsc.2014.0579) (*Transportation Science*, 2017): the multi-level customizable route planning method underlying OSRM's `mld` algorithm, whose query phase is the multi-level Dijkstra search the post refers to.
+
+[7] Project OSRM, [*Disk and Memory Requirements*](https://github.com/Project-OSRM/osrm-backend/wiki/Disk-and-Memory-Requirements) (osrm-backend wiki): records the GiB-order sizes of the preprocessed graph, established here as the boundary for the "gigabytes, not megabytes" claim.
+
+[8] Project OSRM, [*OSRM HTTP API*](https://project-osrm.org/docs/v26.6.1/http) (OSRM API Documentation): specifies the `{longitude},{latitude}` coordinate order, the `/route/v1/{profile}/{coordinates}` service shape, and the `overview` option governing returned geometry.

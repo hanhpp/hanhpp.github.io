@@ -9,14 +9,14 @@ summary: "We cannot time the universe with a stopwatch. Here is how astrophysici
 
 You often hear that the oldest light we can see was emitted 13.8 billion years ago. That statement is close, but subtly wrong.
 
-13.8 billion years is the age of the universe itself. The oldest light we can observe: the **Cosmic Microwave Background (CMB)**: was released approximately 380,000 years after the Big Bang. That light has been traveling through expanding space for roughly 13.787 billion years to reach our telescopes.
+13.8 billion years is the age of the universe itself. The oldest light we can observe: the **Cosmic Microwave Background (CMB)**: was released approximately 380,000 years after the Big Bang. That light has been traveling through expanding space for roughly 13.787 billion years to reach our telescopes [1].
 
 Nobody timed that light with a stopwatch. No human was there to record the timestamp. How do astrophysicists know the age of the cosmos with an uncertainty of less than 1%?
 
 The answer comes from fitting a physical model of expanding space to precise satellite measurements of the early universe, then verifying that calculation against completely independent clocks.
 
 > **The Core Takeaway:**
-> We can never see the Big Bang directly with light. Before 380,000 years, the universe was an opaque plasma fog where photons could not travel in straight lines. When the universe cooled to roughly 3,000 Kelvin, neutral hydrogen formed, and the fog cleared all at once. Over the next 13.8 billion years, cosmic expansion stretched that fiery orange glow by a factor of 1,100, cooling it into the cold 2.725 Kelvin microwave radiation we detect today.
+> We can never see the Big Bang directly with light. Before 380,000 years, the universe was an opaque plasma fog where photons could not travel in straight lines. When the universe cooled to roughly 3,000 Kelvin, neutral hydrogen formed, and the fog cleared all at once. Over the next 13.8 billion years, cosmic expansion stretched that fiery orange glow by a factor of 1,100, cooling it into the cold 2.725 Kelvin microwave radiation we detect today [1].
 
 ---
 
@@ -49,7 +49,7 @@ Throw a handful of pebbles into a shallow pond and freeze the water instantly. B
 
 The early universe had acoustic waves: sound waves rippling through the hot plasma driven by the competing forces of gravitational pull (matter falling inward) and photon radiation pressure (light pushing outward).
 
-When recombination froze the plasma into neutral gas, it captured an instant snapshot of those sound waves. The ESA Planck satellite mapped these ripples across the entire sky. The spacing and height of the temperature ripples (which vary by only 1 part in 100,000) allow cosmologists to measure the exact ratio of ordinary matter, dark matter, and dark energy.
+When recombination froze the plasma into neutral gas, it captured an instant snapshot of those sound waves. The ESA Planck satellite mapped these ripples across the entire sky. The spacing and height of the temperature ripples (which vary by only 1 part in 100,000) allow cosmologists to measure the exact ratio of ordinary matter, dark matter, and dark energy [1][7].
 
 ### 4. The Three Witnesses (Triangulating the Age)
 A detective never relies on a single witness. You trust an alibi when multiple, completely independent clocks arrive at the exact same conclusion without contradiction:
@@ -65,13 +65,13 @@ Witness 3: Radioactive Cosmochronology
   └─ Decay ratios of Uranium-238 and Thorium-232 in ancient stars: ~13.2 ± 2.0 Gyr
 ```
 
-None of the witnesses contradict each other. If stellar burn rates had returned a star that was 18 billion years old, our cosmological model would be broken. All three clocks agree.
+None of the witnesses contradict each other. If stellar burn rates had returned a star that was 18 billion years old, our cosmological model would be broken. All three clocks agree [1][8][9].
 
 ---
 
 ## Interactive Simulation: Stretch the Universe
 
-To build genuine intuition for cosmic expansion, you should not merely read an equation. You should manipulate the scale factor directly, embodying the active mental modeling we explored in [Part 2: Meta-Learning and the Meta-Human]({{< ref "meta-learning-and-meta-cognition-for-engineers" >}}).
+To build genuine intuition for cosmic expansion, you should not merely read an equation. You should manipulate the scale factor directly.
 
 Drag the slider below to expand space from Recombination (\(a = 1.0\times\)) to today (\(a = 1,100\times\)):
 
@@ -272,28 +272,40 @@ Drag the slider below to expand space from Recombination (\(a = 1.0\times\)) to 
 The verification of this cosmological model represents one of the greatest triumphs of experimental science:
 
 ### 1948: Predicted Before It Was Seen
-Physicists Ralph Alpher and Robert Herman used early Big Bang nucleosynthesis calculations to predict that leftover radiation from the early universe must still fill the cosmos today, cooled down to a few Kelvin above absolute zero. Most contemporaries dismissed the idea as untestable.
+Alpher and Herman calculated that leftover radiation from the early universe should still fill the sky today, cooled to a few Kelvin [2]. Most contemporaries dismissed it as untestable.
 
 ### 1965: Discovered by Accident
-Arno Penzias and Robert Wilson were testing a sensitive 20-foot horn antenna at Bell Labs in Holmdel, New Jersey. They detected an annoying, uniform microwave hiss that came equally from every direction in the sky, day and night.
+Penzias and Wilson found a uniform microwave hiss in their Bell Labs horn antenna, arriving from every direction, and could not get rid of it [3]. Dicke's team at Princeton, building an instrument to hunt that predicted glow [4], told them: *"Boys, we've been scooped."*
 
-They checked their circuits. They scrubbed pigeon droppings off the antenna. The signal persisted.
-
-A few miles away at Princeton, Robert Dicke and Jim Peebles were building an instrument specifically to search for the predicted cosmic glow. When Penzias called Dicke to describe the mystery signal, Dicke hung up the phone and told his colleagues: *"Boys, we've been scooped."*
+There was a more beautiful and obvious answer. We simply had the wrong perspective.
 
 ### 1990: The Perfect Blackbody
-NASA launched the Cosmic Background Explorer (COBE) satellite. Its FIRAS spectrometer measured the CMB across dozens of frequencies.
-
-The measured data points matched the theoretical Planck blackbody curve so precisely that the experimental error bars were smaller than the thickness of the ink line used to print the graph. It remains one of the most perfect thermal blackbody spectra ever observed in nature.
+NASA launched the Cosmic Background Explorer (COBE) satellite. Its FIRAS spectrometer measured the CMB across dozens of frequencies [5], and the data matched the theoretical Planck blackbody curve so precisely that the experimental error bars were smaller than the thickness of the ink line used to print the graph. It remains one of the most perfect thermal blackbody spectra ever observed in nature [6].
 
 ---
 
-## Recommended Explorations & Cross-Disciplinary Connections
-
-If this exploration of physical systems, mental models, and empirical verification sparked your curiosity, explore these connected deep dives across our blog:
-
-* **The Polymath Mindset:** Read [The Renaissance Developer]({{< ref "the-renaissance-developer" >}}) to see how Werner Vogels' polymath model applies the same multi-layered systems thinking to modern engineering and silicon architecture.
-* **Cognitive Scaffolding & Meta-Learning:** Read [Meta-Learning and the Meta-Human]({{< ref "meta-learning-and-meta-cognition-for-engineers" >}}) to see how to build internal mental models and interactive learning tools instead of relying on passive reading.
-* **Formal Limits of Understanding:** Read [Alan Turing's 1936 Proof]({{< ref "alan-turing-computable-numbers-entscheidungsproblem" >}}) to see how mathematical limits parallel the physical boundaries of what light can and cannot reveal about the universe.
+This closes a three-part series. [Part 1]({{< ref "the-renaissance-developer" >}}) covers why systems synthesis outlasts syntax, and [Part 2]({{< ref "meta-learning-and-meta-cognition-for-engineers" >}}) covers the cognitive mechanics of learning once answers are instant.
 
 The cosmos does not yield its secrets to passive observation. Whether measuring the expansion of space or designing distributed software, true understanding comes from testing your models against independent witnesses.
+
+---
+
+## References
+
+[1] Planck Collaboration, [*Planck 2018 results. VI. Cosmological parameters*](https://doi.org/10.1051/0004-6361/201833910) (*Astronomy & Astrophysics* 641, A6, 2020): the full-mission FLRW parameter fit behind the 13.787 ± 0.020 Gyr age, the z = 1090 recombination redshift, and the 2.725 K present-day temperature.
+
+[2] R. A. Alpher and R. C. Herman, [*Evolution of the Universe*](https://doi.org/10.1038/162774b0) (*Nature* 162, 774, 1948): the first calculation of the surviving thermal radiation, which put its present temperature at a few Kelvin.
+
+[3] A. A. Penzias and R. W. Wilson, [*A Measurement of Excess Antenna Temperature at 4080 Mc/s*](https://doi.org/10.1086/148307) (*Astrophysical Journal* 142, 419, 1965): the Holmdel horn antenna measurement of the uniform excess hiss that no cryogenic fix could remove.
+
+[4] R. H. Dicke, P. J. E. Peebles, P. G. Roll and D. T. Wilkinson, [*Cosmic Black-Body Radiation*](https://doi.org/10.1086/148306) (*Astrophysical Journal* 142, 414, 1965): the companion paper that identified the excess as the predicted relic radiation rather than an instrumental fault.
+
+[5] J. C. Mather et al., [*A Preliminary Measurement of the Cosmic Microwave Background Spectrum by the COBE FIRAS Instrument*](https://doi.org/10.1086/185717) (*Astrophysical Journal* 354, L37, 1990): the 1990 FIRAS spectrum that fixed the blackbody shape of the CMB.
+
+[6] D. J. Fixsen et al., [*The Cosmic Microwave Background Spectrum from the Full COBE FIRAS Data Set*](https://doi.org/10.1086/178173) (*Astrophysical Journal* 473, 576, 1996): the full-mission spectrum, a blackbody to within 0.03%. NASA describes the same result as the most precisely measured blackbody in nature ([COBE science overview](https://science.nasa.gov/mission/cobe/science/)).
+
+[7] G. F. Smoot et al., [*Structure in the COBE Differential Microwave Radiometer First-Year Maps*](https://doi.org/10.1086/186504) (*Astrophysical Journal* 396, L1, 1992): the first detection of the primordial temperature ripples, at the 1 part in 100,000 level.
+
+[8] L. M. Krauss and B. Chaboyer, [*Age Estimates of Globular Clusters in the Milky Way: Constraints on Cosmology*](https://doi.org/10.1126/science.1075631) (*Science* 299, 65, 2003): the stellar-evolution clock that puts the oldest clusters at roughly 12 to 13.5 Gyr.
+
+[9] R. Cayrel et al., [*Measurement of stellar age from uranium decay*](https://doi.org/10.1038/35055507) (*Nature* 409, 691, 2001): the uranium-238 cosmochronometer read off an ancient halo star, the independent check on the stellar clock.

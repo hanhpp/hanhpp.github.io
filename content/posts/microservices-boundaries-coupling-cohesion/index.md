@@ -35,7 +35,7 @@ a word, put it simply:
 > make about each other.
 
 Every assumption one service makes about another's internals is a thread
-that will eventually snap when someone changes those internals. The fewer
+that will eventually snap when someone changes those internals.[1] The fewer
 assumptions, the more freely each side can change. A microservice's whole
 value proposition (deploy this one thing without deploying anything else)
 depends on ruthlessly hiding as much as possible behind its interface:
@@ -52,9 +52,9 @@ spread across three services, that's weak cohesion; the related behavior
 never had a coherent home. Strong cohesion means one change, one deploy.
 
 Coupling and cohesion aren't independent: they're two views of the same
-underlying question, just measured from inside vs. outside the boundary.
+underlying question, just measured from inside vs. outside the boundary.[2]
 Larry Constantine's law says it cleanly: *a structure is stable if cohesion
-is strong and coupling is low*. Neither one alone is sufficient.
+is strong and coupling is low*[2]. Neither one alone is sufficient.
 
 ## Coupling comes in flavors, and they are not equally bad
 
@@ -62,7 +62,7 @@ This is the part most teams skip, and it's the part that actually matters.
 "Loose coupling good, tight coupling bad" doesn't tell you what to do when
 you're staring at a design and trying to decide if it's fine. Here are four
 kinds of coupling you'll run into between microservices, ordered from
-least to most dangerous.
+least to most dangerous.[3]
 
 ### Domain coupling: usually fine, in moderation
 
@@ -70,7 +70,7 @@ Domain coupling is simply one service calling another because it needs that
 other service's functionality. `OrderProcessor` calls `Warehouse` to reserve
 stock and `Payment` to take money. This is largely unavoidable (a system
 made of collaborating services has to collaborate) and it's considered the
-loosest, most acceptable form of coupling.
+loosest, most acceptable form of coupling.[3]
 
 The warning sign isn't the coupling itself, it's the *shape* of it: if one
 service depends on a long list of downstream services, that's often a
@@ -81,7 +81,7 @@ minimum the callee actually needs; information hiding again.
 ### Pass-through coupling: the sneaky one
 
 This happens when a service passes data through to a second caller purely
-because a *third*, further-downstream service needs it. Picture
+because a *third*, further-downstream service needs it.[3] Picture
 `OrderProcessor` sending a `ShippingManifest` to `Warehouse`, which does
 nothing with it except forward it to `Shipping`. Now `OrderProcessor` has to
 know about a data shape that belongs, conceptually, to a service two hops
@@ -107,7 +107,7 @@ The fix is usually one of:
 ### Common coupling: fine for read-only reference data, risky otherwise
 
 Common coupling is what you get when two or more services read *and write*
-the same shared data (classically, a shared database table). Multiple
+the same shared data (classically, a shared database table).[2] Multiple
 services reading static, rarely-changing reference data (country codes, tax
 rates) from one store is relatively benign, because that data barely
 changes and nobody's fighting over write access.
@@ -145,14 +145,14 @@ disappear. The `Order` table becomes part of an external contract nobody
 agreed to, information hiding is gone, and you're now trusting that
 `Warehouse`'s idea of "valid state transition" exactly matches the `Order`
 service's, with zero way to enforce it. This is sometimes called
-*pathological* coupling for a reason. Avoid it outright.
+*pathological* coupling for a reason[2]. Avoid it outright.
 
 ## A quick word on temporal coupling
 
 One more form worth knowing, because it comes up constantly once you start
 picking communication styles (the subject of the next post): temporal
 coupling is when two services both need to be up and reachable *at the same
-instant* for an operation to succeed. A synchronous HTTP call from
+instant* for an operation to succeed.[3] A synchronous HTTP call from
 `OrderProcessor` to `Warehouse` is temporally coupled: if `Warehouse` is
 down, the whole operation fails right then. It's not inherently bad, but as
 call chains grow, temporal coupling compounds into cascading failures.
@@ -161,7 +161,7 @@ Asynchronous communication is one of the main tools for loosening it.
 ## Naming things the way your users do
 
 One more foundational habit worth adopting alongside coupling analysis:
-**ubiquitous language**, borrowed from Domain-Driven Design. Use the same
+**ubiquitous language**, borrowed from Domain-Driven Design[4]. Use the same
 terms in your code that domain experts use when they talk about the
 business. The alternative (a generic, one-size-fits-all data model where
 every real-world concept becomes a vague `Arrangement` or `Entity`) forces
@@ -171,7 +171,7 @@ code says, and that translation tax gets paid by every developer, forever.
 A related DDD concept, the **aggregate**, is worth carrying forward too: an
 aggregate is a real domain concept with its own identity and lifecycle
 (an `Order`, an `Invoice`), modeled as a self-contained unit whose state
-transitions are managed together, in one place, by one service. An
+transitions are managed together, in one place, by one service.[4][5] An
 aggregate gets to say no to an invalid request. That idea (a service
 guarding its own state machine rather than letting callers dictate it
 directly) is exactly what breaks the common-coupling trap above, and it's
@@ -182,3 +182,15 @@ worth keeping in your back pocket for the rest of this series.
 Boundaries are the foundation, but they don't tell you *how* two well-bounded
 services should actually talk to each other at runtime: synchronously,
 asynchronously, as a request or as a broadcast event. That's next.
+
+## References
+
+[1] D. L. Parnas, [*On the criteria to be used in decomposing systems into modules*](https://doi.org/10.1145/361598.361623) (Communications of the ACM 15(12), 1972): the information-hiding principle behind module decomposition, and the framing of what one module is allowed to assume about another.
+
+[2] W. P. Stevens, G. J. Myers, and L. L. Constantine, [*Structured design*](https://doi.org/10.1147/sj.132.0115) (IBM Systems Journal 13(2), 1974): the original coupling and cohesion taxonomy, including common coupling, content (pathological) coupling, and the rule that a design is stable when cohesion is strong and coupling is low.
+
+[3] Sam Newman, [*Building Microservices: Designing Fine-Grained Systems*](https://samnewman.io/books/building_microservices_2nd_edition) (2nd ed., O'Reilly Media, 2021): the microservice-specific coupling flavors used here (domain, pass-through, common, content) and temporal coupling.
+
+[4] Eric Evans, [*Domain-Driven Design: Tackling Complexity in the Heart of Software*](https://www.informit.com/store/domain-driven-design-tackling-complexity-in-the-heart-9780321125217) (Addison-Wesley, 2003): the ubiquitous-language practice and the aggregate as a self-contained unit with its own identity and lifecycle.
+
+[5] Martin Fowler, [*DDD_Aggregate*](https://martinfowler.com/bliki/DDD_Aggregate.html) (martinfowler.com bliki, 2013): the aggregate as a cluster of domain objects treated as a single unit, with a root that enforces its invariants.

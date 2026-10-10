@@ -51,7 +51,7 @@ in deployment form.
 
 ## Rolling deploys: the default
 
-A rolling deploy replaces instances one at a time. At any point during the
+A rolling deploy replaces instances one at a time[2][3]. At any point during the
 deploy, some instances run the old version and some run the new. This is the
 simplest strategy and the one most teams start with:
 
@@ -73,13 +73,13 @@ instances are updated, you can contract.
 The risk: if the new version has a bug, it's rolling out to production
 gradually. You'll see errors accumulate as more instances switch over. The
 fix is health checks: if the new version fails its health check, the
-deploy stops and rolls back automatically.
+deploy stops and rolls back automatically[1][2].
 
 ## Blue-green deploys: instant rollback
 
 A blue-green deploy runs two identical environments: "blue" (current) and
 "green" (new). You deploy to green, verify it works, then switch the load
-balancer from blue to green. If something breaks, you switch back:
+balancer from blue to green[6]. If something breaks, you switch back:
 
 ```
 Before:    traffic → [blue: v1]
@@ -89,7 +89,7 @@ Switch:    traffic → [green: v2]   blue: [v1]  ← live
 Rollback:  traffic → [blue: v1]    green: [v2] ← instant switch back
 ```
 
-The advantage: rollback is instant. You don't have to rebuild and redeploy
+The advantage: rollback is instant[6]. You don't have to rebuild and redeploy
 the old version; it's still running in blue. The cost: you need twice the
 infrastructure during the deploy. For a service running four instances, you
 need eight during the switch. For a small team with limited infrastructure,
@@ -109,14 +109,14 @@ Full:       traffic → [v2] [v2] [v2] [v2]
 ```
 
 This is the safest deploy strategy because you're testing the new version
-with real production traffic before committing to it. If the canary shows
+with real production traffic before committing to it[5]. If the canary shows
 increased error rates, latency spikes, or business metric anomalies, you
 kill it and stay on v1.
 
 The tooling for this is more complex: you need a load balancer or service
-mesh that can split traffic by percentage, and you need metrics collection
+mesh that can split traffic by percentage[8], and you need metrics collection
 that can compare canary vs. baseline in real time. Istio and Linkerd do
-this natively. If you're not running a service mesh, most cloud load
+this natively[8]. If you're not running a service mesh, most cloud load
 balancers (ALB, Cloudflare) support weighted target groups.
 
 The practical entry point: start with rolling deploys and health checks.
@@ -129,7 +129,7 @@ most sophisticated strategy and the hardest to get right.
 
 Deploying code and releasing features are two different things. A feature
 flag lets you deploy code that's off by default, then turn it on
-incrementally:
+incrementally[7]:
 
 ```go
 if featureflags.Enabled(ctx, "new-checkout-flow") {
@@ -149,7 +149,7 @@ off) and release on Monday (because you turn the flag on during business
 hours).
 
 The danger: flag debt. Every feature flag is a branch in your code that
-someone has to maintain, test, and eventually remove. Teams that add flags
+someone has to maintain, test, and eventually remove[7]. Teams that add flags
 aggressively without a removal process end up with a codebase full of
 dead code paths that nobody understands. The discipline: every flag gets a
 ticket to remove it. If the flag has been on for two weeks with no issues,
@@ -204,7 +204,7 @@ A **deploy webhook** (a notification sent to a shared channel when any
 service deploys) would have told the order team "warehouse just deployed"
 the moment it happened. An **error budget** (a shared metric that tracks
 total system health, not per-service health) would have shown the impact
-immediately. And the
+immediately[4]. And the
 [correlation ID from the debugging post]({{< ref "debugging-microservices-where-did-that-request-go" >}})
 would have connected the order service's 400s to the warehouse service's
 deploy in the trace.
@@ -217,16 +217,16 @@ Independent deployability is a capability, not a default. It requires:
    [expand-contract pattern]({{< ref "microservices-versioning-without-breaking-everyone" >}}).
 2. **Health checks**: every service exposes a `/health` endpoint that
    verifies database connectivity, downstream dependencies, and critical
-   paths. The deploy orchestrator (Kubernetes, ECS, whatever) uses this to
+   paths[1]. The deploy orchestrator (Kubernetes, ECS, whatever) uses this to
    decide whether a new instance is ready to receive traffic.
 3. **Automated rollback**: if the health check fails during a deploy, the
-   orchestrator reverts to the previous version automatically. No human
+   orchestrator reverts to the previous version automatically[2]. No human
    intervention required.
 4. **Deploy notifications**: every deploy posts to a shared channel with
    the service name, version, and who triggered it. When something breaks,
    the first question is always "did anyone deploy recently?"
 5. **Canary analysis**: for critical services, compare error rates and
-   latency between the canary and baseline before promoting the deploy.
+   latency between the canary and baseline before promoting the deploy[5].
 
 None of this is optional infrastructure. It's the price of independent
 deployability: the thing that's supposed to make microservices worth the
@@ -243,3 +243,21 @@ keeping APIs backward-compatible, running the stack locally, debugging
 when things go wrong, and deploying without fear. Each post stands alone,
 but together they're the playbook I wish someone had handed me before
 going through this the first time.
+
+## References
+
+[1] Kubernetes, [*Configure Liveness, Readiness and Startup Probes*](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) (Kubernetes documentation, 2026): the readiness signal an orchestrator uses to hold traffic off a new instance until it can serve, which is the health check the deploy discipline requires.
+
+[2] Kubernetes, [*Deployments*](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) (Kubernetes documentation, 2026): the rolling update strategy, the progress deadline that stops a rollout whose new pods never become ready, and `kubectl rollout undo` as the built-in rollback path.
+
+[3] Kubernetes, [*Disruptions*](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/) (Kubernetes documentation, 2025): how many replicas a voluntary disruption such as a rolling update may remove from service at once, the availability boundary behind replacing instances one at a time.
+
+[4] Marc Alvidrez, [*Embracing Risk*](https://sre.google/sre-book/embracing-risk/) (Site Reliability Engineering, ch. 3, O'Reilly Media, 2016): the error budget as the shared reliability metric that lets a release proceed while budget remains and stops launches once it is spent.
+
+[5] Alec Warner and Štěpán Davidovič, [*Canarying Releases*](https://sre.google/workbook/canarying-releases/) (The Site Reliability Workbook, ch. 16, O'Reilly Media, 2018): the canary and control methodology for exposing a subset of production traffic and weighing the canary against the baseline before promotion.
+
+[6] Martin Fowler, [*BlueGreenDeployment*](https://martinfowler.com/bliki/BlueGreenDeployment.html) (martinfowler.com, 2010): the two switchable environments behind blue-green, and the reason its rollback is a router flip rather than a rebuild.
+
+[7] Pete Hodgson, [*Feature Toggles (aka Feature Flags)*](https://martinfowler.com/articles/feature-toggles.html) (martinfowler.com, 2017): shipping code dark behind a toggle and flipping it incrementally, plus the maintenance cost of long-lived toggles that the removal discipline targets.
+
+[8] Istio, [*Traffic Shifting*](https://istio.io/latest/docs/tasks/traffic-management/traffic-shifting/) (Istio documentation, 2026): percentage-based traffic splitting between two deployed versions, the mesh mechanism a canary deploy needs.

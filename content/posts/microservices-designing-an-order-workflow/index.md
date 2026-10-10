@@ -89,13 +89,13 @@ Neither choice is "more correct" in general; each fits its specific hop.
 With styles chosen, the technology conversation from post three gets short.
 Order-to-Payment, being synchronous request-response with a small number of
 well-controlled internal consumers, is a natural fit for **gRPC**: good
-performance, strong schemas, and MusicCorp controls both ends. The
+performance, strong schemas, and MusicCorp controls both ends [1]. The
 event-driven hops (`Payment Taken`, `Stock Reserved`) need a **topic**, not
 a queue, since multiple independent consumer groups (`Loyalty`,
 `Warehouse`, potentially a future `Recommendations` service) each need
 their own copy of the same event; this is where a broker like Kafka or a
 managed equivalent earns its keep, particularly for the message permanence
-that lets a newly deployed consumer catch up on history it missed.
+that lets a newly deployed consumer catch up on history it missed [2].
 
 Whatever's chosen, the events themselves should be fully detailed rather
 than "just an ID": `Notifications` needs a name and email address to send
@@ -107,11 +107,11 @@ event-driven collaboration was supposed to avoid.
 
 This is where the saga thinking from post four becomes unavoidable. The
 order fulfillment process spans five services and cannot be one ACID
-transaction, so what happens if packaging fails because the CD isn't
+transaction [3], so what happens if packaging fails because the CD isn't
 actually on the shelf, despite the system thinking it was?
 
 This is a **choreographed saga**: no single orchestrator, each service
-reacting to events and deciding its own next move. Consider the failure
+reacting to events and deciding its own next move [4]. Consider the failure
 case explicitly:
 
 ```
@@ -122,9 +122,9 @@ By this point, payment has already been taken and (if we hadn't applied
 the reordering trick from post four) loyalty points may already have been
 awarded. Rolling the whole order back now means firing **compensating
 transactions**: refund the payment, and reverse the loyalty award if it
-already happened. Neither of these is a true rollback: refunding isn't
+already happened [5][6]. Neither of these is a true rollback: refunding isn't
 "pretend the charge never happened," it's a new transaction that reverses
-the effect. If a "sorry, your order shipped" notification had already gone
+the effect [4][5]. If a "sorry, your order shipped" notification had already gone
 out, the compensating action there isn't deletion (you can't unsend an
 email); it's a second, corrective email.
 
@@ -136,8 +136,8 @@ step simply never fired if packaging failed first.
 
 Because this is choreography, no single service has a built-in view of
 "what state is order #4521 in right now?" Every event in this saga carries
-a **correlation ID**, and a dedicated service consumes the full event
-stream to reconstruct that view, the practical requirement post four
+a **correlation ID** [7], and a dedicated service consumes the full event
+stream to reconstruct that view [8], the practical requirement post four
 flagged as close to essential once you give up a central orchestrator.
 
 ## Why this is worth designing on paper first
@@ -159,3 +159,21 @@ style, and only then pick the technology and the failure-recovery approach
 that fits what you've already decided. Applied consistently, that's most of
 what separates a microservice architecture that stays maintainable from one
 that quietly turns into a distributed monolith with extra network hops.
+
+## References
+
+[1] gRPC Authors, [*Core concepts, architecture and lifecycle*](https://grpc.io/docs/what-is-grpc/core-concepts/) (gRPC project documentation): defines the unary RPC, one request and one response, which is the synchronous request-response shape the Order-to-Payment hop takes, and the protocol buffer service definition behind it.
+
+[2] Apache Software Foundation, [*Apache Kafka Documentation: Introduction*](https://kafka.apache.org/43/getting-started/introduction/) (Apache Kafka 4.3 documentation): states that a topic is multi-producer and multi-subscriber and that events stay readable until a per-topic retention window expires, the fan-out and replay behavior step 2 picks a broker for.
+
+[3] Pat Helland, [*Life Beyond Distributed Transactions*](https://doi.org/10.1145/3009826) (Communications of the ACM 60(2), 2017, pp. 46-54): the argument that a transaction cannot span independently owned entities, so cross-service work needs at-least-once messaging and idempotent handlers instead.
+
+[4] Chris Richardson, [*Pattern: Saga*](https://microservices.io/patterns/data/saga.html) (microservices.io pattern catalog): choreography versus orchestration, and the missing automatic rollback that leaves compensating transactions to the developer.
+
+[5] Hector Garcia-Molina and Kenneth Salem, [*Sagas*](https://doi.org/10.1145/38713.38742) (ACM SIGMOD '87, pp. 249-259): the original saga model, where a compensating transaction semantically undoes a completed step instead of restoring the prior state.
+
+[6] Stripe, [*Idempotent requests*](https://docs.stripe.com/api/idempotent_requests) (Stripe API documentation): the idempotency key that makes a retried request safe after an unknown outcome, the boundary a re-issued refund or loyalty-points reversal sits on.
+
+[7] Gregor Hohpe and Bobby Woolf, [*Correlation Identifier*](https://www.enterpriseintegrationpatterns.com/patterns/messaging/CorrelationIdentifier.html) (Enterprise Integration Patterns, 2003): the unique identifier a message carries so later messages can be tied back to the exchange that produced them.
+
+[8] Chris Richardson, [*Pattern: Command Query Responsibility Segregation (CQRS)*](https://microservices.io/patterns/data/cqrs.html) (microservices.io pattern catalog): a read-only view database kept current by subscribing to the owning services' domain events, the shape of the service rebuilding order state from the saga stream.

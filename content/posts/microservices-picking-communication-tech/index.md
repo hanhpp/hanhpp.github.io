@@ -27,18 +27,18 @@ options; they're the yardstick.
 RPC's whole pitch is making a network call look like a local method call.
 That's also its biggest risk: hide the network *too* well, and developers
 write code that fires off a thousand "local-looking" calls without
-realizing each one is a network round trip.
+realizing each one is a network round trip [1].
 
 Older RPC implementations like Java RMI compound this with genuine
 brittleness. Tie your client and server to the same binary stub generation,
 and removing so much as an unused field from a shared type can break
 deserialization on every consumer: you're stuck doing lockstep releases
-whether you wanted to or not.
+whether you wanted to or not [1].
 
 **gRPC** is the modern answer and it's a good one. Built on HTTP/2 with
 protocol buffers for serialization, it has strong cross-language support (so
 you don't inherit RMI's single-platform trap), solid performance, and a
-healthy tooling ecosystem for schema evolution. If you have good control
+healthy tooling ecosystem for schema evolution [2][3]. If you have good control
 over both ends of a synchronous request-response call (which is gRPC's
 sweet spot), it's usually the first thing worth evaluating.
 
@@ -47,14 +47,14 @@ sweet spot), it's usually the first thing worth evaluating.
 REST's actual contribution isn't "use HTTP," it's the idea of *resources*
 (a `Customer`, an `Order`) with a uniform set of verbs (GET, POST, PUT,
 DELETE) that behave consistently across every resource, instead of a
-bespoke `createCustomer`/`editCustomer` method per operation. Riding on
+bespoke `createCustomer`/`editCustomer` method per operation [4]. Riding on
 HTTP gets you a huge amount for free: caching proxies, load balancers,
 monitoring tooling, and a security ecosystem that already understands the
 protocol.
 
 The purist version of REST also includes HATEOAS: hypermedia controls that
 let a client navigate an API the way a human navigates a website, without
-hardcoding URLs. It's a genuinely interesting idea. It's also one that,
+hardcoding URLs [4]. It's a genuinely interesting idea. It's also one that,
 across the industry, essentially never gets adopted in practice; you're
 unlikely to meet a team that's found it worth the extra plumbing. Don't
 feel behind if you skip it.
@@ -76,7 +76,7 @@ several round trips returning more than it asked for.
 That's a perimeter-facing job, not a microservice-to-microservice one. Two
 practical limitations worth knowing up front: caching is much harder than
 with plain REST, since you can't just slap standard HTTP cache headers on
-an arbitrary query; and writes don't fit the model nearly as naturally as
+an arbitrary query [5]; and writes don't fit the model nearly as naturally as
 reads do, which is why teams commonly end up using GraphQL for reads and
 REST for writes on the same system. If you're aggregating and filtering
 data for a UI, look at GraphQL or the Backend-for-Frontend pattern, not at
@@ -86,30 +86,30 @@ replacing your internal service-to-service protocol with it.
 
 For asynchronous communication, brokers (RabbitMQ, ActiveMQ, Kafka, or a
 managed equivalent like SQS/SNS) sit in the middle so producers and
-consumers never have to be up at the same moment. The feature that matters
+consumers never have to be up at the same moment [6]. The feature that matters
 most is **guaranteed delivery**: the broker holds a message durably until it
 can be delivered, so the sender doesn't have to decide "retry or give up?"
-the way it would with a direct synchronous call.
+the way it would with a direct synchronous call [6].
 
 Two structural concepts worth keeping straight:
 
 - **Queues** are point-to-point: one message, consumed by one member of a
   consumer group. This is your load-distribution mechanism (the *competing
   consumers* pattern): three instances of `OrderProcessor` in the same
-  group, and only one of them handles any given message.
+  group, and only one of them handles any given message [6].
 - **Topics** let multiple, independent consumer groups each get their own
   copy of the same message. This is what event broadcast actually runs on:
   `Warehouse` and `Notifications` both react to the same `Order Placed`
-  event without knowing about each other.
+  event without knowing about each other [6].
 
 As a rough (not absolute) rule: topics fit event-driven collaboration,
-queues fit request-response.
+queues fit request-response [7].
 
 **Kafka** deserves a specific mention because of two features that set it
 apart from a "normal" broker. First, message *permanence*: Kafka can
 retain messages far longer than "until the last consumer reads it," which
 means a newly deployed consumer can replay history it never saw the first
-time around. Second, built-in stream processing (KSQL), letting you define
+time around [8]. Second, built-in stream processing (KSQL), letting you define
 SQL-like queries over topics directly, which starts to look like a
 continuously updating materialized view with a topic as the source instead
 of a table.
@@ -120,7 +120,7 @@ of a table.
 > you there. Whatever your broker claims, build consumers that are
 > idempotent and can tolerate seeing the same message twice (a message ID
 > and a "have I processed this already?" check goes a long way), rather
-> than betting your correctness on the broker's marketing copy.
+> than betting your correctness on the broker's marketing copy [8].
 
 ## Finding services: DNS, or something built for constant churn
 
@@ -183,3 +183,21 @@ communication on. But talking to each other is only half the workflow
 problem: the harder question is what happens to consistency when a single
 business operation spans several of these calls and one of them fails
 partway through. That's next.
+
+## References
+
+[1] J. Waldo, G. Wyant, A. Wollrath, and S. Kendall, [*A Note on Distributed Computing*](https://waldo.scholars.harvard.edu/publications/note-distributed-computing) (Sun Microsystems Laboratories technical report SMLI TR-94-29, 1994): the argument that local and remote objects must be treated differently, anchoring this post's claim that RPC's network transparency is its central risk and that stub-coupled RMI forces lockstep releases.
+
+[2] gRPC Authors, [*Introduction to gRPC*](https://grpc.io/docs/what-is-grpc/introduction/) (grpc.io documentation, accessed 2026): gRPC's use of HTTP/2 and protocol buffers plus its cross-language code generation, anchoring the description of gRPC as the modern RPC choice.
+
+[3] IETF, [*RFC 9113: HTTP/2*](https://www.rfc-editor.org/rfc/rfc9113.html) (Internet Standard, 2022): the HTTP/2 framing and multiplexing specification that gRPC runs on.
+
+[4] R. T. Fielding, [*Architectural Styles and the Design of Network-based Software Architectures*, chapter 5](https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm) (doctoral dissertation, University of California, Irvine, 2000): the definitions of resources, the uniform interface, and HATEOAS that anchor the REST section.
+
+[5] GraphQL Foundation, [*Caching*](https://graphql.org/learn/caching/) (graphql.org documentation, accessed 2026): why arbitrary GraphQL queries cannot reuse plain HTTP cache headers, anchoring the caching limitation.
+
+[6] RabbitMQ, [*AMQP 0-9-1 Model Explained*](https://www.rabbitmq.com/tutorials/amqp-concepts) (RabbitMQ documentation, accessed 2026): queues, exchanges, and durable message delivery, anchoring the point-to-point queue, fan-out topic, and guaranteed-delivery claims.
+
+[7] RabbitMQ, [*RabbitMQ tutorial: Remote procedure call (RPC)*](https://www.rabbitmq.com/tutorials/tutorial-six-python) (RabbitMQ documentation, accessed 2026): request-reply implemented over a queue, anchoring the claim that queues fit request-response.
+
+[8] Apache Software Foundation, [*Apache Kafka Documentation*](https://kafka.apache.org/documentation/#semantics) (Apache Kafka, accessed 2026): log retention and replay, consumer groups, and the at-most-once, at-least-once, and exactly-once delivery semantics, anchoring the Kafka permanence and delivery-guarantee claims.

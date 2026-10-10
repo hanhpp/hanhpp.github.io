@@ -21,7 +21,7 @@ the point where a mesh earns its cost.
 ## What a service mesh is, mechanically
 
 A service mesh adds a **sidecar proxy** (usually Envoy) next to every
-service instance. Every network call from your service goes through the
+service instance [1]. Every network call from your service goes through the
 proxy first. Every inbound call hits the proxy before it reaches your
 service. Your code doesn't know the proxy exists: it makes normal HTTP or
 gRPC calls, and the proxy handles everything else.
@@ -38,11 +38,11 @@ After mesh:
 
 The sidecars collectively form the "mesh": they're managed by a control
 plane (Istiod for Istio, the Linkerd control plane for Linkerd) that
-distributes configuration, certificates, and routing rules to every proxy.
+distributes configuration, certificates, and routing rules to every proxy [1][6].
 
 The value proposition: all of the network-layer concerns (encryption,
 retries, timeouts, traffic splitting, observability) live in the proxy,
-not in your application code. You get them without changing a line of Go.
+not in your application code [5]. You get them without changing a line of Go [1].
 
 ## What a service mesh actually gives you
 
@@ -57,19 +57,19 @@ rejecting connections because a certificate expired.
 
 A mesh handles this automatically. The control plane issues short-lived
 certificates to every sidecar, rotates them before expiry, and verifies
-identity on every connection. Your services get encrypted, authenticated
+identity on every connection [2][7]. Your services get encrypted, authenticated
 traffic with zero code changes.
 
 ### Traffic management
 
 The mesh can split traffic by percentage: send 5% of requests to the new
-version of a service, 95% to the old. This is the
+version of a service, 95% to the old [3]. This is the
 [canary deploy pattern]({{< ref "microservices-deploying-without-the-fear" >}})
 implemented at the infrastructure layer instead of in your application or
 load balancer.
 
 It can also handle retries, timeouts, and circuit breakers at the proxy
-level. If Service B is slow, Sidecar A retries the request without your
+level [3][5]. If Service B is slow, Sidecar A retries the request without your
 code knowing. If Service B is down, Sidecar A opens a circuit and returns
 a fallback response immediately.
 
@@ -77,7 +77,7 @@ a fallback response immediately.
 
 Every request that flows through the mesh is automatically traced. The
 sidecars inject trace headers (if you're using OpenTelemetry or Jaeger),
-record request duration, and report success/failure rates. You get a
+record request duration, and report success/failure rates [5]. You get a
 dashboard of service-to-service latency and error rates without
 instrumenting your application.
 
@@ -101,7 +101,7 @@ observability), and a large community.
 - Feature-complete. Traffic splitting, fault injection, rate limiting,
   policy enforcement; if the feature exists in the mesh space, Istio has it.
 - Extensible via WebAssembly (WASM) filters. You can add custom logic to
-  the proxy without forking it.
+  the proxy without forking it [4].
 - Large ecosystem. Most Kubernetes tools and platforms integrate with
   Istio out of the box.
 
@@ -113,23 +113,23 @@ observability), and a large community.
   debugging proxy issues require dedicated knowledge. Istio upgrades
   occasionally break things, and the release cadence is fast.
 - Configuration is verbose. Istio's CRDs (VirtualService, DestinationRule,
-  Gateway, etc.) are powerful but numerous. Getting traffic routing right
+  Gateway, etc.) are powerful but numerous [3]. Getting traffic routing right
   requires understanding several interacting resources.
 
 ### Linkerd
 
 Linkerd is a lighter-weight alternative. It uses a purpose-built proxy
-(not Envoy) called linkerd2-proxy, written in Rust.
+(not Envoy) called linkerd2-proxy, written in Rust [6].
 
 **Strengths:**
-- Lightweight. The proxy uses ~10MB of RAM and minimal CPU. The control
+- Lightweight. The proxy uses ~10MB of RAM and minimal CPU [8]. The control
   plane is simpler and smaller than Istio's.
 - Simpler to operate. Fewer CRDs, simpler upgrade process, less
   configuration surface area. You can get mTLS and basic traffic management
   running in minutes, not hours.
 - Strong defaults. Linkerd makes opinionated choices (automatic retries,
   automatic mTLS, automatic telemetry) that work out of the box without
-  tuning.
+  tuning [7].
 
 **Weaknesses:**
 - Smaller feature set. No WASM extensibility, fewer traffic management
@@ -231,3 +231,21 @@ management. When those stop being enough (when you have enough services
 that the manual approach is genuinely too much work), a mesh is the right
 next step. But "when those stop being enough" is usually later than you
 think.
+
+## References
+
+[1] Istio, [*Sidecar or ambient?*](https://istio.io/latest/docs/overview/dataplane-modes/) (Istio documentation): the split between the data plane of proxies and the control plane that configures them, and the two data plane modes, sidecar (an Envoy proxy alongside each pod) and sidecarless ambient (a per-node ztunnel), that the sidecar model in this post describes.
+
+[2] Istio, [*Security*](https://istio.io/latest/docs/concepts/security/) (Istio documentation): workload identity and certificate management, where istiod acts as the certificate authority that issues, delivers, and rotates the X.509 certificates Envoy uses for mutual TLS between services.
+
+[3] Istio, [*Traffic Management*](https://istio.io/latest/docs/concepts/traffic-management/) (Istio documentation): the VirtualService, DestinationRule, Gateway, and Sidecar resources, and the percentage-based traffic shifting, request timeouts, retries, and circuit breaking configured through them.
+
+[4] Istio, [*Extensibility*](https://istio.io/latest/docs/concepts/wasm/) (Istio documentation): WebAssembly plugin support for adding custom logic to the mesh proxy without forking it.
+
+[5] Envoy Project, [*Architecture overview*](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/arch_overview) (Envoy documentation): the built-in TLS, circuit breaking, outlier detection, tracing, and metrics that a sidecar proxy provides to application code unmodified.
+
+[6] Linkerd, [*Architecture*](https://linkerd.io/docs/reference/architecture/) (Linkerd documentation): the Linkerd control plane and its ultralight Rust micro-proxy, linkerd2-proxy, which handles outbound service discovery, load balancing, circuit breakers, retries, and timeouts.
+
+[7] Linkerd, [*Automatic mTLS*](https://linkerd.io/docs/features/automatic-mtls/) (Linkerd documentation): transparent mTLS on all TCP between meshed pods, with the identity certificate authority issuing certificates bound to the Kubernetes ServiceAccount and rotating them automatically.
+
+[8] Linkerd, [*Announcing Linkerd 2.0*](https://linkerd.io/2018/09/18/announcing-linkerd-2-0) (Linkerd blog, 2018): the source of the roughly 10 MB RSS figure for the Rust data plane proxy.

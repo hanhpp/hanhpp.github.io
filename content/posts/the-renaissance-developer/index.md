@@ -32,7 +32,7 @@ The panic that AI will make professional developers obsolete is not new. Our ind
 | **2006** | **AWS EC2 & Cloud Computing** | "Systems administrators and infrastructure engineers are finished." | Lowering deployment friction caused an explosion of microservices, distributed architectures, and SRE disciplines. |
 | **2026** | **Generative AI & Agentic Code** | "Developers are obsolete; natural language is the only programming language." | Syntax generation became a commodity; systems synthesis, fault tolerance, and unit economics became the ultimate moat. |
 
-Every time an industry breakthrough lowers the barrier to entry, it does not eliminate the need for engineering expertise. It amplifies it.
+Every time an industry breakthrough lowers the barrier to entry, it does not eliminate the need for engineering expertise. It amplifies it [2].
 
 When John Backus created Fortran in 1957, assembly programmers genuinely feared obsolescence. Instead, freeing engineers from manual register juggling allowed them to design complex algorithms that were previously unthinkable. When AWS launched S3 and EC2 in 2006, operations engineers feared that automated infrastructure APIs would leave them jobless. Instead, cloud computing transformed infrastructure from a slow procurement barrier into dynamic code, spawning thousands of new companies and creating unprecedented demand for distributed systems engineers.
 
@@ -42,7 +42,7 @@ Generative AI operates on the exact same trajectory. It automates typographical 
 
 ## The Polymath Archetype: What Leonardo Da Vinci Teaches Software Engineers
 
-In his 2026 technology predictions, Amazon Chief Technology Officer Dr. Werner Vogels coined the term **The Renaissance Developer**.
+In his 2026 technology predictions, Amazon Chief Technology Officer Dr. Werner Vogels coined the term **The Renaissance Developer** [1].
 
 The historical reference is deliberate. Before Leonardo Da Vinci painted the *Mona Lisa*, he spent decades dissecting human cadavers in poorly lit rooms to map the exact attachment points of muscular tissue. To design canal systems for Florence, he mapped fluid dynamics and the eddy currents of moving water. To sketch flying machines, he spent hours calculating the wing aspect ratios of raptors.
 
@@ -75,7 +75,7 @@ An LLM has never sat in an executive budget review. It does not know whether you
 * It cannot balance customer SLOs against developer on-call fatigue.
 
 ### 4. Human Ergonomics and System Intent
-Code is read ten times more often than it is written. A Renaissance Developer crafts architectures that humans can reason about, debug at 3 AM, and safely modify two years later.
+Code is read ten times more often than it is written [6]. A Renaissance Developer crafts architectures that humans can reason about, debug at 3 AM, and safely modify two years later.
 ---
 
 ## The Anatomy of an AI Failure: The "Prompt-and-Pray" Concurrency Trap
@@ -124,8 +124,8 @@ func ProcessUsers(ctx context.Context, db *sql.DB, userIDs []int64) ([]UserScore
 When executed against a local SQLite database or a lightweight mock in a unit test with ten items, this code executes in milliseconds.
 
 When deployed to production with 10,000 users, it triggers a catastrophic cascade:
-1. **Unbounded Goroutine Spawning:** The loop spawns 10,000 goroutines instantly. While a Go goroutine starts with only ~2 KB of stack space, 10,000 concurrent routines still demand 20 MB of initial memory and flood the Go runtime scheduler.
-2. **Connection Pool Starvation:** `sql.DB` manages a connection pool (by default, often capped at `max_connections = 100` in Postgres). 10,000 goroutines contend simultaneously for 100 connections. 9,900 goroutines block, holding memory while waiting on the pool lock.
+1. **Unbounded Goroutine Spawning:** The loop spawns 10,000 goroutines instantly. While a Go goroutine starts with only ~2 KB of stack space, 10,000 concurrent routines still demand 20 MB of initial memory and flood the Go runtime scheduler [3].
+2. **Connection Pool Starvation:** `sql.DB` manages a connection pool (by default, often capped at `max_connections = 100` in Postgres) [4][5]. 10,000 goroutines contend simultaneously for 100 connections. 9,900 goroutines block, holding memory while waiting on the pool lock.
 3. **TCP Ephemeral Port and File Descriptor Churn:** Under burst load, if the connection pool settings are unconfigured, the application attempts to open thousands of short-lived TCP sockets to PostgreSQL, exhausting operating system file descriptors and hitting socket backlog limits.
 4. **PostgreSQL Worker Exhaustion:** The database CPU spikes to 100% not from query execution, but from context switching between hundreds of active backend worker processes and lock contention on the buffer pool.
 
@@ -211,6 +211,8 @@ None of these decisions were about syntax. All of them were about **systems inva
 
 The emergence of AI tools does not mean engineers should write every line of code by hand out of stubborn pride. That would be as foolish as an assembly programmer refusing to use a C compiler in 1975.
 
+People will no longer try to solve problems. They will build mental models and be creative; the machine will take that idea and complete it.
+
 The optimal workflow is a sharp division of cognitive labor:
 
 ```text
@@ -244,19 +246,30 @@ Keep ownership of the boundaries:
 
 ---
 
-## Recommended Learning Paths & Systems Foundations
-
-If you want to explore the deeper mechanics beneath the Renaissance Developer stack, check out these earlier deep dives:
-
-* **Silicon & Hardware Contracts:** Read [The ISA Is a Contract, Not a Benchmark]({{< ref "isa-as-a-contract-risc-vs-cisc" >}}) to see how memory ordering and decoder silicon shape execution limits.
-* **Distributed State & Resilience:** Read [Sagas for Microservice Transactions]({{< ref "microservices-sagas-vs-two-phase-commit" >}}) and [GitOps Reality with ArgoCD]({{< ref "gitops-argocd-database-migration-reality" >}}) to master failure recovery without distributed locks.
-* **Pragmatic AI Workflows:** Read [The Four-Layer AI Coding Stack]({{< ref "the-four-layer-ai-coding-stack" >}}) and [Agentic Coding Assistants]({{< ref "how-ai-actually-fits-into-my-dev-workflow" >}}) for production-proven guardrails.
----
-
 ## What Comes Next
 
 Understanding the systems moat is only the first step. To operate effectively as a Renaissance Developer, you must change how your brain absorbs and filters technical information.
 
-When every API answer and code snippet is available in seconds, memorizing syntax creates an illusion of competence that quickly atrophies real engineering judgment. In Part 2 of this series, we explore the cognitive mechanics of software engineering:
+When every API answer and code snippet is available in seconds, memorizing syntax creates an illusion of competence that quickly atrophies real engineering judgment [7][8]. In Part 2 of this series, we explore the cognitive mechanics of software engineering:
 
 * Read [Part 2: Meta-Cognition for Software Engineers: How to Think in the Age of Instant Answers]({{< ref "meta-learning-and-meta-cognition-for-engineers" >}}) to understand how to separate perishable syntax from timeless primitives, and how to build internal mental runtime engines that never decay.
+
+---
+
+## References
+
+[1] Werner Vogels, [*Werner Vogels' Tech Predictions for 2026 and Beyond*](https://aws.amazon.com/executive-insights/content/werner-vogels-2026-tech-predictions/) (Amazon Web Services): the origin of the Renaissance Developer framing this post argues from.
+
+[2] David H. Autor, [*Why Are There Still So Many Jobs? The History and Future of Workplace Automation*](https://doi.org/10.1257/jep.29.3.3) (*Journal of Economic Perspectives* 29(3), 3, 2015): the evidence that automating a task reshapes demand for the skill rather than deleting it, the pattern behind the Fortran and EC2 rows.
+
+[3] The Go Authors, [*Why goroutines instead of threads?*](https://go.dev/doc/faq#goroutines) (Go FAQ): the lightweight stack and scheduling model that makes 10,000 simultaneous goroutines look affordable in review.
+
+[4] The Go Authors, [*database/sql: DB.SetMaxOpenConns*](https://pkg.go.dev/database/sql#DB.SetMaxOpenConns) (Go standard library): the pool ceiling that converts unbounded goroutines into blocked waiters.
+
+[5] PostgreSQL Global Development Group, [*Connections and Authentication*](https://www.postgresql.org/docs/current/runtime-config-connection.html) (PostgreSQL documentation): the `max_connections` default and per-backend process cost behind the connection starvation failure mode.
+
+[6] Robert C. Martin, [*Clean Code: A Handbook of Agile Software Craftsmanship*](https://www.oreilly.com/library/view/clean-code-a/9780136083238/) (Prentice Hall, 2008): the source of the read-to-write ratio used here to justify designing for the debugger.
+
+[7] Evan F. Risko and Sam J. Gilbert, [*Cognitive Offloading*](https://doi.org/10.1016/j.tics.2016.07.002) (*Trends in Cognitive Sciences* 20(9), 676, 2016): the review showing that moving a task out of the head changes what the head retains.
+
+[8] Andy Clark and David J. Chalmers, [*The Extended Mind*](https://consc.net/papers/extended.html) (*Analysis* 58(1), 7, 1998): the argument that cognition extends into the tools we think with, which makes the choice of tool a choice about skill.

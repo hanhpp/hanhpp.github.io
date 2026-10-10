@@ -81,7 +81,7 @@ not be related, and the customer is still waiting.
 
 A correlation ID (sometimes called a request ID or trace ID) is a unique
 string generated when a request enters your system and passed along to every
-service that touches it. Every log line that service produces includes that
+service that touches it[1]. Every log line that service produces includes that
 ID. That's it: one string that lets you grep across all services and
 reconstruct a single request's journey.
 
@@ -154,7 +154,7 @@ OpenTelemetry.
 ### The mental model
 
 A trace is a tree of spans. The root span is the incoming request. Each
-outbound call to another service creates a child span. Each span records
+outbound call to another service creates a child span[2]. Each span records
 its start time, end time, status, and metadata. When the trace is
 collected, you see a waterfall diagram showing exactly how time was spent:
 
@@ -194,13 +194,13 @@ func createOrder(ctx context.Context, req OrderRequest) (Order, error) {
 ```
 
 The SDK handles context propagation: when you make an outbound HTTP call,
-the trace context is automatically injected into the headers. The
+the trace context is automatically injected into the headers[3]. The
 destination service picks it up and continues the trace. You don't pass
 IDs manually; the instrumentation does it.
 
 What you *do* need is a collector: something that receives spans from all
 your services and stores them. Jaeger and Grafana Tempo are the common
-open-source options. The collector is the one piece of infrastructure you
+open-source options[5][6]. The collector is the one piece of infrastructure you
 have to run, and it's the thing that makes tracing data searchable.
 
 > Correlation IDs and distributed tracing aren't alternatives; they serve
@@ -214,7 +214,7 @@ have to run, and it's the thing that makes tracing data searchable.
 With one or two services, reading logs from each one is tedious but
 feasible. With ten services, it's impossible. You need your logs in one
 place (a system like Loki, the ELK stack, or Datadog) where you can
-search across all services at once.
+search across all services at once[7].
 
 The practical minimum: every service writes structured logs (JSON, not
 free-form text) to stdout, and a log collector ships them to a central
@@ -287,10 +287,10 @@ microservice:
   that lets you search across all services by correlation ID.
 - **Distributed tracing**: OpenTelemetry with Jaeger or Tempo. Start with
   auto-instrumentation (the Go SDK instruments `net/http` automatically)
-  and add manual spans for the business-critical paths.
+  and add manual spans for the business-critical paths[4].
 - **CPU and memory profiling**: Go's built-in `pprof` tool, exposed via a
   debug endpoint. When you've found *which* service is slow but not *why*,
-  the profile tells you exactly which function is burning cycles. See
+  the profile tells you exactly which function is burning cycles[8]. See
   [Go performance profiling with pprof]({{< ref "go-performance-profiling-with-pprof" >}}).
 
 None of this is optional infrastructure. It's the equivalent of having a
@@ -308,3 +308,21 @@ you whether you need microservices, the
 told you where to draw the boundaries, and the communication and saga posts
 gave you the patterns. This post gives you the tooling to actually operate
 what you've built. Don't skip it.
+
+## References
+
+[1] W3C, [*Trace Context*](https://www.w3.org/TR/trace-context/) (W3C Recommendation, 23 November 2021): defines the traceparent and tracestate headers that carry one request's trace identity across service boundaries, the standardized form of the correlation ID handed from service to service.
+
+[2] OpenTelemetry Authors, [*Trace API*](https://opentelemetry.io/docs/specs/otel/trace/api/) (OpenTelemetry specification, stable): defines the tracer, span, and parent-child span relationships that make a trace a tree, and the start time, end time, and status each span records.
+
+[3] OpenTelemetry Authors, [*Context propagation*](https://opentelemetry.io/docs/concepts/context-propagation/) (OpenTelemetry documentation): documents automatic injection and extraction of trace context on outbound calls, so instrumentation carries the trace across process boundaries without hand-passed IDs.
+
+[4] OpenTelemetry Authors, [*Instrumentation*](https://opentelemetry.io/docs/languages/go/instrumentation/) (OpenTelemetry Go documentation): covers the Go SDK tracer obtained from a TracerProvider plus the net/http instrumentation that produces spans automatically, as in the create-order sample.
+
+[5] Jaeger Authors, [*Architecture*](https://www.jaegertracing.io/docs/2.22/architecture/) (Jaeger documentation, v2.22): describes the collector that receives trace data from applications and writes spans to a storage backend, and the query service that makes them searchable.
+
+[6] Grafana Labs, [*Grafana Tempo*](https://grafana.com/docs/tempo/latest/) (Grafana Labs documentation): documents Tempo as an open-source, high-scale distributed tracing backend, the alternative to Jaeger named in the post.
+
+[7] Grafana Labs, [*Grafana Loki*](https://grafana.com/docs/loki/latest/) (Grafana Labs documentation): documents Loki as a log aggregation system that indexes streams by Prometheus-style labels, so logs across all services can be queried by field.
+
+[8] The Go Authors, [*pprof*](https://pkg.go.dev/net/http/pprof) (Go standard library documentation): documents the net/http/pprof handlers that expose CPU and heap profiles over a debug endpoint, the tool behind the profiling step.

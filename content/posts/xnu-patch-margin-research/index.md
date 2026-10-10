@@ -2,7 +2,7 @@
 title: "Read the Fix First: A Patch-Margin Method for XNU Research"
 date: 2026-10-09T09:30:00+07:00
 draft: false
-tags: ["reverse-engineering", "apple", "xnu", "vulnerability-research"]
+tags: ["ios", "reverse-engineering", "apple", "xnu", "vulnerability-research"]
 summary: "A source-first method for Apple kernel research: diff consecutive XNU tags, mine the regression tests that ship with the fixes, map sibling call sites, and rank candidates by how well they survive Memory Integrity Enforcement. Four evidence gates, a safe workflow, and the stop conditions that keep this work honest."
 ---
 
@@ -134,6 +134,18 @@ because each new test is a written description of a fixed defect.
 Order the shortlist by how likely the bug class is to matter on current
 hardware, then by whether the changed code has attacker-controlled input [5].
 The ranking table below is the output of this step for one real window.
+
+The cell in that column is a judgement, so it needs a stated criterion rather
+than an adjective. I score it on cost. A candidate that operates on a valid
+allocation with the wrong type or the wrong authority needs no bypass at all,
+which is why nearly every row is survivable; what separates the rows is the
+question after that, whether the primitive the candidate needs is reusable
+across unrelated bugs or specific to this one. A candidate that depends on an
+exemption inside the tagging implementation is borrowing something Apple can
+withdraw independently of the bug, and the kernel-side exemptions a tagging
+implementation carries by design are worth reading in the original analysis
+[7]. [Part 1]({{< ref "ios-architecture-from-sandbox-to-secure-enclave" >}})
+works through the four questions in full.
 
 ## Regression tests are compressed bug reports
 
@@ -303,10 +315,34 @@ kernel-map selection could be established. The correct call was to keep the
 audit pattern and close the candidate. A source diff can look alarming and
 still be semantic correctness work with no security consequence.
 
+### Case five: resolution state that survives a retry
+
+An earlier window changed how `vfs_lookup.c` initializes two locals,
+`resolve_flags` and `resolve_prefix_len`. Before the change both were
+initialized in their declarations. After it, both are assigned zero immediately
+below the `vnode_recycled:` label, with a comment that states the reason
+directly: the resolve states are reset so the resolve prefix path gets stripped
+when lookup is retried because the vnode was recycled [1].
+
+The mechanism is worth reading twice, because the defect is a property of
+control flow rather than of the values. A declaration-level initializer sits
+above the retry label, so the second pass over that code skips it and resumes
+with the first pass's state. The same window also added enforcement for
+`NAMEI_RESOLVE_BENEATH`, comparing `ISDOTDOT` resolution against the starting
+directory and the mount point that covers it [1].
+
+The reusable invariant is not specific to path resolution. Any routine that can
+be re-entered through a label, a retry, or a loop has to re-establish its state
+rather than resume it, and every value initialized above the re-entry point is
+a value that survives it. Grep for the label, then list what is initialized
+only once. Scope note: I verified this across the tags in that window, not on
+the current development branch, where the surrounding code has been reworked
+since.
+
 ## Bug classes that survive Memory Integrity Enforcement
 
 Modern Apple silicon enforces memory tagging at a granularity that makes
-classic cross-allocation corruption much harder [5]. A linear heap overflow into
+classic cross-allocation corruption much harder [5][6]. A linear heap overflow into
 an adjacent object often trips a tag mismatch before it does anything
 useful. That changes the ranking, not the game. The bug classes that remain
 durable are the ones that operate on a *valid* allocation, or that abuse
@@ -544,6 +580,8 @@ Read the test. Find the invariant. Then go look at every other place that
 believes the same thing, and check whether it is still wrong. That is where
 the bugs are, and the source is telling you where to look.
 
+This post covers the method that needs nothing beyond a source tree. The last part of the series moves to the surface that needs almost nothing else either, and finds a different kind of boundary: [Part 4: The Reachable Surface]({{< ref "ios-webkit-and-app-layer" >}}) covers the browser's process split, what crosses between those processes, and the line between a check on the client and a decision on the server.
+
 ## References
 
 [1] [apple-oss-distributions/xnu](https://github.com/apple-oss-distributions/xnu): canonical repository for Darwin XNU kernel releases, regression test suites, and security fix commit history.
@@ -555,3 +593,7 @@ the bugs are, and the source is telling you where to look.
 [4] Brandon Azad, [voucher_swap: Exploiting MIG reference counting in iOS 12](https://googleprojectzero.blogspot.com/2019/01/voucher-swap-exploiting-mig-reference.html): technical breakdown of XNU Mach message handling, port rights, MIG stubs, and memory boundary verification.
 
 [5] [Apple Platform Security Guide](https://support.apple.com/guide/security/welcome/web): architectural overview of kalloc type isolation, Pointer Authentication Codes, and hardware memory safety mitigations in contemporary Apple silicon.
+
+[6] Apple Security Engineering and Architecture, [*Memory Integrity Enforcement: A complete vision for memory safety in Apple devices*](https://security.apple.com/blog/memory-integrity-enforcement) (Apple Security Research, 2025): Apple's own account of the tagging, hardened allocator, and pointer-integrity design that sets which bug classes stay profitable.
+
+[7] Mark Brand, [*MTE As Implemented, Part 3: The Kernel*](https://projectzero.google/2023/08/mte-as-implemented-part-3-kernel.html) (Project Zero, 2023): the kernel-side exemptions a tagging implementation carries by design, including the dereference path that skips the tag check entirely.

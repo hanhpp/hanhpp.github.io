@@ -37,9 +37,9 @@ None of that is exotic. It is just the ordinary cost of skipping the architectur
 
 There is a version of security writing that begins with a command line and ends with a shell. It reads well and teaches very little, because the interesting part of every real result is the part that comes before the tool runs: deciding what to point the tool at.
 
-The argument I made in [The Renaissance Developer]({{< ref "the-renaissance-developer" >}}) applies directly here. When syntax becomes cheap, the value moves to systems synthesis: knowing how one change propagates through layers that were designed by different teams at different times. A security result is exactly that kind of synthesis. A single attacker-controlled length field can travel through an Objective-C method, an XPC encoder, a Mach message descriptor, a MIG stub, a `copyin` boundary, a kernel zone allocator, and a hardware tag check, and the answer to "is this a bug" is determined by which of those layers trusts the one before it.
+That is a systems argument before it is a security argument. When syntax becomes cheap, the value moves to systems synthesis: knowing how one change propagates through layers that were designed by different teams at different times. A security result is exactly that kind of synthesis. A single attacker-controlled length field can travel through an Objective-C method, an XPC encoder, a Mach message descriptor, a MIG stub, a `copyin` boundary, a kernel zone allocator, and a hardware tag check, and the answer to "is this a bug" is determined by which of those layers trusts the one before it.
 
-If you do not know where the layers are, you cannot know where the trust ends. So the series begins with the stack, then narrows. Part 2 takes the Mach-O format and the dyld shared cache, because that is how the code of every layer above the kernel is actually delivered and how you enumerate it. Part 3 takes XNU source diffing, because on Apple platforms the most reliable way to find a real boundary error is to read the patch that fixed one. This post is the frame both of those hang on.
+If you do not know where the layers are, you cannot know where the trust ends. So the series begins with the stack, then narrows. Part 2 takes the Mach-O format and the dyld shared cache, because that is how the code of every layer above the kernel is actually delivered and how you enumerate it. Part 3 takes XNU source diffing, because on Apple platforms the most reliable way to find a real boundary error is to read the patch that fixed one. Part 4 goes the other direction and takes the surface you can reach without any of that access: the browser's process split and the app layer. This post is the frame the rest hang on.
 
 ## One stack, many boundaries
 
@@ -198,7 +198,7 @@ Before I call anything a finding, I want four gates satisfied and four safety co
 
 And the safety conditions, which are not optional and are not negotiable:
 
-- No panic-capable or state-corrupting test on a machine I depend on. Validation happens in a snapshot-backed virtual machine or on an authorized isolated device, and the machine is restorable afterward.
+- No panic-capable or state-corrupting test on a machine I depend on. Validation happens in a snapshot-backed virtual machine or on an authorized isolated device, and the machine is restorable afterward. At the time of writing that environment is not merely unused but blocked: there is no research device, no isolated macOS guest, and no equivalent authorized runtime available to me, so every claim in this series is static.
 - No instrumentation of current retail devices without explicit authorization for that environment [3].
 - No claim of a vulnerability from a patch diff alone. A diff tells you a fix exists. It does not tell you the unpatched version is reachable.
 - No spending on external validation infrastructure until static work has produced a concrete candidate that actually needs dynamic confirmation.
@@ -207,7 +207,7 @@ The gates are boring. They are also the reason a candidate that survives them is
 
 ## Why memory integrity enforcement changes the target list
 
-A decade ago, the highest-yield kernel bug was cross-allocation corruption: overflow into a neighbor, use-after-free of a recycled object, a write through a stale pointer. Tagging and protected allocators cut directly into that class, which means the marginal value of another such hypothesis is falling.
+A decade ago, the highest-yield kernel bug was cross-allocation corruption: overflow into a neighbor, use-after-free of a recycled object, a write through a stale pointer. Tagging and protected allocators cut directly into that class [6], which means the marginal value of another such hypothesis is falling.
 
 The classes that survive are the ones where the allocation is valid and the type or the authority is wrong:
 
@@ -221,13 +221,25 @@ The classes that survive are the ones where the allocation is valid and the type
 
 Notice that six of the seven are described by a boundary and an invariant rather than by a memory primitive. That is the argument for this post existing first.
 
+## How to judge a mitigation before ranking a candidate
+
+If MIE is going to decide which candidates are worth writing down, it has to be reasoned about as an implementation rather than as a headline. Four questions, in order. The fourth is the one people skip.
+
+- **What does it exempt?** Enumerate the paths that bypass the check by design before arguing about how well the check works. A fixed architectural exemption is a reusable bypass at zero per-bug cost, which is worse than a rare implementation defect, and it is exactly the part a feature description will not mention.
+- **Where is the violation reported?** A mitigation that detects correctly and reports badly has an attack surface. Follow the signal from the fault through to whatever handles it, and treat everything that handler reads as attacker-influenced.
+- **What does a bypass cost the attacker?** *Soft* means one bypass that is reusable across unrelated bugs, the way a ROP chain reuses a DEP bypass. *Hard* means no reusable bypass exists without folding in a second bug. A probabilistic scheme is at best hard-probabilistic, never deterministic. Score the cost, not the existence of a bypass.
+- **Do the check's inputs live where the attacker can already write?** A validator whose operands, including the pointer to its own secret, sit inside the structure that was just corrupted is only as strong as the attacker's inability to forge that pointer.
+
+The clearest published worked example of this discipline is the analysis of ARM memory tagging as implemented [7]. MIE is a different implementation, so the specific findings there do not transfer to it. The questions do.
+
 ## How this series is laid out
 
 - **Part 1 (this post):** the stack and its boundaries. What trusts what, and what evidence you need before you claim a crossing.
 - **Part 2:** [iOS Reversing: Mach-O and the dyld Shared Cache]({{< ref "ios-reversing-mach-o-dyld-shared-cache" >}}). How the code of layers 1 through 4 is actually stored, how to enumerate it from an authorized system artifact, and how to map a service to its callers without a debugger.
 - **Part 3:** [XNU Patch-Margin Research]({{< ref "xnu-patch-margin-research" >}}). How to read Apple's own fixes as a research signal, how to separate hardening from a reachable bug, and how to keep a candidate queue honest.
+- **Part 4:** [The Reachable Surface: WebKit and the App Layer]({{< ref "ios-webkit-and-app-layer" >}}). The boundaries you can study without an authorization: the browser's process split, what crosses between those processes, and the line between a check on the client and a decision on the server.
 
-Read in order, they go from the shape of the system, to the representation of the code, to the discipline of the evidence. Read individually, each stands alone.
+Read in order, they go from the shape of the system, to the representation of the code, to the discipline of the evidence, and finally to the surface that is actually reachable. Read individually, each stands alone.
 
 ## The point of the map
 
@@ -248,3 +260,7 @@ Start at the boundary, follow the data path down, and only then choose the tool.
 [4] [Arm Architecture Reference Manual for A-profile Architecture](https://developer.arm.com/documentation/ddi0487/latest): hardware specifications for Exception Levels (EL0 through EL3), Pointer Authentication Codes (PAC), and memory tagging extensions.
 
 [5] Jonathan Levin, [*Mac OS X and iOS Internals: To the Apple's Core*](http://newosxbook.com/): architectural reference on Mach messaging, MIG stubs, launchd daemon initialization, and sandbox container profiles.
+
+[6] Apple Security Engineering and Architecture, [*Memory Integrity Enforcement: A complete vision for memory safety in Apple devices*](https://security.apple.com/blog/memory-integrity-enforcement) (Apple Security Research, 2025): Apple's own description of the tagging, hardened allocator, and pointer-integrity design that changes which bug classes stay profitable on current silicon.
+
+[7] Mark Brand, [*MTE As Implemented, Part 2: Mitigation Case Studies*](https://projectzero.google/2023/08/mte-as-implemented-part-2-mitigation.html) (Project Zero, 2023): the worked example of scoring a tagging mitigation by what a bypass costs the attacker rather than by whether one exists.

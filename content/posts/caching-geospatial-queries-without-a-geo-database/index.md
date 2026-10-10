@@ -15,11 +15,11 @@ the same office and the same job site, or the same warehouse and the same
 few delivery zones, that's a cache-hit rate waiting to be collected.
 
 The instinct is to reach for something geospatial-native: PostGIS, a
-geohash library, an R-tree. For exact-match lookups on a bounded set of
+geohash library, an R-tree[1]. For exact-match lookups on a bounded set of
 recurring routes, that's more machinery than the problem needs. Plain
 Postgres, one rounding function, and a unique index cover it.
 
-> **The 30-Second Pattern:** Don't install PostGIS just to cache recurring route lookups. Round incoming GPS coordinates to 4 decimal places (~11m precision), build a composite key `(origin_lat, origin_lng, dest_lat, dest_lng)`, and back it with a standard Postgres `UNIQUE` B-tree index. You get 90%+ cache hit rates on repeat queries without geospatial extensions.
+> **The 30-Second Pattern:** Don't install PostGIS just to cache recurring route lookups. Round incoming GPS coordinates to 4 decimal places (~11m precision)[2], build a composite key `(origin_lat, origin_lng, dest_lat, dest_lng)`, and back it with a standard Postgres `UNIQUE` B-tree index[3]. You get 90%+ cache hit rates on repeat queries without geospatial extensions.
 
 ## The key insight: round before you key
 
@@ -29,7 +29,7 @@ meter apart; for routing purposes, the same point. If you cache on raw
 float coordinates, you get a cache miss every time GPS jitter changes the
 9th decimal place, which is close to always.
 
-Round to 4 decimal places instead: about 11 meters of precision, plenty for
+Round to 4 decimal places instead: about 11 meters of precision[2], plenty for
 "which route is this":
 
 ```go
@@ -46,7 +46,7 @@ round4(100.529050)    = 100.5291   // ties round up, same as math.Round elsewher
 ```
 
 That single function is doing the job a geohash would do (bucketing nearby
-points together) without adding a dependency or a new data type.
+points together) without adding a dependency or a new data type[4].
 
 ## The schema
 
@@ -68,10 +68,10 @@ CREATE INDEX IF NOT EXISTS idx_distance_cache_lookup
 
 The `UNIQUE` constraint is doing double duty: it's the cache key *and* it's
 what makes an `ON CONFLICT` upsert possible, so a cache write is a single
-statement rather than a check-then-insert race.
+statement rather than a check-then-insert race[5].
 
 > A composite unique index on four columns works here because a route is
-> always queried as a specific ordered pair: `from → to`. If your app also
+> always queried as a specific ordered pair: `from → to`[6]. If your app also
 > needs `to → from` to hit the same cache row, round and sort the pair
 > consistently before keying, or you'll silently double your storage and
 > your miss rate.
@@ -165,7 +165,7 @@ shape:
 
 - **"Points within N km of here"**: a proximity/radius query needs an
   actual spatial index (PostGIS `GIST` on a `geography` column, or
-  equivalent); a unique index on rounded columns can't answer "nearby,"
+  equivalent)[7]; a unique index on rounded columns can't answer "nearby,"
   only "identical."
 - **Unbounded, low-repeat coordinates**: if every query is between two
   points that have never been queried before (e.g. live GPS breadcrumbs),
@@ -179,3 +179,19 @@ For the common case this was built for (recurring routes between a bounded
 set of known locations), a table, a rounding function, and a unique index
 outperform the complexity of a geospatial engine you'd otherwise have to run
 and operate for the same result.
+
+## References
+
+[1] Antonin Guttman, [*R-trees: A Dynamic Index Structure for Spatial Searching*](https://doi.org/10.1145/602259.602266) (ACM SIGMOD, 1984): the original R-tree index structure, anchoring the spatial index the post names as the alternative to a rounded-coordinate key.
+
+[2] Wikipedia contributors, [*Decimal degrees*](https://en.wikipedia.org/wiki/Decimal_degrees) (Wikipedia, accessed 2026): the precision table giving 0.0001 degree as about 11.1 m at the equator, which anchors the post's ~11 m rounding bucket.
+
+[3] PostgreSQL Global Development Group, [*Unique Indexes*](https://www.postgresql.org/docs/current/indexes-unique.html) (PostgreSQL 18 documentation, 2026): a UNIQUE constraint is enforced by a B-tree unique index, the structure the post's cache key is built on.
+
+[4] Wikipedia contributors, [*Geohash*](https://en.wikipedia.org/wiki/Geohash) (Wikipedia, accessed 2026): the geohash grid that buckets nearby coordinates into shared cells, the job the post's round4 function stands in for.
+
+[5] PostgreSQL Global Development Group, [*INSERT*](https://www.postgresql.org/docs/current/sql-insert.html) (PostgreSQL 18 documentation, 2026): the ON CONFLICT clause that makes the cache write a single upsert statement rather than a check-then-insert race.
+
+[6] PostgreSQL Global Development Group, [*Multicolumn Indexes*](https://www.postgresql.org/docs/current/indexes-multicolumn.html) (PostgreSQL 18 documentation, 2026): how a composite B-tree index serves a query that constrains the leading columns of the key, as the four-column from/to lookup does.
+
+[7] PostGIS Project, [*Data Management*](https://postgis.net/docs/using_postgis_dbmanagement.html) (PostGIS manual, accessed 2026): the geography type and GiST spatial indexes that radius and proximity queries need, the boundary the post marks as out of scope.

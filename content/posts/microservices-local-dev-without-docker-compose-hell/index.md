@@ -9,7 +9,7 @@ summary: "You split the monolith into twelve services. Now a new developer's fir
 The [decision checklist]({{< ref "should-you-even-use-microservices" >}})
 mentioned this in passing: running a monolith locally means `go run .` and
 you're done. Running microservices locally means Docker Compose with fifteen
-containers, or a shared staging environment that's always half-broken. This
+containers[1], or a shared staging environment that's always half-broken. This
 post is the practical version of that warning: how to actually structure
 local development so it doesn't become the tax that makes everyone wish
 you'd stayed with the monolith.
@@ -17,13 +17,13 @@ you'd stayed with the monolith.
 The core problem is simple: a microservice architecture assumes network
 calls between services. On your laptop, you don't have a network with
 twelve running services. You have one machine, limited RAM, and a Docker
-daemon that slows to a crawl once you pass six or seven containers. The
+daemon[5] that slows to a crawl once you pass six or seven containers. The
 question is how to get the service you're *working on* running locally
 without needing every other service to be running too.
 
 ## The Docker Compose default, and why it breaks down
 
-The first instinct is a `docker-compose.yml` that runs everything:
+The first instinct is a `docker-compose.yml`[2] that runs everything:
 
 ```yaml
 services:
@@ -47,7 +47,7 @@ A Java service uses 256MB minimum. A PostgreSQL container uses 100MB. A
 Redis container uses 50MB. Twelve services plus infrastructure and you're
 at 2–3GB before your IDE loads. On an 8GB laptop, you're swapping.
 
-**Startup time.** `docker compose up` starts services in dependency order.
+**Startup time.** `docker compose up` starts services in dependency order[3].
 Service A waits for Service B, which waits for Service C. By the time
 everything is healthy, you've made coffee, checked Slack, and forgotten
 what you were working on.
@@ -103,7 +103,7 @@ Canned mocks work, but they don't handle edge cases: what happens when
 the warehouse returns a 503? What happens when the response is missing a
 field? For that, you need a mock that can be configured per-test:
 
-**WireMock** (for HTTP) lets you define stub mappings:
+**WireMock**[6] (for HTTP) lets you define stub mappings:
 
 ```json
 {
@@ -123,7 +123,7 @@ You can set different responses for different request bodies, add delays,
 or simulate flaky behavior. The mock behaves like the real service without
 running it.
 
-**Mountebank** does the same thing across protocols: HTTP, TCP, and
+**Mountebank**[7] does the same thing across protocols: HTTP, TCP, and
 amqp. If your services communicate over a message broker, Mountebank can
 mock the broker's behavior.
 
@@ -136,7 +136,7 @@ staging environment and waiting.
 
 If you do need some real services running (maybe you're testing a workflow
 that spans three services and mocking isn't realistic), Docker Compose
-profiles let you choose which services to start:
+profiles[4] let you choose which services to start:
 
 ```yaml
 services:
@@ -177,17 +177,17 @@ instead of an all-or-nothing commitment.
 The nuclear option that actually works: run the services somewhere else.
 
 **Tilt** and **Skaffold** watch your local code, rebuild the container
-image on change, and deploy to a local Kubernetes cluster (like minikube
-or k3d) or a remote cluster. You edit code locally, Tilt syncs it to the
+image on change, and deploy to a local Kubernetes cluster (like minikube[10]
+or k3d) or a remote cluster[8][9]. You edit code locally, Tilt syncs it to the
 cluster, and the cluster runs the full architecture with proper networking.
 
 **Gitpod** and **GitHub Codespaces** give you a cloud VM with the full
-stack pre-configured. New developers clone the repo, open the IDE, and
+stack pre-configured[12][13]. New developers clone the repo, open the IDE, and
 everything is already running. No Docker setup, no port conflicts, no
 "works on my machine."
 
 **Telepresence** lets you run one service locally while proxying to a
-remote cluster for everything else. You get hot-reload on the service
+remote cluster for everything else[11]. You get hot-reload on the service
 you're changing and real dependencies for everything else.
 
 These solutions cost money (cloud VMs, cluster resources) and add
@@ -236,7 +236,7 @@ layered approach:
    its direct dependencies (database, one or two adjacent services) run in
    containers. This takes a minute to start and tests the real wiring.
 
-3. **Contract tests verify boundaries.** Consumer-driven contracts (from
+3. **Contract tests verify boundaries.** Consumer-driven contracts[14] (from
    the [versioning post]({{< ref "microservices-versioning-without-breaking-everyone" >}}))
    ensure your service's API matches what consumers expect, without
    running the consumers.
@@ -259,3 +259,33 @@ that microservices give you. The teams that handle it well are the ones
 that invest in the tooling early (mocks, profiles, contract tests)
 instead of discovering the pain in their first week and spending the next
 three months fighting Docker Compose.
+
+## References
+
+[1] Docker, [*Docker Compose*](https://docs.docker.com/compose/) (Docker documentation): the multi-container runner and the `docker compose up` command behind the fifteen-container local stack the post starts from.
+
+[2] Docker, [*Compose Specification*](https://compose-spec.io/) (Compose Specification): the normative `services:` file format that both YAML examples in this post are written in.
+
+[3] Docker, [*Define services in Docker Compose*](https://docs.docker.com/reference/compose-file/services/#depends_on) (Docker Compose file reference): the `depends_on` attribute and its conditions, which govern the dependency-ordered startup described under "Startup time".
+
+[4] Docker, [*Using profiles with Compose*](https://docs.docker.com/compose/how-tos/profiles/) (Docker documentation): the `profiles` attribute and `--profile` flag behind Pattern 3, including the rule that a service with no profile always starts.
+
+[5] Docker, [*What is Docker?*](https://docs.docker.com/get-started/docker-overview/) (Docker documentation): the client and daemon architecture of Docker Engine, the process that hosts every container in the compose setup.
+
+[6] WireMock, [*Stubbing*](https://wiremock.org/docs/stubbing/) (WireMock documentation): the request, response, and priority stub mapping JSON used in Pattern 2.
+
+[7] Brandon Byars, [*mountebank - http*](https://www.mbtest.dev/docs/protocols/http) (mountebank documentation): the imposter and stub response model behind the multi-protocol test double in Pattern 2.
+
+[8] Tilt, [*Getting Started With Tilt*](https://docs.tilt.dev/) (Tilt documentation): the build, sync, and live-update loop Pattern 4 attributes to Tilt.
+
+[9] Skaffold, [*skaffold dev*](https://skaffold.dev/docs/workflows/dev/) (Skaffold documentation): the file-watching, rebuild, and redeploy loop Pattern 4 attributes to Skaffold.
+
+[10] Kubernetes SIGs, [*minikube start*](https://minikube.sigs.k8s.io/docs/start/) (minikube documentation): the single-node local Kubernetes cluster named as a Pattern 4 deployment target.
+
+[11] Telepresence, [*Quick start*](https://telepresence.io/docs/quick-start) (Telepresence documentation): the intercept model in which a locally running service receives traffic from a remote cluster.
+
+[12] GitHub, [*What are GitHub Codespaces?*](https://docs.github.com/en/codespaces/about-codespaces/what-are-codespaces) (GitHub documentation): the hosted development environment with a stack preconfigured from a repository.
+
+[13] Gitpod, [*Gitpod documentation*](https://www.gitpod.io/docs) (Gitpod documentation): the cloud development environment the post names next to Codespaces; the URL redirects to the vendor's Ona documentation after the rebrand.
+
+[14] Pact Foundation, [*Writing Consumer tests*](https://docs.pact.io/consumer) (Pact documentation): consumer-driven contract testing, the third layer of the test stack in "What actually works in practice".

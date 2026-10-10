@@ -45,7 +45,7 @@ change to Service A's API, Services B through G don't automatically update.
 They're still running the old code that expects the old shape. Some of them
 might deploy today, some next week, some next quarter. During that window,
 the old and new versions of your API have to coexist; the old version
-has to keep working for consumers that haven't upgraded yet.
+has to keep working for consumers that haven't upgraded yet[3].
 
 This creates a compatibility matrix. With N services and M API versions, you
 might have N×M combinations to think about. In practice, you don't, but
@@ -55,7 +55,7 @@ small and the transition path clear.
 ## The expand-contract pattern
 
 The single most practical versioning strategy is **expand-contract** (also
-called parallel change or cross-phase). The rule is simple:
+called parallel change or cross-phase)[1]. The rule is simple:
 
 1. **Expand**: add the new field alongside the old one. Both exist.
 2. **Migrate**: consumers switch to the new field at their own pace.
@@ -89,7 +89,7 @@ API is clean, and you're back to one version.
 
 > The discipline is in the contract phase. Teams that expand but never
 > contract end up with APIs full of deprecated fields that nobody dares
-> remove. Add a metric: track how many requests still read the old field.
+> remove[2]. Add a metric: track how many requests still read the old field.
 > When it drops to zero, remove it. When it doesn't drop to zero, find out
 > who's still reading it and talk to them.
 
@@ -99,11 +99,11 @@ When you need genuinely incompatible changes (not just adding a field but
 changing the semantics of the entire response), you need to version the API
 itself. There are two practical approaches:
 
-**URL versioning** (`/v1/stock`, `/v2/stock`) is explicit and visible. You
+**URL versioning** (`/v1/stock`, `/v2/stock`) is explicit and visible[4]. You
 can see which version you're calling. It's easy to route, easy to document,
 and easy to debug. The downside: it leaks implementation details into your
 URLs, and it gives consumers an excuse to stay on v1 forever because v1
-still works.
+still works[5].
 
 **Header versioning** (`Accept: application/vnd.musiccorp.v2+json`) keeps
 your URLs clean and makes versioning a negotiation between client and server.
@@ -137,21 +137,21 @@ message Warehouse {
 ```
 
 Protobuf's rule: old code ignores unknown fields. So when you add field 4,
-old consumers that don't know about it simply skip it: no error, no crash.
+old consumers that don't know about it simply skip it: no error, no crash[6].
 When you remove field 3, new consumers that expected it check for its
 presence. This gives you safe forward and backward compatibility by default,
 as long as you follow two rules:
 
-1. **Never reuse a field number.** If you remove field 3, leave it reserved.
+1. **Never reuse a field number.** If you remove field 3, leave it reserved[6].
    Don't assign a new meaning to number 3; old code might still be sending
    data with that number.
 2. **Use optional for fields that might not be present.** New consumers
    checking a removed field need to handle its absence.
 
 Avro gives you something even better for schema evolution: a writer's schema
-and a reader's schema that the system reconciles automatically. If the
+and a reader's schema that the system reconciles automatically[7]. If the
 writer sends field A and field B, and the reader expects field B and field
-C`, the system fills in a default for C and ignores A. You don't have to
+C`, the system fills in a default for C and ignores A[7]. You don't have to
 think about forward compatibility per se; the format handles it.
 
 > If you're building new services and choosing a wire format, protobuf or
@@ -166,14 +166,14 @@ Expand-contract handles the "add then remove" lifecycle. But how do you
 know when it's safe to remove the old field? How do you know that no
 consumer still depends on it?
 
-**Consumer-driven contracts** flip the testing direction. Instead of the
+**Consumer-driven contracts** flip the testing direction[8]. Instead of the
 provider testing that its API works, each consumer defines what it needs:
 "I expect `GET /stock/{sku}` to return an object with `quantity` as an
 integer." The provider runs all consumers' contracts against its API before
 deploying. If any contract fails, the deploy is blocked.
 
 The practical entry point is Pact, an open-source contract testing
-framework. The consumer writes a contract:
+framework[8]. The consumer writes a contract:
 
 ```python
 # consumer side
@@ -268,3 +268,21 @@ safely. And if the incident scenario above made you wince, the
 [debugging post]({{< ref "debugging-microservices-where-did-that-request-go" >}})
 covers the tooling that would have cut the investigation time from four
 hours to fifteen minutes.
+
+## References
+
+[1] Danilo Sato, [*Parallel Change*](https://martinfowler.com/bliki/ParallelChange.html) (martinfowler.com bliki, 2014): defines the expand, migrate, and contract phases of the pattern this post calls expand-contract, including the migrate window that stays open as long as external clients take.
+
+[2] Erik Wilde, [*The Sunset HTTP Header Field*](https://www.rfc-editor.org/rfc/rfc8594.html) (IETF RFC 8594, 2019): the response header and sunset link relation that announce when a URI will stop responding, the standard signaling boundary for the contract phase.
+
+[3] Google, [*AIP-180: Backwards compatibility*](https://google.aip.dev/180) (Google API Improvement Proposals, 2019): separates source, wire, and semantic compatibility, and requires old clients to keep working against newer servers within one major version.
+
+[4] Tom Preston-Werner, [*Semantic Versioning 2.0.0*](https://semver.org/) (SemVer specification, 2013): reserves MAJOR increments for backwards-incompatible API changes, the convention behind moving from a v1 URL to v2.
+
+[5] Google, [*AIP-185: API Versioning*](https://google.aip.dev/185) (Google API Improvement Proposals, 2024): places the major version at the front of the URI path, requires two versions to run side by side during a transition period, and requires a communicated deprecation period before shutdown.
+
+[6] Google, [*Language Guide (proto 3)*](https://protobuf.dev/programming-guides/proto3/) (Protocol Buffers documentation): field numbers are permanent, deleted numbers and names are reserved so they cannot be reused, old binaries ignore unknown fields, and `optional` records field presence.
+
+[7] Apache Software Foundation, [*Apache Avro 1.12.0 Specification*](https://avro.apache.org/docs/1.12.0/specification/) (Avro specification, 2024): schema resolution reconciles a writer's schema with a reader's schema and fills fields the reader expects but the writer omitted from declared defaults.
+
+[8] Pact Foundation, [*Pact Documentation*](https://docs.pact.io/) (Pact documentation): consumer-defined contracts and provider verification, the mechanism that blocks a deploy when a consumer still expects a removed field.

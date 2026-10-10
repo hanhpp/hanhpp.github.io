@@ -20,13 +20,13 @@ questions, really:
 
 Those two axes give you four communication styles, plus a fifth (sharing
 data through a common store) that's easy to miss because it barely looks
-like communication at all. Get this decision right first, and the
+like communication at all.[1] Get this decision right first, and the
 technology choice in the next post becomes a much shorter conversation.
 
 ## Why "just make it a network call" doesn't work
 
 It's tempting to treat a call to another service like a method call on an
-object: cross the process boundary, get an answer back, move on. Three
+object: cross the process boundary, get an answer back, move on.[2] Three
 things break that illusion immediately:
 
 - **Performance.** An in-process call can be inlined away by the compiler.
@@ -43,7 +43,7 @@ things break that illusion immediately:
   response that never makes it back because the caller died in the
   meantime. Distributed systems research breaks this down into crash,
   omission, timing, response, and (worst of all) *arbitrary* failures, where
-  the parties involved can't even agree that something went wrong.
+  the parties involved can't even agree that something went wrong.[1][3]
 
 None of that is a reason to avoid inter-process communication; it's a
 reason to design for it deliberately, which is what the rest of this post
@@ -95,7 +95,7 @@ reconstruct what it was for.
 > A word of caution before you get excited about async everywhere: it
 > trades one set of headaches (blocking, cascading failure) for another
 > (out-of-order delivery, duplicate messages, "did that response go
-> anywhere?"). It's not simpler, just differently complex. Good monitoring
+> anywhere?"). It's not simpler, just differently complex.[1] Good monitoring
 > and a correlation ID on every message are not optional extras here:
 > they're how you'll debug the "where did this message go" question at 2 a.m.
 
@@ -106,11 +106,11 @@ service to do something and expecting to hear back? That's
 request-response, and it works in either flavor:
 
 - **Synchronous request-response**: `Chart` asks `Inventory` for current
-  stock levels over HTTP, blocks, gets an answer.
+  stock levels over HTTP, blocks, gets an answer.[4]
 - **Asynchronous request-response**: `OrderProcessor` puts a "reserve
   stock" message on a queue; `Inventory` picks it up whenever it's free,
   does the work, and puts the response on a reply queue that
-  `OrderProcessor` reads from.
+  `OrderProcessor` reads from.[5]
 
 Request-response is the right shape whenever you genuinely need the result
 before you can continue, or you need to know whether something failed so
@@ -130,7 +130,7 @@ three things in a row because that's how it was written.
 This is the odd one out, and it's worth sitting with because the mental
 model is genuinely inverted from request-response. Instead of asking a
 specific service to do something, a service just broadcasts a fact:
-*"this happened."* `Warehouse` fires an event when a package is packed. It
+*"this happened."*[6] `Warehouse` fires an event when a package is packed. It
 does not know or care who's listening: `Notifications` might send an
 email, `Inventory` might adjust stock counts, both, or neither. The emitter
 is unaware of, and doesn't need to be aware of, who consumes its events.
@@ -144,22 +144,22 @@ The catch is what goes *inside* the event. Two options:
 
 - **Just an ID**: consumers that need more than the ID have to call back
   to fetch it, which reintroduces domain coupling and can hammer the source
-  service if many consumers all react to the same event.
+  service if many consumers all react to the same event.[7]
 - **Fully detailed**: put in everything a consumer would reasonably need,
   the same as you would for a request-response payload. This is generally
   the better default, at the cost of the event becoming a wider contract
   you now have to maintain (remove a field later, and you might break
-  someone quietly depending on it).
+  someone quietly depending on it).[7]
 
 Events are also, by their nature, always asynchronous: there's no such
 thing as a synchronous broadcast, since the emitter by design doesn't wait
-for anyone.
+for anyone.[7]
 
 ## The pattern you don't notice: communication through common data
 
 The fifth style barely feels like "communication" because it's so indirect:
 one service drops data somewhere (a file, a data lake, a shared table) and
-one or more other services pick it up later, usually by polling.
+one or more other services pick it up later, usually by polling.[1]
 Despite feeling informal, this is arguably the most common integration
 pattern in existence, especially for large data volumes or when you need
 interoperability with something that can't speak your API's protocol (an
@@ -169,14 +169,14 @@ gRPC).
 The failure mode to watch is the same **common coupling** from the last
 post: if multiple services both *read and write* the shared store, you've
 built exactly the tangled shared-database problem coupling analysis was
-supposed to help you avoid. Keep the flow of information one-directional
+supposed to help you avoid.[8] Keep the flow of information one-directional
 (publisher writes, consumers only read) and this pattern is genuinely
 useful rather than an accident waiting to surface.
 
 ## Mix and match, on purpose
 
 A real microservice architecture is not "we do REST" or "we do events";
-it's a deliberate mix. It's entirely normal for one service to expose a
+it's a deliberate mix.[1] It's entirely normal for one service to expose a
 synchronous request-response API for placing an order *and* fire events
 when the order's state changes, serving both an immediate caller and any
 number of interested listeners. The skill isn't picking one style
@@ -189,3 +189,21 @@ These are technology-agnostic patterns: none of them mandate REST,
 gRPC, or Kafka specifically. Next up: which actual technology fits which
 pattern, and where the popular choices (REST, gRPC, GraphQL, message
 brokers) genuinely differ.
+
+## References
+
+[1] Sam Newman, [*Building Microservices: Designing Fine-Grained Systems*, 2nd edition](https://samnewman.io/books/building_microservices_2nd_edition) (O'Reilly Media, 2021): Chapter 4 defines the five communication styles this post follows (synchronous blocking, asynchronous nonblocking, communication through common data, request-response, and event-driven), their coupling costs, and the advice to mix styles deliberately.
+
+[2] gRPC Authors, [*Introduction to gRPC*](https://grpc.io/docs/what-is-grpc/introduction/) (gRPC documentation, 2024): defines the RPC model as calling a method on a server "as if it were a local object", the method-call illusion the first section takes apart.
+
+[3] Flavin Cristian, [*Understanding fault-tolerant distributed systems*](https://doi.org/10.1145/102792.102801) (Communications of the ACM 34(2), 1991, pages 56-78): the failure taxonomy of crash, omission, timing, response, and arbitrary failures that the network-failure bullet summarizes.
+
+[4] R. Fielding, M. Nottingham, and J. Reschke (eds.), [*RFC 9110: HTTP Semantics*](https://www.rfc-editor.org/rfc/rfc9110.html) (IETF Standards Track RFC, June 2022): defines HTTP's stateless request/response exchange, the protocol underneath synchronous request-response over HTTP.
+
+[5] OASIS, [*Advanced Message Queuing Protocol (AMQP) Version 1.0, Part 3: Messaging*](https://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-messaging-v1.0-os.html) (OASIS Standard, 29 October 2012): defines the reply-to and correlation-id message properties, the wire-level reply queue and request/response correlation in asynchronous request-response.
+
+[6] Cloud Native Computing Foundation, [*CloudEvents Specification, version 1.0.2*](https://raw.githubusercontent.com/cloudevents/spec/v1.0.2/cloudevents/spec.md) (CNCF specification, February 2022): defines an event as a data record expressing an occurrence, where an occurrence is a captured statement of fact, the broadcast model behind the event-driven style.
+
+[7] Martin Fowler, [*What do you mean by "Event-Driven"?*](https://martinfowler.com/articles/201701-event-driven.html) (martinfowler.com, 2017): separates event notification, which carries little more than an ID and expects no answer, from event-carried state transfer, which ships the full data consumers need without a callback.
+
+[8] Chris Richardson, [*Pattern: Shared database*](https://microservices.io/patterns/data/shared-database.html) (microservices.io pattern language): the shared store that multiple services freely read and write, and the development-time and runtime coupling that follows.

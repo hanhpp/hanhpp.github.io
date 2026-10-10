@@ -7,7 +7,7 @@ summary: "Each service owns its database. That's the rule. But when a report nee
 ---
 
 The [sagas post]({{< ref "microservices-sagas-vs-two-phase-commit" >}})
-covered why services shouldn't share database transactions. This post covers
+covered why services shouldn't share database transactions [2]. This post covers
 the architectural consequence of that rule: if each service owns its own
 database, how do you answer questions that span multiple services?
 
@@ -16,13 +16,13 @@ about payments. The warehouse service knows about stock. The customer
 service knows about addresses and preferences. When a customer asks "show
 me my recent orders with their payment status and shipping tracking," that
 query touches four databases. In a monolith, it's one SQL join. In
-microservices, there's no join across service boundaries, and that's the
+microservices, there's no join across service boundaries [1], and that's the
 point. The question is what you do instead.
 
 ## Why database-per-service is the rule
 
 Before the patterns, the reason: if two services share a database, a
-schema change in one service breaks the other. Service A renames a column.
+schema change in one service breaks the other [1]. Service A renames a column.
 Service B, which queries that column directly, starts failing. You've
 reintroduced the coupling you were trying to escape, not through the API,
 but through the data layer.
@@ -38,7 +38,7 @@ The rule exists for the same reason the
 [coupling post]({{< ref "microservices-boundaries-coupling-cohesion" >}})
 exists: to keep service boundaries meaningful. A service that owns its
 database can evolve its data model freely, run migrations without coordinating
-with other teams, and scale its storage independently. That's the value
+with other teams, and scale its storage independently [1]. That's the value
 proposition. The cost is the query problem.
 
 ## Pattern 1: API composition
@@ -70,7 +70,7 @@ func GetOrderSummary(ctx context.Context, orderID string) (OrderSummary, error) 
 ```
 
 This is a **composition query**: one service acts as the aggregator, calls
-multiple downstream services, and assembles the result. It's straightforward
+multiple downstream services, and assembles the result [3]. It's straightforward
 and easy to understand.
 
 The problems:
@@ -84,7 +84,7 @@ The problems:
   every composition query.
 - **No cross-service joins.** You can't sort by "orders with payments over
   $100, shipped in the last week" without fetching everything and filtering
-  in memory. That works for small result sets. It doesn't work for
+  in memory [3]. That works for small result sets. It doesn't work for
   analytics.
 
 API composition is the right choice for **simple read paths** where the
@@ -95,7 +95,7 @@ bounded (a single order, a user profile, a product detail page).
 
 **Command Query Responsibility Segregation** splits the data model into two:
 a **write model** (the service's authoritative database, optimized for
-transactions) and a **read model** (a separate store optimized for queries).
+transactions) and a **read model** (a separate store optimized for queries) [4].
 
 The write side stays as-is: the order service has its orders table, the
 payment service has its payments table, each with its own schema optimized
@@ -120,12 +120,12 @@ payment and shipment data, and writes a denormalized "order summary" row to
 the read store. When the customer asks for their order history, the query
 hits the read store: one fast SELECT, no cross-service calls.
 
-The read store can be anything: a PostgreSQL table with the right indexes,
-an Elasticsearch index for full-text search, a Redis cache for hot data.
-The point is that it's shaped for the query, not for the write.
+The read store can be anything: a PostgreSQL table with the right indexes
+[8], an Elasticsearch index for full-text search, a Redis cache for hot data
+[7]. The point is that it's shaped for the query, not for the write.
 
 **The trade-off is eventual consistency.** The read model is updated
-asynchronously. There's a window (typically milliseconds) between "the
+asynchronously [4]. There's a window (typically milliseconds) between "the
 write happened" and "the read model reflects it." If the customer places an
 order and immediately refreshes the page, they might not see it yet. For
 most use cases, this is fine. For financial reporting or audit trails, it
@@ -139,7 +139,7 @@ CQRS is the right choice when:
 ## Pattern 3: Event sourcing (store what happened, not what is)
 
 Event sourcing takes the CQRS write model further: instead of storing the
-current state of an entity, you store every event that led to it.
+current state of an entity, you store every event that led to it [5].
 
 ```
 Order 8842 events:
@@ -152,7 +152,7 @@ Order 8842 events:
 The current state is derived by replaying events: start with an empty
 order, apply each event in order, and you end up with the current state.
 This gives you a complete audit trail for free: you can reconstruct the
-state at any point in time, not just the current state.
+state at any point in time, not just the current state [5].
 
 Event sourcing solves the cross-service query problem in a different way:
 events are the shared language. The order service emits `OrderPlaced`. The
@@ -189,7 +189,7 @@ For analytics and business intelligence, none of the above patterns are
 quite right. You don't want to compose API calls in real time for a
 dashboard that queries six months of data. You want a **reporting database**:
 a copy of all relevant data, assembled into a single store, optimized for
-analytical queries.
+analytical queries [6].
 
 The mechanism is the same as CQRS projections: services emit events, a
 pipeline consumes them, and a reporting database stores the denormalized
@@ -245,3 +245,21 @@ sourcing depending on complexity and freshness requirements. The reporting
 database covers analytics. And sometimes, the pragmatic answer is a shared
 database with clear ownership; just make sure the coupling is a conscious
 choice, not an accident.
+
+## References
+
+[1] Chris Richardson, [Pattern: Database per service](https://microservices.io/patterns/data/database-per-service.html) (Microservice Architecture pattern catalog): the defining statement of the rule that each service owns a private datastore, the loose coupling and independent scaling it buys, and the drawback that queries joining data owned by several services are no longer straightforward.
+
+[2] Hector Garcia-Molina and Kenneth Salem, [*Sagas*](https://doi.org/10.1145/38713.38742) (*Proceedings of the 1987 ACM SIGMOD International Conference on Management of Data*, 1987): the original long-lived-transaction decomposition into a sequence of subtransactions with compensating actions, the canonical anchor for keeping writes consistent across services without sharing a database transaction.
+
+[3] Chris Richardson, [Pattern: API Composition](https://microservices.io/patterns/data/api-composition.html) (Microservice Architecture pattern catalog): the aggregator pattern for queries spanning several services, including its drawback that large result sets degrade into inefficient in-memory joins.
+
+[4] Chris Richardson, [Pattern: Command Query Responsibility Segregation (CQRS)](https://microservices.io/patterns/data/cqrs.html) (Microservice Architecture pattern catalog): the split into a command model and an event-fed, denormalized view database, whose listed drawbacks include replication lag and eventually consistent views.
+
+[5] Martin Fowler, [Event Sourcing](https://martinfowler.com/eaaDev/EventSourcing.html) (2005): storing application state as an append-only sequence of events that is replayed to derive current state and to reconstruct any prior state.
+
+[6] Martin Fowler, [Reporting Database](https://martinfowler.com/bliki/ReportingDatabase.html) (2014): the separate copy of the data maintained for decision support and analysis, because operational updates and reporting have different schema and access requirements.
+
+[7] Martin Fowler, [Polyglot Persistence](https://martinfowler.com/bliki/PolyglotPersistence.html) (2011): using different data storage technologies for different kinds of data, which is what lets a read model live in whichever store fits the query.
+
+[8] PostgreSQL Global Development Group, [PostgreSQL 18 Documentation: Chapter 11. Indexes](https://www.postgresql.org/docs/current/indexes.html) (PostgreSQL 18): the index types and multicolumn and ordering support that turn a filtered read-store query into an index scan instead of a sequential pass over the table.

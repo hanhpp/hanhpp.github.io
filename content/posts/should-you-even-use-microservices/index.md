@@ -25,7 +25,7 @@ pattern that happens to require technology to implement. The core value
 isn't "services are smaller so they're easier to understand": a well-structured
 monolith with clean module boundaries gives you that. The core value is
 **independent deployability**: Team A can ship their changes on Tuesday
-without coordinating with Team B's release on Thursday.
+without coordinating with Team B's release on Thursday [1].
 
 That only matters when you have enough teams that coordination is genuinely
 slowing you down. If your engineering team can fit around a single table,
@@ -49,8 +49,8 @@ order and reserving stock can be one database transaction. If the stock
 reservation fails, the order never happened. With microservices, you now
 have two separate transactions that can each succeed or fail independently.
 You can get most of the way back with patterns like sagas (covered later in
-this series), but "most of the way back" is not "all the way back." You're
-accepting eventual consistency where you once had strong consistency, and
+this series) [3], but "most of the way back" is not "all the way back." You're
+accepting eventual consistency where you once had strong consistency [2], and
 that trade-off shows up in surprising places, like the customer who sees
 their order confirmation before the payment fails.
 
@@ -59,7 +59,7 @@ stack trace from top to bottom. Debugging microservices means grepping
 across three services' logs, correlating by request ID, and trying to
 reconstruct a timeline that spans multiple processes. At 2 AM. With
 incomplete logs because one service was deployed with a logging level that's
-too quiet. Distributed tracing tools like OpenTelemetry help, but they're
+too quiet. Distributed tracing tools like OpenTelemetry help [4], but they're
 additional infrastructure you now have to run, configure, and teach your
 team to use. If you want to see what this debugging experience actually
 looks like (and what tooling makes it survivable), see
@@ -141,12 +141,12 @@ system keeps running. Before you adopt microservices, you need:
 
 - Structured, centralized logging (not just `log.Printf` to stdout)
 - Distributed tracing across service boundaries
-- Health checks and circuit breakers on every inter-service call
+- Health checks and circuit breakers on every inter-service call [5]
 - An on-call rotation that can handle "the system is 80% up" instead of
-  "the system is down"
+  "the system is down" [6]
 
 If you don't have these yet, building them as part of a microservices
-migration is like learning to swim by jumping into the ocean. Build the
+migration is like learning to swim by jumping into the ocean [7]. Build the
 observability stack first; if you're not sure where to start, see
 [debugging microservices]({{< ref "debugging-microservices-where-did-that-request-go" >}})
 for the minimum viable setup. If you can't justify the observability
@@ -178,7 +178,7 @@ The rules are simple:
    without spinning up the whole application, the boundary isn't clean
    enough.
 4. **One team owns each module** (or at least one module has a clear primary
-   owner). Ownership means "responsible for the module's API, internal
+   owner) [8]. Ownership means "responsible for the module's API, internal
    design, and the data it manages."
 
 A modular monolith gives you 80% of the organizational benefit of
@@ -207,3 +207,21 @@ We start with the hardest and most consequential decision: how to draw the
 boundaries so they actually hold up. That's where most microservice
 architectures succeed or fail, and it's where we'll begin: [what actually
 makes a good microservice boundary]({{< ref "microservices-boundaries-coupling-cohesion" >}}).
+
+## References
+
+[1] James Lewis and Martin Fowler, [*Microservices*](https://martinfowler.com/articles/microservices.html) (martinfowler.com, 2014): the definition of the microservice architectural style as a suite of small, independently deployable services, and the source of the independent-deployability criterion this post rests on.
+
+[2] Martin Fowler, [*Microservice Trade-Offs*](https://martinfowler.com/articles/microservice-trade-offs.html) (martinfowler.com, 2015): the cost side of the ledger, naming distribution, eventual consistency, and operational complexity as what the style charges for its benefits.
+
+[3] Hector Garcia-Molina and Kenneth Salem, [*Sagas*](https://doi.org/10.1145/38713.38742) (ACM SIGMOD '87, pages 249-259): the compensating-transaction sequence that replaces one cross-service transaction, the pattern behind "most of the way back" to ACID.
+
+[4] OpenTelemetry, [*Traces*](https://opentelemetry.io/docs/concepts/signals/traces/) (OpenTelemetry documentation): spans and trace context as the mechanism that correlates a single request across process boundaries.
+
+[5] Martin Fowler, [*CircuitBreaker*](https://martinfowler.com/bliki/CircuitBreaker.html) (martinfowler.com, 2014): the trip-and-reset wrapper that keeps a caller from hammering a remote call that is failing or hanging.
+
+[6] Rob Ewaschuk (edited by Betsy Beyer), [*Monitoring Distributed Systems*](https://sre.google/sre-book/monitoring-distributed-systems/) (Google SRE Book, 2017): symptom-based alerting and the rules for what should page a human when a system is only partly degraded rather than fully down.
+
+[7] Martin Fowler, [*Microservice Prerequisites*](https://martinfowler.com/bliki/MicroservicePrerequisites.html) (martinfowler.com, 2014): rapid provisioning, basic monitoring, and rapid deployment as the baseline competencies to have in place before adopting the style.
+
+[8] Melvin E. Conway, [*How Do Committees Invent?*](https://www.melconway.com/Home/Committees_Paper.html) (Datamation, April 1968): Conway's law, the observation that a system's structure copies the communication structure of the organization that designed it, which is why one owner has to follow each module boundary.
