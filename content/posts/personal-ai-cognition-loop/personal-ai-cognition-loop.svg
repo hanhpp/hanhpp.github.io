@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 560" width="920" height="560">
+  <defs>
+    <style>
+      .bg { fill: #0f172a; rx: 12px; }
+      .title { font-family: 'Poppins', system-ui, sans-serif; font-size: 16px; font-weight: 700; fill: #f8fafc; }
+      .subtitle { font-family: 'Source Code Pro', monospace; font-size: 12px; fill: #94a3b8; }
+      .card { rx: 8px; stroke-width: 1.5; }
+      .capture { fill: #172554; stroke: #818cf8; }
+      .learn { fill: #3b0764; stroke: #c084fc; }
+      .memory { fill: #082f49; stroke: #38bdf8; }
+      .act { fill: #064e3b; stroke: #34d399; }
+      .audit { fill: #422006; stroke: #f59e0b; }
+      .heading { font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 700; }
+      .body { font-family: 'Source Code Pro', monospace; font-size: 10.5px; fill: #cbd5e1; }
+      .arrow { stroke: #64748b; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .arrow-label { font-family: 'Source Code Pro', monospace; font-size: 10px; fill: #94a3b8; }
+    </style>
+    <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M 0 0 L 8 4 L 0 8 z" fill="#64748b" />
+    </marker>
+  </defs>
+
+  <rect width="920" height="560" class="bg" />
+  <text x="40" y="38" class="title">The Personal AI Cognition Loop</text>
+  <text x="40" y="58" class="subtitle">A learning system with human attempts, provenance, approval gates, and scheduled recall</text>
+
+  <g transform="translate(40, 90)">
+    <rect width="250" height="115" class="card capture" />
+    <text x="18" y="27" class="heading" fill="#a5b4fc">1. CAPTURE &amp; ROUTE</text>
+    <text x="18" y="51" class="body">Notes, code, voice, papers, events</text>
+    <text x="18" y="68" class="body">Classify sensitivity before egress</text>
+    <text x="18" y="85" class="body">Local, API, or zero-egress route</text>
+  </g>
+
+  <g transform="translate(335, 90)">
+    <rect width="250" height="115" class="card learn" />
+    <text x="18" y="27" class="heading" fill="#e9d5ff">2. ATTEMPT &amp; SCAFFOLD</text>
+    <text x="18" y="51" class="body">Human prediction comes first</text>
+    <text x="18" y="68" class="body">Hint ladder, not instant answer</text>
+    <text x="18" y="85" class="body">Difficulty adapts to prior knowledge</text>
+  </g>
+
+  <g transform="translate(630, 90)">
+    <rect width="250" height="115" class="card memory" />
+    <text x="18" y="27" class="heading" fill="#7dd3fc">3. RETRIEVE &amp; VERIFY</text>
+    <text x="18" y="51" class="body">BM25 plus semantic retrieval</text>
+    <text x="18" y="68" class="body">Citations and confidence ledger</text>
+    <text x="18" y="85" class="body">Reject unsupported synthesis</text>
+  </g>
+
+  <path d="M 290 147 L 330 147" class="arrow" />
+  <text x="292" y="135" class="arrow-label">classified input</text>
+  <path d="M 585 147 L 625 147" class="arrow" />
+  <text x="586" y="135" class="arrow-label">evidence</text>
+
+  <g transform="translate(335, 280)">
+    <rect width="250" height="115" class="card act" />
+    <text x="18" y="27" class="heading" fill="#86efac">4. REMEMBER &amp; REVIEW</text>
+    <text x="18" y="51" class="body">Human approves memory writes</text>
+    <text x="18" y="68" class="body">Spaced retrieval schedule</text>
+    <text x="18" y="85" class="body">Weekly reflection batch</text>
+  </g>
+
+  <path d="M 755 205 C 755 250, 585 250, 585 275" class="arrow" />
+  <text x="650" y="243" class="arrow-label">accepted lesson</text>
+  <path d="M 460 280 C 460 235, 165 235, 165 210" class="arrow" />
+  <text x="230" y="243" class="arrow-label">next review prompt</text>
+
+  <g transform="translate(40, 440)">
+    <rect width="840" height="80" class="card audit" />
+    <text x="20" y="27" class="heading" fill="#fbbf24">5. APPROVAL &amp; AUDIT BOUNDARY</text>
+    <text x="20" y="50" class="body">The AI may draft notes, tasks, messages, and patches. It may not send, commit, delete, pay, or publish without explicit approval.</text>
+    <text x="20" y="67" class="body">Track egress, tool calls, rejected suggestions, recall results, and cost per retained lesson.</text>
+  </g>
+</svg>
