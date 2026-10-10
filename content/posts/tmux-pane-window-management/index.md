@@ -6,7 +6,7 @@ tags: ["cli", "workflow", "terminal"]
 summary: "Most tmux guides dump the whole key table on you. These are the pane and window bindings that survive contact with a real workday: splits, navigation, layout, and the marked-pane tricks tmux never bound for you."
 ---
 
-tmux has ~200 default keybindings [10], and memorizing them is the wrong goal. The set that pays rent daily is maybe fifteen keys, plus three commands tmux deliberately left unbound that solve the problems the bound keys can't. This post is that set, not the man page.
+tmux has 265 default keybindings [10], and memorizing them is the wrong goal. The set that pays rent daily is maybe fifteen keys, plus three commands tmux deliberately left unbound that solve the problems the bound keys can't. This post is that set, not the man page.
 
 > **The 30-Second Cheatsheet:** If you only memorize five bindings: `prefix z` (zoom pane), `prefix ;` (jump to last active pane), `prefix %` / `prefix "` (vertical/horizontal split), `prefix c` (new window), and `prefix l` (last window) [1]. For the three load-bearing commands tmux never bound (`join-pane`, `move-pane`, `break-pane`), jump to [The four movers](#the-four-movers-tmux-never-bound).
 
