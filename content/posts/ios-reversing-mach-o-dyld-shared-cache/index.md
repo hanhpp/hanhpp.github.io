@@ -290,7 +290,7 @@ Next in the series, [the patch-margin work]({{< ref "xnu-patch-margin-research" 
 
 [1] [Apple Open Source: dyld](https://github.com/apple-oss-distributions/dyld): canonical repository for the dynamic linker, dyld shared cache builder, image mapping tables, and chained fixup parser implementations.
 
-[2] [Apple Developer: Mach-O Runtime Architecture](https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/MachORuntime/): reference specification for Mach-O headers, load commands, and segment memory protections.
+[2] [Apple Developer: Mach-O Programming Topics](https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/MachOTopics/0-Introduction/introduction.html): reference specification for Mach-O headers, load commands, and segment memory protections.
 
 [3] [blacktop/ipsw](https://github.com/blacktop/ipsw): open-source Go-based research suite for extracting and analyzing iOS IPSWs, Mach-O binaries, symbols, and dyld shared caches.
 

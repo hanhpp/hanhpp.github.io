@@ -590,7 +590,7 @@ This post covers the method that needs nothing beyond a source tree. The last pa
 
 [3] Project Zero, [0day Exploit Root Cause Analyses](https://googleprojectzero.blogspot.com/p/rca.html): canonical index of root-cause analyses, variant hunting methodology, and patch-verification write-ups for disclosed in-the-wild zero-days.
 
-[4] Brandon Azad, [voucher_swap: Exploiting MIG reference counting in iOS 12](https://googleprojectzero.blogspot.com/2019/01/voucher-swap-exploiting-mig-reference.html): technical breakdown of XNU Mach message handling, port rights, MIG stubs, and memory boundary verification.
+[4] Brandon Azad, [voucher_swap: Exploiting MIG reference counting in iOS 12](https://projectzero.google/2019/01/voucherswap-exploiting-mig-reference.html): technical breakdown of XNU Mach message handling, port rights, MIG stubs, and memory boundary verification.
 
 [5] [Apple Platform Security Guide](https://support.apple.com/guide/security/welcome/web): architectural overview of kalloc type isolation, Pointer Authentication Codes, and hardware memory safety mitigations in contemporary Apple silicon.
 
