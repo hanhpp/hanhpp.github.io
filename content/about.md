@@ -5,28 +5,10 @@ draft: false
 description: "Notes on lower layers, security, and whatever I end up curious about."
 ---
 
-I build things with code and sometimes break things on purpose.
+I build things with code, and then break them on purpose to find out how they work.
 
-I like understanding the inner workings of things, which usually means
-going down a layer or two until the answer stops being "because that is
-what the framework does".
+Every program is open source if you are patient enough.
 
-I like games too. Probably where the habit started.
+There is always another layer under the one you just understood, and that is the part I like. Learning does not stop at the answer that works. It stops at the answer you can explain.
 
-Hobbyist pentester, and I mean the hobbyist part. I don't sell findings or
-run engagements. What I write reflects that: mechanisms, dead ends, and the
-naive attempt before the working one.
-
-This blog is where I write down the things I learn so I don't forget them.
-Mostly technical: systems, security, and whatever holds my attention at the
-moment. Sometimes not.
-
-I believe the best way to learn something is to build it, break it, and
-then write about it so future-me doesn't have to figure it out again.
-
-Open to contract, consulting, and engineering work in distributed systems,
-backend architecture, and security: reach me directly at
-[hanhphamit@gmail.com](mailto:hanhphamit@gmail.com).
-
-If any of this sounds interesting, the [posts]({{< ref "posts" >}}) are
-where the good stuff lives.
+Open to contract, consulting, and engineering work in distributed systems, backend architecture, and security: reach me at [hanhphamit@gmail.com](mailto:hanhphamit@gmail.com).

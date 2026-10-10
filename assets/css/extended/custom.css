@@ -748,6 +748,42 @@ html.view-workstation .post-tags a[href*="/tags/compilers/"]::before, html.view-
     transform: scale(1.1);
 }
 
+/* PaperMod emits align="center" on .social-icons but ships no rule for it,
+   and the wrapper is not a flex container, so the icons sit left. Honour it. */
+.social-icons[align="center"] {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* The theme zeroes the first icon's inline padding for a left-aligned row,
+   which biases a centred row ~5px left. Restore it so the glyphs centre, not the boxes. */
+.social-icons[align="center"] a:first-of-type {
+    padding-inline-start: 10px;
+}
+
+/* ── Homepage hero: the line reads as a pull-quote ── */
+/* Scoped to .entry-content only: the terminal, the status bar and the
+   heading keep their own type. System serif stack, no webfont to fetch;
+   Iowan Old Style first so macOS gets the book face. */
+.home-info-hero .entry-content {
+    text-align: center;
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Charter, Georgia, "Times New Roman", serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.5rem, 1.05rem + 1.55vw, 2rem);
+    line-height: 1.34;
+    letter-spacing: -0.01em;
+    /* 23.9em is the midpoint of the window that breaks this text on the
+       sentence boundary (measured in-browser: both "Always" clauses are
+       23.16em, adding the next word is 24.63em). Deliberately NOT
+       text-wrap:balance: balancing picks the break with the shortest
+       longest-line, which splits a phrase instead. Re-measure if the
+       wording changes. */
+    max-width: 23.9em;
+    margin-inline: auto;
+}
+
 /* ── Homepage greeting: typewriter cursor ── */
 .typewriter-cursor {
     display: inline-block;
@@ -764,6 +800,7 @@ html.view-workstation .post-tags a[href*="/tags/compilers/"]::before, html.view-
 
 @media (prefers-reduced-motion: reduce) {
     .typewriter-cursor { animation: none; }
+    .t-cursor          { animation: none; }
     .post-entry:hover  { transform: none; box-shadow: none; }
     html               { scroll-behavior: auto; }
 
@@ -1607,7 +1644,9 @@ html.view-workstation .term-segment.term-git {
     letter-spacing: 0.02em;
 }
 
-.term-cursor {
+/* The terminal's decorative caret. The HTML asks for .t-cursor; this rule was
+   written as .term-cursor, so the caret never rendered (measured 0x0). */
+.t-cursor {
     display: inline-block;
     width: 7px;
     height: 14px;
@@ -1616,6 +1655,12 @@ html.view-workstation .term-segment.term-git {
     vertical-align: middle;
     margin-left: 2px;
     animation: term-blink 1.1s infinite;
+}
+
+/* The input already carries a native caret, so hide the decorative one while
+   the reader is typing into it rather than showing two. */
+.mini-term-interactive-line:focus-within .t-cursor {
+    display: none;
 }
 
 @keyframes term-blink {

@@ -20,7 +20,7 @@ pygmentsUseClasses = true
 [params]
   env = 'production'
   title = "Hanh Pham's Blog"
-  description = "Notes on code, security, and whatever else I'm poking at."
+  description = "Always a more beautiful answer. Always a more obvious one. We simply had the wrong perspective."
   author = "Hanh Pham"
   # Search engine verification and social attribution. These are read by
   # layouts/_partials/extend_head.html and stay inert while unset.
@@ -50,8 +50,13 @@ pygmentsUseClasses = true
     lang = "en"
 
   [params.homeInfoParams]
-    Title = "Hi there \U0001F44B"
-    Content = "Software engineer building distributed backends by day, breaking binaries in CTFs by night. This is where I write down deep dives on Go, reverse engineering, microservices, and hardware architectures so future-me doesn't have to re-learn them."
+    Title = "Hi there"
+    Content = "Always a more beautiful answer. Always a more obvious one. We simply had the wrong perspective."
+    AlignSocialIconsTo = "center"
+    # Printed by the hero terminal in both places it can appear: the scripted
+    # `cat aboutme.md` output and the interactive reply to the same command.
+    # Reading it from here is what stops the two from drifting apart.
+    TerminalBio = "Notes on Go, reverse engineering, and distributed systems."
 
   [[params.socialIcons]]
     name = "github"

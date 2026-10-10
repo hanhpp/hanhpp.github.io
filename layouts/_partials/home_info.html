@@ -28,7 +28,7 @@
                 <div class="mini-term-row"><span class="t-prompt">hanh@home:~$</span> <span class="t-cmd">whoami</span></div>
                 <div class="mini-term-out">hanh</div>
                 <div class="mini-term-row"><span class="t-prompt">hanh@home:~$</span> <span class="t-cmd">cat aboutme.md</span></div>
-                <div class="mini-term-out">Software engineer building distributed backends by day, breaking binaries in CTFs by night.</div>
+                <div class="mini-term-out">{{ $.Site.Params.homeInfoParams.terminalbio }}</div>
             </div>
             <div class="mini-term-interactive-line">
                 <span class="t-prompt">hanh@home:~$</span>
@@ -62,7 +62,7 @@
         var CMDS = {
             "help": "Commands: whoami, cat aboutme.md, ls, uname -a, date, clear (plus a few hidden easter eggs)",
             "whoami": "hanh (systems & binary reverse engineer)",
-            "cat aboutme.md": "Software engineer building distributed backends by day, breaking binaries in CTFs by night.",
+            "cat aboutme.md": "{{ $.Site.Params.homeInfoParams.terminalbio }}",
             "ls": "aboutme.md   posts/   tags/   soundtrack.sh*   secret.txt",
             "dir": "aboutme.md   posts/   tags/   soundtrack.sh*   secret.txt",
             "cat secret.txt": "Nice try! No flags here, only hard-won engineering trade-offs.",
