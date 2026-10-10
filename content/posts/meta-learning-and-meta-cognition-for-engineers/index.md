@@ -142,17 +142,6 @@ By delegating the audit to an external partner while retaining strict independen
 
 ---
 
-## Recommended Learning Paths & Cognitive Deep Dives
-
-To continue developing your personal learning system and systems intuition, explore these related essays from our archive:
-
-* **Building Intuition from Scratch:** Read [How I Started Learning Reverse Engineering]({{< ref "how-i-started-learning-reverse-engineering" >}}) to see how tackling low-level binary crackmes forces active reconstruction and breaks the illusion of competence.
-* **Theoretical Computation Limits:** Read [Alan Turing's 1936 Proof]({{< ref "alan-turing-computable-numbers-entscheidungsproblem" >}}) to understand why formal state machines and undecidability define what algorithms can and cannot compute.
-* **Structured Decision Frameworks:** Read [Inside TypeSafe's Jev and Decision Models]({{< ref "typesafe-jev-decision-models" >}}) to see how to replace loose prompting with typed architectural evaluation.
-* **The Engineering Moat:** Read [Part 1: The Renaissance Developer]({{< ref "the-renaissance-developer" >}}) for our breakdown of why systems synthesis across silicon and unit economics outlasts commoditized syntax.
-
----
-
 ## What Comes Next
 
 We have examined the systems engineer's role in the AI era ([Part 1]({{< ref "the-renaissance-developer" >}})) and how to build a personal AI learning scaffold through metacognition (Part 2).
