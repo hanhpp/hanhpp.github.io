@@ -24,9 +24,9 @@ At the bottom of the stack are the raw neural weights: Sonnet 3.7, OpenAI o3-min
 
 Models are not interchangeable commodities that differ only on a benchmark leaderboard. They have distinct cognitive profiles:
 
-- **Multi-File Spatial Reasoning:** Sonnet 3.7 excels at understanding sprawling repository structure, matching existing code conventions, and respecting architectural boundaries.
-- **Algorithmic Constraint Solvers:** OpenAI o3-mini and o1 excel at pure logic puzzles, self-contained algorithms, and competitive programming problems with rigid mathematical invariants.
-- **Cost-Weighted Inference:** DeepSeek R1 provides deep reasoning traces at roughly a tenth of the API cost of Western frontier models, making brute-force exploratory passes affordable.
+- **Multi-File Spatial Reasoning:** Sonnet 3.7 excels at understanding sprawling repository structure, matching existing code conventions, and respecting architectural boundaries.[1]
+- **Algorithmic Constraint Solvers:** OpenAI o3-mini and o1 excel at pure logic puzzles, self-contained algorithms, and competitive programming problems with rigid mathematical invariants.[2]
+- **Cost-Weighted Inference:** DeepSeek R1 provides deep reasoning traces at roughly a tenth of the API cost of Western frontier models, making brute-force exploratory passes affordable.[3]
 
 The model is responsible for exactly one job: predicting the next token given a context window. It does not read your files, it does not run your tests, and it does not write to your disk. When an assistant hallucinates a function signature, it is rarely because the weights cannot reason; it is because the layers above failed to supply the interface definition in the prompt.
 
@@ -36,7 +36,7 @@ The model is responsible for exactly one job: predicting the next token given a 
 The model is hosted behind a gateway: direct vendor APIs (OpenAI, Google, Mistral), proxy aggregators (OpenRouter), enterprise hyperscalers (AWS Bedrock, Azure AI), or local engines (vLLM, Ollama).
 Developers treat this layer as an invisible pipe. It is actually the difference between an assistant you can afford to run and one that bankrupts you.
 
-The load-bearing feature at Layer 2 is **prompt caching**.
+The load-bearing feature at Layer 2 is **prompt caching**.[4]
 
 Consider a realistic agent session:
 - System prompt, tool definitions, rules: ~8,000 tokens
@@ -72,8 +72,8 @@ For software engineering, pure vector RAG is fundamentally broken. Embeddings un
 
 Modern harnesses have largely abandoned pure vector search in favor of deterministic tools:
 - **`ripgrep` and file discovery:** Fast regex sweeps across filenames and content.
-- **Language Server Protocol (LSP):** Querying the actual compiler/language server for `goToDefinition`, `findReferences`, and `typeDefinition`. This follows the real call graph instead of guessing based on word proximity.
-- **AST Parsing (tree-sitter):** Structural syntax parsing that extracts class skeletons and function signatures without burning context on implementation bodies.
+- **Language Server Protocol (LSP):** Querying the actual compiler/language server for `goToDefinition`, `findReferences`, and `typeDefinition`.[5] This follows the real call graph instead of guessing based on word proximity.
+- **AST Parsing (tree-sitter):** Structural syntax parsing that extracts class skeletons and function signatures without burning context on implementation bodies.[6]
 
 ### 2. Patch Generation Strategies
 Once the model decides what code to write, how does the harness apply it to your disk?
@@ -102,8 +102,8 @@ Without this loop, the user acts as the compiler, manually copying errors back a
 Early AI coding benchmarks (like HumanEval or MBPP) tested single functions in isolation: the model was given a docstring and asked to generate a Python function.
 
 Modern evaluations look entirely different because real software engineering is an integration test:
-- **Aider's Polyglot & Refactoring Benchmarks:** The Polyglot benchmark tests 225 problems across six languages (C++, Go, Java, JS, Python, Rust) in isolated containers with test feedback loops. More importantly, Aider's Refactor benchmark asks models to refactor 89 massive methods, specifically testing whether the harness and model can output dense code without truncating lines, dropping syntax, or taking lazy shortcuts.
-- **SWE-bench Verified & SWE-bench Pro:** Evaluating models on hundreds of real GitHub issues. The most telling finding from the SWE-bench leaderboard is scaffold sensitivity: taking the exact same base model and pairing it with an optimized execution harness (such as `mini-SWE-agent` with structured bash tools and iterative retries) swings issue resolution rates by 20 to 30 percentage points.
+- **Aider's Polyglot & Refactoring Benchmarks:** The Polyglot benchmark tests 225 problems across six languages (C++, Go, Java, JS, Python, Rust) in isolated containers with test feedback loops.[7] More importantly, Aider's Refactor benchmark asks models to refactor 89 massive methods, specifically testing whether the harness and model can output dense code without truncating lines, dropping syntax, or taking lazy shortcuts.[8]
+- **SWE-bench Verified & SWE-bench Pro:** Evaluating models on hundreds of real GitHub issues.[9] The most telling finding from the SWE-bench leaderboard is scaffold sensitivity: taking the exact same base model and pairing it with an optimized execution harness (such as `mini-SWE-agent` with structured bash tools and iterative retries) swings issue resolution rates by 20 to 30 percentage points.[10]
 
 When frontier models reach 70% to 80%+ on SWE-bench Verified, the harness is doing half the heavy lifting.
 
@@ -118,7 +118,7 @@ Each surface optimizes for an entirely different phase of engineering work.
 
 ### GUI IDEs Win at Micro-Edits
 Cursor and Windsurf provide a polished experience for single-file, interactive development:
-- **Shadow Workspaces:** Cursor runs a background language server in a hidden workspace to check compiler diagnostics while the model streams text.
+- **Shadow Workspaces:** Cursor runs a background language server in a hidden workspace to check compiler diagnostics while the model streams text.[11]
 - **Speculative Tab-Completion:** Predicting where your cursor will jump next and pre-streaming ghost text.
 - **Inline Visual Diffs:** Reviewing green and red diff hunks directly in the editor buffer with keyboard shortcuts (`Ctrl + K`).
 
@@ -136,7 +136,7 @@ One of the biggest points of confusion among developers is the economic divide b
 
 ### The Flat-Rate Tier (Copilot, Cursor Pro: $20/month)
 - Providers cannot afford to give you unlimited raw frontier models for twenty dollars.
-- Behind the scenes, flat-rate tiers rely on aggressive cost controls: hard rate limits, request queues during peak hours, smaller fallback models, and speculative routing.
+- Behind the scenes, flat-rate tiers rely on aggressive cost controls: hard rate limits, request queues during peak hours, smaller fallback models, and speculative routing.[12]
 - This is fine for interactive autocomplete and small edits. It falls apart during heavy multi-file architectural refactors that consume millions of context tokens.
 ### Pay-Per-Token APIs (Aider, OpenCode, CLI Agents)
 - There are no opaque rate limits or hidden model downgrades during peak hours.
@@ -154,4 +154,30 @@ The next time an AI assistant produces garbage, resist the urge to declare that 
 4. **Did the Model fail?** Was the algorithmic reasoning fundamentally flawed despite clean context and precise tools?
 
 Eighty percent of the time, the failure lives in Layers 2 and 3. When you understand the stack, you stop cargo-culting tools and start building an environment that actually survives a production codebase.
+
+## References
+
+[1] Anthropic, [*Claude 3.7 Sonnet and Claude Code*](https://www.anthropic.com/news/claude-3-7-sonnet) (Anthropic, 2025): the release notes for Claude 3.7 Sonnet, documenting its coding strength and, per the partner reports the post relies on, its handling of complex codebases.
+
+[2] OpenAI, [*o3-mini*](https://platform.openai.com/docs/models/o3-mini) (OpenAI API model documentation, 2025): the model reference identifying o3-mini as a small reasoning model with reasoning-token support, the boundary for the algorithmic-solver claims made about the o3 and o1 family.
+
+[3] DeepSeek-AI, [*DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning*](https://arxiv.org/abs/2501.12948) (arXiv:2501.12948, 2025): the original report showing that reasoning patterns such as self-reflection and verification emerge from pure reinforcement learning, the basis for treating R1 as a source of cheap exploratory reasoning traces.
+
+[4] OpenAI, [*Prompt caching*](https://platform.openai.com/docs/guides/prompt-caching) (OpenAI API documentation): the guide documenting the discounted cached-input rate for reused prefixes and the latency reduction that makes repeated 50,000-token prefixes in an agent loop affordable.
+
+[5] Microsoft, [*Language Server Protocol Specification 3.17*](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/) (Microsoft LSP specification, 3.17): the definitions of the textDocument/definition, textDocument/references, and textDocument/typeDefinition requests that harnesses use for symbol-accurate code retrieval.
+
+[6] Tree-sitter project, [*Introduction*](https://tree-sitter.github.io/tree-sitter/) (Tree-sitter documentation): the incremental parser that builds a concrete syntax tree, the mechanism behind extracting class skeletons and function signatures without carrying implementation bodies in context.
+
+[7] Aider, [*o1 tops aider's new polyglot leaderboard*](https://aider.chat/2024/12/21/polyglot.html) (Aider blog, 2024): the benchmark write-up describing the 225 hardest Exercism exercises across C++, Go, Java, JavaScript, Python, and Rust.
+
+[8] Aider, [*Refactoring leaderboard*](https://aider.chat/docs/leaderboards/refactor.html) (Aider benchmarks): the refactoring benchmark of 89 large methods from large Python classes, built to measure models that skip sections or truncate long code output.
+
+[9] Carlos E. Jimenez et al., [*SWE-bench: Can Language Models Resolve Real-World GitHub Issues?*](https://arxiv.org/abs/2310.06770) (ICLR 2024): the original benchmark of real GitHub issues that the Verified and Pro splits extend.
+
+[10] SWE-agent team, [*mini-swe-agent*](https://github.com/SWE-agent/mini-swe-agent) (SWE-agent project repository): the minimal harness reporting over 74% on SWE-bench Verified and the bash-only leaderboard that scores the same models under different scaffolds.
+
+[11] Cursor, [*Iterating with shadow workspaces*](https://cursor.com/blog/shadow-workspace) (Cursor blog, 2024): Cursor's own account of the hidden-window shadow workspace, its language-server goal, and the VS Code fork it depends on.
+
+[12] GitHub, [*Plans for GitHub Copilot*](https://docs.github.com/en/copilot/about-github-copilot/plans-for-github-copilot) (GitHub Docs): the per-plan credit allowances, premium-model access tiers, and usage limits that cap what a flat-rate subscription can consume.
 
