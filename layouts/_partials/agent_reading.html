@@ -44,7 +44,7 @@
   {{- end }}
 </div>
 
-<script type="application/json" id="agent-reading">{{ $data | jsonify }}</script>
+<script type="application/json" id="agent-reading">{{ $data | jsonify | safeJS }}</script>
 
 <script>
 (function () {
