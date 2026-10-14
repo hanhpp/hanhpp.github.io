@@ -2683,7 +2683,12 @@ html.view-workstation .hero-mini-terminal:hover {
 }
 
 .mini-term-input {
-    flex: 1;
+    /* Sizes to what is typed rather than stretching, so the decorative caret that
+       follows it sits after the text instead of at the far right of the line.
+       29ch is the placeholder's length, so the hint stays readable at rest. */
+    flex: 0 1 auto;
+    field-sizing: content;
+    min-width: 29ch;
     background: transparent;
     border: none;
     outline: none;
