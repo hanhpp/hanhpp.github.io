@@ -862,21 +862,42 @@ html.view-workstation .post-tags a[href*="/tags/compilers/"]::before, html.view-
     text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
 }
 
-/* ── Contact page: canvas container ── */
-.quantum-canvas-wrap {
-    width: 100%;
-    height: 260px;
-    position: relative;
-    margin-bottom: 2rem;
-    border-radius: 12px;
-    overflow: hidden;
-    background: var(--code-bg);
+/* ── Contact page: the sky ──
+   The root carries the page colour so the body can go transparent on the one page that has a sky
+   behind it. A negative z-index canvas paints above the root background and below every box in the
+   body, which is the only stacking order that puts stars behind the text without raising each block
+   and fighting the header and footer for z-index. The header and footer are in-flow boxes with no
+   background of their own, so nothing else occludes it. */
+html {
+    background: var(--theme);
 }
 
-.quantum-canvas-wrap canvas {
+body:has(.universe-canvas) {
+    background: transparent;
+}
+
+.universe-canvas {
+    position: fixed;
+    inset: 0;
     display: block;
     width: 100%;
     height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Text over a sky needs its own background, and a halo is the version of that which cannot be seen.
+   Painted in the page colour it is invisible everywhere except where a star would otherwise sit
+   behind a glyph, which is the only place the contrast ratio moves. It is scoped to the text that
+   sits directly on the page background: the form card, the table of contents and the submit button
+   all carry a surface of their own, and there the page colour would show up as a glow. */
+body:has(.universe-canvas) .post-title,
+body:has(.universe-canvas) .post-meta,
+body:has(.universe-canvas) .post-content > p,
+body:has(.universe-canvas) .post-content > h3,
+body:has(.universe-canvas) .post-content > ul,
+body:has(.universe-canvas) .footer {
+    text-shadow: 0 0 3px var(--theme), 0 0 3px var(--theme), 0 0 3px var(--theme), 0 0 7px var(--theme);
 }
 
 /* ── Contact links: clean list ── */
