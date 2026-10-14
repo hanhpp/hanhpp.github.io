@@ -2812,3 +2812,316 @@ html.view-workstation .hero-mini-terminal:hover {
     height: 100%;
     border: 0;
 }
+
+/* -- Tag and status colours on light and dark surfaces --
+   The palette was picked against one dark surface, so on white it fails outright (#38bdf8 at
+   2.14:1, #10b981 at 2.33:1) and on the card surface it fails for the warmer hues (#f97316 at
+   2.84:1). Each colour is darkened for light mode or lightened for dark, only as far as it has
+   to be to clear 4.6:1, so the hues stay recognisable. Every selector is fully qualified with
+   its theme: an earlier attempt prefixed only the first of each group, and lost. */
+
+/* light mode */
+:root[data-theme="light"] .post-tags a[href*="/tags/go/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/go/"] {
+    color: #007997;  /* was #00add8, now 4.61:1 */
+}
+:root[data-theme="light"] .post-tags a[href*="/tags/networking/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/networking/"],
+:root[data-theme="light"] .post-tags a[href*="/tags/sql/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/sql/"] {
+    color: #0274af;  /* was #0284c7, now 4.68:1 */
+}
+:root[data-theme="light"] .post-tags a[href*="/tags/cryptography/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/cryptography/"],
+:root[data-theme="light"] .post-tags a[href*="/tags/devops/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/devops/"],
+:root[data-theme="light"] .post-tags a[href*="/tags/release-notes/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/release-notes/"] {
+    color: #04788c;  /* was #06b6d4, now 4.73:1 */
+}
+:root[data-theme="light"] .post-tags a[href*="/tags/wsl/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/wsl/"] {
+    color: #0a73a3;  /* was #0ea5e9, now 4.82:1 */
+}
+:root[data-theme="light"] .post-tags a[href*="/tags/geospatial/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/geospatial/"],
+:root[data-theme="light"] .post-tags a[href*="/tags/performance/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/performance/"],
+:root[data-theme="light"] .post-tags a[href*="/tags/security/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/security/"],
+:root[data-theme="light"] .post-tags a[href*="/tags/terminal/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/terminal/"] {
+    color: #0b7e58;  /* was #10b981, now 4.65:1 */
+}
+:root[data-theme="light"] .post-tags a[href*="/tags/compression/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/compression/"] {
+    color: #0d796e;  /* was #14b8a6, now 4.84:1 */
+}
+:root[data-theme="light"] .post-tags a[href*="/tags/docker/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/docker/"] {
+    color: #1b72b4;  /* was #2496ed, now 4.68:1 */
+}
+:root[data-theme="light"] .post-tags a[href*="/tags/kubernetes/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/kubernetes/"] {
+    color: #3068dc;  /* was #326ce5, now 4.65:1 */
+}
+:root[data-theme="light"] .post-tags a[href*="/tags/postgres/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/postgres/"] {
+    color: #336791;  /* was #336791, now 5.52:1 */
+}
+:root[data-theme="light"] .post-tags a[href*="/tags/compilers/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/compilers/"] {
+    color: #23759a;  /* was #38bdf8, now 4.72:1 */
+}
+:root[data-theme="light"] .post-tags a[href*="/tags/algorithms/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/algorithms/"],
+:root[data-theme="light"] .post-tags a[href*="/tags/database/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/database/"],
+:root[data-theme="light"] .post-tags a[href*="/tags/microservices/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/microservices/"] {
+    color: #306bca;  /* was #3b82f6, now 4.72:1 */
+}
+:root[data-theme="light"] .post-tags a[href*="/tags/computer-science/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/computer-science/"],
+:root[data-theme="light"] .post-tags a[href*="/tags/distributed-systems/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/distributed-systems/"] {
+    color: #5b5ede;  /* was #6366f1, now 4.7:1 */
+}
+:root[data-theme="light"] .post-tags a[href*="/tags/cli/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/cli/"],
+:root[data-theme="light"] .post-tags a[href*="/tags/hardware/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/hardware/"] {
+    color: #606f85;  /* was #64748b, now 4.69:1 */
+}
+:root[data-theme="light"] .post-tags a[href*="/tags/dotnet/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/dotnet/"] {
+    color: #5f68b8;  /* was #818cf8, now 4.63:1 */
+}
+:root[data-theme="light"] .post-tags a[href*="/tags/ai/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/ai/"],
+:root[data-theme="light"] .post-tags a[href*="/tags/meta/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/meta/"],
+:root[data-theme="light"] .post-tags a[href*="/tags/workflow/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/workflow/"] {
+    color: #7d53dd;  /* was #8b5cf6, now 4.64:1 */
+}
+:root[data-theme="light"] .post-tags a[href*="/tags/architecture/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/architecture/"],
+:root[data-theme="light"] .post-tags a[href*="/tags/deep-dive/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/deep-dive/"] {
+    color: #9049d4;  /* was #a855f7, now 4.71:1 */
+}
+:root[data-theme="light"] .post-tags a[href*="/tags/sql-server/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/sql-server/"] {
+    color: #cc292b;  /* was #cc292b, now 4.91:1 */
+}
+:root[data-theme="light"] .post-tags a[href*="/tags/rust/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/rust/"] {
+    color: #c0480a;  /* was #ea580c, now 4.62:1 */
+}
+:root[data-theme="light"] .post-tags a[href*="/tags/assembly/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/assembly/"],
+:root[data-theme="light"] .post-tags a[href*="/tags/demo/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/demo/"],
+:root[data-theme="light"] .post-tags a[href*="/tags/linux/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/linux/"] {
+    color: #886805;  /* was #eab308, now 4.78:1 */
+}
+:root[data-theme="light"] .post-tags a[href*="/tags/ci-cd/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/ci-cd/"],
+:root[data-theme="light"] .post-tags a[href*="/tags/math/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/math/"],
+:root[data-theme="light"] .post-tags a[href*="/tags/state-machine/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/state-machine/"] {
+    color: #bd3a7a;  /* was #ec4899, now 4.76:1 */
+}
+:root[data-theme="light"] .post-tags a[href*="/tags/ctf/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/ctf/"] {
+    color: #c93939;  /* was #ef4444, now 4.67:1 */
+}
+:root[data-theme="light"] .post-tags a[href*="/tags/gitops/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/gitops/"],
+:root[data-theme="light"] .post-tags a[href*="/tags/malware-analysis/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/malware-analysis/"] {
+    color: #c8344d;  /* was #f43f5e, now 4.75:1 */
+}
+:root[data-theme="light"] .post-tags a[href*="/tags/caching/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/caching/"],
+:root[data-theme="light"] .post-tags a[href*="/tags/tooling/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/tooling/"] {
+    color: #986207;  /* was #f59e0b, now 4.72:1 */
+}
+:root[data-theme="light"] .post-tags a[href*="/tags/infrastructure/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/infrastructure/"],
+:root[data-theme="light"] .post-tags a[href*="/tags/reverse-engineering/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/reverse-engineering/"] {
+    color: #b35310;  /* was #f97316, now 4.63:1 */
+}
+:root[data-theme="light"] .post-tags a[href*="/tags/hugo/"],
+:root[data-theme="light"] .terms-tags a[href*="/tags/hugo/"] {
+    color: #c7326a;  /* was #ff4088, now 4.71:1 */
+}
+
+/* dark mode */
+:root[data-theme="dark"] .post-tags a[href*="/tags/go/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/go/"] {
+    color: #00add8;  /* was #00add8, now 5.13:1 */
+}
+:root[data-theme="dark"] .post-tags a[href*="/tags/networking/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/networking/"],
+:root[data-theme="dark"] .post-tags a[href*="/tags/sql/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/sql/"] {
+    color: #02a4f7;  /* was #0284c7, now 4.92:1 */
+}
+:root[data-theme="dark"] .post-tags a[href*="/tags/cryptography/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/cryptography/"],
+:root[data-theme="dark"] .post-tags a[href*="/tags/devops/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/devops/"],
+:root[data-theme="dark"] .post-tags a[href*="/tags/release-notes/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/release-notes/"] {
+    color: #06b6d4;  /* was #06b6d4, now 5.56:1 */
+}
+:root[data-theme="dark"] .post-tags a[href*="/tags/wsl/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/wsl/"] {
+    color: #0ea5e9;  /* was #0ea5e9, now 4.87:1 */
+}
+:root[data-theme="dark"] .post-tags a[href*="/tags/geospatial/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/geospatial/"],
+:root[data-theme="dark"] .post-tags a[href*="/tags/performance/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/performance/"],
+:root[data-theme="dark"] .post-tags a[href*="/tags/security/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/security/"],
+:root[data-theme="dark"] .post-tags a[href*="/tags/terminal/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/terminal/"] {
+    color: #10b981;  /* was #10b981, now 5.32:1 */
+}
+:root[data-theme="dark"] .post-tags a[href*="/tags/compression/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/compression/"] {
+    color: #14b8a6;  /* was #14b8a6, now 5.43:1 */
+}
+:root[data-theme="dark"] .post-tags a[href*="/tags/docker/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/docker/"] {
+    color: #259cf6;  /* was #2496ed, now 4.61:1 */
+}
+:root[data-theme="dark"] .post-tags a[href*="/tags/kubernetes/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/kubernetes/"] {
+    color: #489cff;  /* was #326ce5, now 4.81:1 */
+}
+:root[data-theme="dark"] .post-tags a[href*="/tags/postgres/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/postgres/"] {
+    color: #4e9ddc;  /* was #336791, now 4.62:1 */
+}
+:root[data-theme="dark"] .post-tags a[href*="/tags/compilers/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/compilers/"] {
+    color: #38bdf8;  /* was #38bdf8, now 6.3:1 */
+}
+:root[data-theme="dark"] .post-tags a[href*="/tags/algorithms/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/algorithms/"],
+:root[data-theme="dark"] .post-tags a[href*="/tags/database/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/database/"],
+:root[data-theme="dark"] .post-tags a[href*="/tags/microservices/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/microservices/"] {
+    color: #479cff;  /* was #3b82f6, now 4.8:1 */
+}
+:root[data-theme="dark"] .post-tags a[href*="/tags/computer-science/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/computer-science/"],
+:root[data-theme="dark"] .post-tags a[href*="/tags/distributed-systems/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/distributed-systems/"] {
+    color: #878bff;  /* was #6366f1, now 4.61:1 */
+}
+:root[data-theme="dark"] .post-tags a[href*="/tags/cli/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/cli/"],
+:root[data-theme="dark"] .post-tags a[href*="/tags/hardware/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/hardware/"] {
+    color: #8499b7;  /* was #64748b, now 4.64:1 */
+}
+:root[data-theme="dark"] .post-tags a[href*="/tags/dotnet/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/dotnet/"] {
+    color: #8692ff;  /* was #818cf8, now 4.87:1 */
+}
+:root[data-theme="dark"] .post-tags a[href*="/tags/ai/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/ai/"],
+:root[data-theme="dark"] .post-tags a[href*="/tags/meta/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/meta/"],
+:root[data-theme="dark"] .post-tags a[href*="/tags/workflow/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/workflow/"] {
+    color: #b779ff;  /* was #8b5cf6, now 4.63:1 */
+}
+:root[data-theme="dark"] .post-tags a[href*="/tags/architecture/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/architecture/"],
+:root[data-theme="dark"] .post-tags a[href*="/tags/deep-dive/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/deep-dive/"] {
+    color: #d76dff;  /* was #a855f7, now 4.84:1 */
+}
+:root[data-theme="dark"] .post-tags a[href*="/tags/sql-server/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/sql-server/"] {
+    color: #ff6267;  /* was #cc292b, now 4.63:1 */
+}
+:root[data-theme="dark"] .post-tags a[href*="/tags/rust/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/rust/"] {
+    color: #ff660e;  /* was #ea580c, now 4.6:1 */
+}
+:root[data-theme="dark"] .post-tags a[href*="/tags/assembly/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/assembly/"],
+:root[data-theme="dark"] .post-tags a[href*="/tags/demo/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/demo/"],
+:root[data-theme="dark"] .post-tags a[href*="/tags/linux/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/linux/"] {
+    color: #eab308;  /* was #eab308, now 7.04:1 */
+}
+:root[data-theme="dark"] .post-tags a[href*="/tags/ci-cd/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/ci-cd/"],
+:root[data-theme="dark"] .post-tags a[href*="/tags/math/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/math/"],
+:root[data-theme="dark"] .post-tags a[href*="/tags/state-machine/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/state-machine/"] {
+    color: #ff54b1;  /* was #ec4899, now 4.6:1 */
+}
+:root[data-theme="dark"] .post-tags a[href*="/tags/ctf/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/ctf/"] {
+    color: #ff6262;  /* was #ef4444, now 4.62:1 */
+}
+:root[data-theme="dark"] .post-tags a[href*="/tags/gitops/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/gitops/"],
+:root[data-theme="dark"] .post-tags a[href*="/tags/malware-analysis/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/malware-analysis/"] {
+    color: #ff5d8b;  /* was #f43f5e, now 4.62:1 */
+}
+:root[data-theme="dark"] .post-tags a[href*="/tags/caching/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/caching/"],
+:root[data-theme="dark"] .post-tags a[href*="/tags/tooling/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/tooling/"] {
+    color: #f59e0b;  /* was #f59e0b, now 6.29:1 */
+}
+:root[data-theme="dark"] .post-tags a[href*="/tags/infrastructure/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/infrastructure/"],
+:root[data-theme="dark"] .post-tags a[href*="/tags/reverse-engineering/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/reverse-engineering/"] {
+    color: #f97316;  /* was #f97316, now 4.82:1 */
+}
+:root[data-theme="dark"] .post-tags a[href*="/tags/hugo/"],
+:root[data-theme="dark"] .terms-tags a[href*="/tags/hugo/"] {
+    color: #ff54b4;  /* was #ff4088, now 4.62:1 */
+}
+
+/* The same palette on other surfaces. The terminal keeps a dark background in both themes,
+   so its prompt colour is deliberately not in this list. */
+:root[data-theme="light"] .status-live { color: #0b7e58; }
+:root[data-theme="light"] .term-segment.term-user { color: #0b7e58; }
+:root[data-theme="light"] .term-segment.term-git { color: #9049d4; }
+:root[data-theme="light"] .fs-cwd { color: #23759a; }
+:root[data-theme="light"] .telemetry-v.status-online { color: #0b7e58; }
+:root[data-theme="light"] .spec-v.status-ok { color: #0b7e58; }
+:root[data-theme="dark"] .status-live { color: #10b981; }
+:root[data-theme="dark"] .term-segment.term-user { color: #10b981; }
+:root[data-theme="dark"] .term-segment.term-git { color: #d76dff; }
+:root[data-theme="dark"] .fs-cwd { color: #38bdf8; }
+:root[data-theme="dark"] .telemetry-v.status-online { color: #10b981; }
+:root[data-theme="dark"] .spec-v.status-ok { color: #10b981; }
+
+/* The dividers were var(--border): 1.06:1 on light and 1.32:1 on dark, invisible in both. */
+:root[data-theme="light"] .status-divider { color: #656f7d; }
+:root[data-theme="dark"] .status-divider { color: #94a3b8; }
+
+/* The music player keeps a dark surface in both themes, so its title stays light in both. */
+:root[data-theme="light"] .player-title { color: #c046ff; }
