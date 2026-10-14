@@ -2947,11 +2947,13 @@ html.view-workstation .hero-mini-terminal:hover {
 .mini-term-input {
     /* Sizes to what is typed rather than stretching, so the decorative caret that
        follows it sits after the text instead of at the far right of the line.
-       27ch is the placeholder's measured width, so the caret lands right after the
-       hint at rest instead of a character and a half past it. */
+       min-width is 0 on purpose: the prompt line is a flex row, so any minimum here
+       pushes the caret away from the prompt. It previously held 27ch, the width of
+       the placeholder hint, which left the caret 202px past the username. The hint
+       moved to the quick chips, which already name the commands. */
     flex: 0 1 auto;
     field-sizing: content;
-    min-width: 27ch;
+    min-width: 0;
     background: transparent;
     border: none;
     outline: none;
@@ -2961,12 +2963,6 @@ html.view-workstation .hero-mini-terminal:hover {
     padding: 0;
     margin: 0;
     caret-color: var(--accent);
-}
-
-.mini-term-input::placeholder {
-    color: #64748b;
-    font-style: italic;
-    opacity: 0.8;
 }
 
 .mini-term-quick-chips {
