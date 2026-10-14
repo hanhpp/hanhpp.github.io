@@ -3125,3 +3125,7 @@ html.view-workstation .hero-mini-terminal:hover {
 
 /* The music player keeps a dark surface in both themes, so its title stays light in both. */
 :root[data-theme="light"] .player-title { color: #c046ff; }
+
+/* The terminal header's path chip, missed in the block above: measured 3.76:1 on light. */
+:root[data-theme="light"] .term-segment.term-path { color: #0274af; }
+:root[data-theme="dark"] .term-segment.term-path { color: #02a4f7; }
