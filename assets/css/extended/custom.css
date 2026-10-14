@@ -900,6 +900,240 @@ body:has(.universe-canvas) .footer {
     text-shadow: 0 0 3px var(--theme), 0 0 3px var(--theme), 0 0 3px var(--theme), 0 0 7px var(--theme);
 }
 
+/* ── Reading for a human or an agent ──
+   One page, two readings. Agent mode hides the prose and shows the structured view, which is built from
+   the same front matter the prose is, so a command cannot drift between them. The switch is a class on
+   the root, so the reading is decided before paint and nothing flashes. */
+.reading-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 1.6rem;
+    font-size: 0.85rem;
+    color: var(--secondary);
+}
+
+.reading-label {
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.72rem;
+}
+
+.reading-btn {
+    font: inherit;
+    padding: 4px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--secondary);
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.reading-btn:hover {
+    color: var(--primary);
+}
+
+.reading-btn.is-active {
+    color: var(--primary);
+    border-color: var(--accent-border);
+    background: var(--accent-bg);
+}
+
+html.reading-agent .post-content {
+    display: none;
+}
+
+.agent-view {
+    margin: 0 0 2rem;
+}
+
+.agent-line {
+    margin: 0 0 0.4rem;
+    font-size: 1.05rem;
+    color: var(--primary);
+}
+
+.agent-meta {
+    margin: 0 0 1.6rem;
+    font-size: 0.85rem;
+    color: var(--secondary);
+}
+
+.agent-exercises {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.agent-exercises > li {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.agent-exercises > li:last-child {
+    border-bottom: 0;
+}
+
+.agent-q {
+    margin: 0 0 0.6rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.agent-cmd,
+.agent-expect {
+    margin: 0 0 0.5rem;
+    padding: 0.7rem 0.9rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 0.88rem;
+}
+
+.agent-cmd {
+    background: var(--code-bg);
+}
+
+.agent-expect {
+    background: transparent;
+    border: 1px dashed var(--border);
+    color: var(--secondary);
+}
+
+.agent-cmd code,
+.agent-expect code {
+    background: none;
+    padding: 0;
+    font-size: inherit;
+}
+
+.agent-accept,
+.agent-wrong {
+    margin: 0.4rem 0 0;
+    font-size: 0.9rem;
+}
+
+.agent-accept > span,
+.agent-wrong > span {
+    display: inline-block;
+    min-width: 7.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.7rem;
+    color: var(--secondary);
+}
+
+.agent-wrong {
+    color: var(--secondary);
+}
+
+.agent-claims {
+    width: 100%;
+    margin-top: 1.5rem;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.agent-claims th,
+.agent-claims td {
+    text-align: left;
+    padding: 0.5rem 0.7rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+}
+
+.agent-claims th {
+    color: var(--secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.7rem;
+}
+
+/* The exercise figure, rendered from front matter so the human reading cannot drift from the agent one. */
+.exercise {
+    margin: 1.6rem 0;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: transparent;
+}
+
+.exercise figcaption {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: baseline;
+    margin-bottom: 0.8rem;
+}
+
+.exercise-n {
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.7rem;
+    color: var(--secondary);
+    white-space: nowrap;
+}
+
+.exercise-q {
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.exercise-cmd,
+.exercise-expect {
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+    margin: 0 0 0.5rem;
+}
+
+.exercise-label {
+    flex: 0 0 3.6rem;
+    padding-top: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.68rem;
+    color: var(--secondary);
+}
+
+.exercise-cmd pre,
+.exercise-expect pre {
+    flex: 1 1 auto;
+    margin: 0;
+    padding: 0.7rem 0.9rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 0.86rem;
+}
+
+.exercise-cmd pre {
+    background: var(--code-bg);
+}
+
+.exercise-expect pre {
+    background: transparent;
+    border: 1px dashed var(--border);
+    color: var(--secondary);
+}
+
+.exercise-cmd code,
+.exercise-expect code {
+    background: none;
+    padding: 0;
+    font-size: inherit;
+}
+
+.exercise-accept,
+.exercise-wrong {
+    margin: 0.5rem 0 0;
+    font-size: 0.9rem;
+}
+
+.exercise-wrong {
+    color: var(--secondary);
+}
+
 /* ── Contact links: clean list ── */
 .contact-links {
     list-style: none;

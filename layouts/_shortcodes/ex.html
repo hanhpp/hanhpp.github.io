@@ -1,0 +1,34 @@
+{{- /* Renders one exercise from the page's `exercises` front matter.
+       One source per exercise: the human view and the agent view are both built from the same data,
+       so a command cannot drift between the two readings.
+
+       The key is `number` and not `n` on purpose: YAML treats a bare `n` as the boolean false, so a key
+       named `n` arrives as `"false"` and every lookup for it silently finds nothing. */ -}}
+{{- $n := int (.Get 0) -}}
+{{- $ex := false -}}
+{{- with .Page.Params.exercises -}}
+  {{- $found := where . "number" $n -}}
+  {{- if $found -}}{{- $ex = index $found 0 -}}{{- end -}}
+{{- end -}}
+{{- with $ex -}}
+<figure class="exercise" id="exercise-{{ .number }}">
+  <figcaption>
+    <span class="exercise-n">Exercise {{ .number }}</span>
+    {{- with .question }}<span class="exercise-q">{{ . | markdownify }}</span>{{ end -}}
+  </figcaption>
+  {{- with .command }}
+  <div class="exercise-cmd">
+    <span class="exercise-label">run</span>
+    <pre><code>{{ . }}</code></pre>
+  </div>
+  {{- end }}
+  {{- with .expect }}
+  <div class="exercise-expect">
+    <span class="exercise-label">expect</span>
+    <pre><code>{{ . }}</code></pre>
+  </div>
+  {{- end }}
+  {{- with .accept }}<p class="exercise-accept"><strong>Done when</strong> {{ . | markdownify }}</p>{{ end }}
+  {{- with .wrong_answer }}<p class="exercise-wrong"><strong>The wrong answer</strong> {{ . | markdownify }}</p>{{ end }}
+</figure>
+{{- end -}}
