@@ -2,18 +2,13 @@
        The page carries the prose, and the exercises live in front matter. Human mode shows the prose and
        hides this block; agent mode hides the prose and shows this block. Nothing is duplicated: both
        readings are built from the same front matter, and the JSON block means an agent that only fetches
-       the page never has to parse HTML. The toggle starts hidden and JavaScript reveals it, so a reader
-       without JavaScript gets the human reading rather than a control that does nothing. */ -}}
+       the page never has to parse HTML. The control itself lives in the header, beside the theme toggle,
+       and is revealed by the script below, so a reader without JavaScript gets the human reading rather
+       than a control that does nothing. */ -}}
 {{- $ex := .Params.exercises -}}
 {{- if $ex }}
 {{- $data := dict "title" .Title "url" .Permalink "summary" (.Params.summary | default .Description) "exercises" $ex -}}
 {{- with .Params.claims }}{{ $data = merge $data (dict "claims" .) }}{{ end -}}
-<div class="reading-toggle" data-reading-toggle hidden>
-  <span class="reading-label">Reading for</span>
-  <button type="button" class="reading-btn is-active" data-reading="human" aria-pressed="true">a human</button>
-  <button type="button" class="reading-btn" data-reading="agent" aria-pressed="false">an agent</button>
-</div>
-
 <div class="agent-view" hidden>
   <div class="agent-head">
     <p class="agent-line">{{ .Params.summary | default .Description }}</p>
@@ -51,18 +46,14 @@
     var toggle = document.querySelector("[data-reading-toggle]");
     var agentView = document.querySelector(".agent-view");
     if (!toggle || !agentView) return;
-    var buttons = toggle.querySelectorAll("[data-reading]");
     var root = document.documentElement;
 
     function apply(mode, persist) {
         var agent = mode === "agent";
         root.classList.toggle("reading-agent", agent);
         agentView.hidden = !agent;
-        for (var i = 0; i < buttons.length; i++) {
-            var on = buttons[i].getAttribute("data-reading") === mode;
-            buttons[i].classList.toggle("is-active", on);
-            buttons[i].setAttribute("aria-pressed", on ? "true" : "false");
-        }
+        toggle.setAttribute("aria-pressed", agent ? "true" : "false");
+        toggle.title = agent ? "Prose reading" : "Structured reading";
         if (persist) {
             try { localStorage.setItem("reading-mode", mode); } catch (e) {}
         }
@@ -74,12 +65,9 @@
     }
     apply(wanted === "agent" ? "agent" : "human", false);
     toggle.hidden = false;
-
-    for (var j = 0; j < buttons.length; j++) {
-        buttons[j].addEventListener("click", function () {
-            apply(this.getAttribute("data-reading"), true);
-        });
-    }
+    toggle.addEventListener("click", function () {
+        apply(root.classList.contains("reading-agent") ? "human" : "agent", true);
+    });
 })();
 </script>
 {{- end -}}

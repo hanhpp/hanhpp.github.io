@@ -69,6 +69,33 @@
                     </svg>
                 </button>
                 {{- end }}
+
+                {{- /* The reading control, on the same line as the theme toggle and only on pages that
+                       actually carry an agent reading. An icon and not a label: the two glyphs switch
+                       with the reading, so nothing in the prose has to explain it. Revealed by the
+                       script in agent_reading.html, which means a reader without JavaScript keeps the
+                       prose and never sees a control that cannot work. */ -}}
+                {{- if .Params.exercises }}
+                <button type="button" id="reading-toggle" class="reading-toggle-icon" data-reading-toggle hidden
+                    aria-pressed="false" title="Structured reading"
+                    aria-label="Switch between the prose and the structured reading">
+                    <svg class="reading-human" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        aria-hidden="true">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <svg class="reading-agent" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        aria-hidden="true">
+                        <rect x="4" y="7" width="16" height="12" rx="2"></rect>
+                        <path d="M9 7V4h6v3"></path>
+                        <path d="M8 19v2M16 19v2"></path>
+                        <circle cx="9.5" cy="13" r="1"></circle>
+                        <circle cx="14.5" cy="13" r="1"></circle>
+                    </svg>
+                </button>
+                {{- end }}
             </div>
                 {{- if (not site.Params.disableLangToggle) }}
                     {{- $lang := .Lang}}

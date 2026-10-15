@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <rect x="1" y="1" width="958" height="558" rx="14" fill="#ffffff" stroke="#e5e5e7"/>
+  <text x="36" y="44" font-size="17" font-weight="600" fill="#1d1d1f">Where the exploit lands in the boot chain</text>
+  <text x="36" y="66" font-size="12" fill="#555555">Control arrives before the first signature check, so the chain is inverted rather than broken. What sits outside that position is as load-bearing as what sits inside it.</text>
+
+  <!-- chain card -->
+  <rect x="36" y="92" width="520" height="430" rx="12" fill="#faf7ff" stroke="#d8b4fe"/>
+  <text x="60" y="122" font-size="13" font-weight="600" fill="#6d28d9" font-family="ui-monospace, 'Source Code Pro', monospace">THE BOOT CHAIN, FIRST CODE TO APPS</text>
+
+  <!-- 1. SecureROM, highlighted -->
+  <rect x="60" y="140" width="472" height="74" rx="10" fill="#f3e8ff" stroke="#6d28d9" stroke-width="1.5"/>
+  <text x="76" y="164" font-size="12.5" font-weight="600" fill="#6d28d9">SecureROM (mask ROM)</text>
+  <text x="76" y="184" font-size="11" fill="#1d1d1f">First code on a cold boot. Read-only, fabricated into the SoC,</text>
+  <text x="76" y="200" font-size="11" fill="#1d1d1f">so no firmware update can reach it.</text>
+  <text x="404" y="164" font-size="10.5" font-weight="600" fill="#6d28d9" font-family="ui-monospace, 'Source Code Pro', monospace">checkm8 HERE</text>
+
+  <line x1="296" y1="214" x2="296" y2="232" stroke="#86868b" stroke-width="1.5"/>
+  <polygon points="296,236 291,228 301,228" fill="#86868b"/>
+
+  <!-- 2. iBoot -->
+  <rect x="60" y="238" width="472" height="58" rx="10" fill="#ffffff" stroke="#e5e5e7"/>
+  <text x="76" y="262" font-size="12.5" font-weight="600" fill="#1d1d1f">iBoot</text>
+  <text x="76" y="282" font-size="11" fill="#555555">Verifies the next stage before handing control to it.</text>
+
+  <line x1="296" y1="296" x2="296" y2="314" stroke="#86868b" stroke-width="1.5"/>
+  <polygon points="296,318 291,310 301,310" fill="#86868b"/>
+
+  <!-- 3. Kernel -->
+  <rect x="60" y="320" width="472" height="58" rx="10" fill="#ffffff" stroke="#e5e5e7"/>
+  <text x="76" y="344" font-size="12.5" font-weight="600" fill="#1d1d1f">Kernel</text>
+  <text x="76" y="364" font-size="11" fill="#555555">Patch protection and memory protection initialise here.</text>
+
+  <line x1="296" y1="378" x2="296" y2="396" stroke="#86868b" stroke-width="1.5"/>
+  <polygon points="296,400 291,392 301,392" fill="#86868b"/>
+
+  <!-- 4. User space -->
+  <rect x="60" y="402" width="472" height="58" rx="10" fill="#ffffff" stroke="#e5e5e7"/>
+  <text x="76" y="426" font-size="12.5" font-weight="600" fill="#1d1d1f">User space</text>
+  <text x="76" y="446" font-size="11" fill="#555555">launchd, then apps. Data Protection keys sit behind the SEP.</text>
+
+  <text x="60" y="486" font-size="10.5" fill="#86868b">The patch lives in memory only: a reboot returns the device to stock.</text>
+  <text x="60" y="502" font-size="10.5" fill="#86868b">That is why the jailbreak is semi-tethered rather than untethered.</text>
+
+  <!-- right column -->
+  <rect x="576" y="92" width="348" height="204" rx="12" fill="#ffffff" stroke="#d8b4fe"/>
+  <text x="600" y="122" font-size="12.5" font-weight="600" fill="#6d28d9" font-family="ui-monospace, 'Source Code Pro', monospace">REACHED</text>
+  <g font-size="11" fill="#1d1d1f">
+    <text x="600" y="150">Every stage below the ROM: the kernel, its</text>
+    <text x="600" y="166">code-signing decision, the sandbox, mounts.</text>
+    <text x="600" y="192">The verifier is replaced before it runs, so no</text>
+    <text x="600" y="208">signature check ever fails.</text>
+    <text x="600" y="240">PongoOS turns the pwned state into a usable</text>
+    <text x="600" y="256">pre-boot environment. It is not a jailbreak.</text>
+    <text x="600" y="282" font-size="10.5" fill="#86868b">Per-boot only: nothing is written to the ROM.</text>
+  </g>
+
+  <rect x="576" y="318" width="348" height="204" rx="12" fill="#ffffff" stroke="#e5e5e7"/>
+  <text x="600" y="348" font-size="12.5" font-weight="600" fill="#86868b" font-family="ui-monospace, 'Source Code Pro', monospace">NOT REACHED</text>
+  <g font-size="11" fill="#555555">
+    <text x="600" y="376">The Secure Enclave, and its own separate ROM</text>
+    <text x="600" y="402">Data Protection: keybag keys are entangled</text>
+    <text x="600" y="418">with a UID that never leaves the enclave</text>
+    <text x="600" y="444">Anything remote: the trigger is a cable and</text>
+    <text x="600" y="460">DFU mode, and it needs physical access</text>
+    <text x="600" y="492" font-size="10.5" fill="#86868b">A11 is the ceiling. A12 and later are untouched.</text>
+  </g>
+</svg>

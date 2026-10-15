@@ -904,40 +904,46 @@ body:has(.universe-canvas) .footer {
    One page, two readings. Agent mode hides the prose and shows the structured view, which is built from
    the same front matter the prose is, so a command cannot drift between them. The switch is a class on
    the root, so the reading is decided before paint and nothing flashes. */
-.reading-toggle {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 0 0 1.6rem;
-    font-size: 0.85rem;
-    color: var(--secondary);
-}
-
-.reading-label {
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-size: 0.72rem;
-}
-
-.reading-btn {
-    font: inherit;
-    padding: 4px 12px;
+/* The reading control: a small icon on the theme toggle's line, so the two display controls sit together.
+   Two glyphs, one visible at a time, the same way the theme toggle carries a moon and a sun. No label:
+   the icon changes with the reading, which is the whole explanation a reader needs. */
+.reading-toggle-icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 26px !important;
+    height: 26px !important;
+    min-height: 26px !important;
+    max-height: 26px !important;
+    line-height: 1 !important;
+    padding: 0 !important;
+    border-radius: 6px;
+    background: var(--code-bg);
     border: 1px solid var(--border);
-    border-radius: 999px;
-    background: transparent;
-    color: var(--secondary);
+    color: var(--primary);
     cursor: pointer;
-    transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    box-sizing: border-box;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
 }
 
-.reading-btn:hover {
-    color: var(--primary);
+.reading-toggle-icon:hover {
+    transform: scale(1.08);
+    border-color: var(--accent);
+    box-shadow: 0 2px 8px rgba(109, 40, 217, 0.2);
 }
 
-.reading-btn.is-active {
-    color: var(--primary);
-    border-color: var(--accent-border);
-    background: var(--accent-bg);
+.reading-toggle-icon .reading-agent {
+    display: none;
+}
+
+html.reading-agent .reading-toggle-icon .reading-agent {
+    display: inline;
+}
+
+html.reading-agent .reading-toggle-icon .reading-human {
+    display: none;
 }
 
 html.reading-agent .post-content {
