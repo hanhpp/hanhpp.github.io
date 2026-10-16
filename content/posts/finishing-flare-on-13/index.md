@@ -1,6 +1,6 @@
 ---
 title: "Finishing Flare-On 13: 9 for 9 (Write-ups Upcoming)"
-date: 2026-11-02T10:00:00+07:00
+date: 2026-10-24T09:00:00+07:00
 draft: false
 tags: ["reverse-engineering", "ctf", "milestone"]
 summary: "Last year I was only able to solve 3 of the 10 challenges, but this year I cleared all nine stages. Complete technical write-ups coming up as soon as the competition wraps up."
