@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 430" width="958" height="428" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <defs>
+    <marker id="down" viewBox="0 0 10 10" refX="5" refY="10" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,0 L5,10 z" fill="#6d28d9"/>
+    </marker>
+    <marker id="up" viewBox="0 0 10 10" refX="5" refY="0" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,10 L10,10 L5,0 z" fill="#0f172a"/>
+    </marker>
+  </defs>
+
+  <rect x="1" y="1" width="958" height="428" rx="14" fill="#ffffff" stroke="#e2e8f0"/>
+  <text x="36" y="40" font-size="18" font-weight="700" fill="#0f172a">Two systems, two directions</text>
+  <text x="36" y="64" font-size="13" fill="#64748b">The fan pulls the car down. The thrusters push it up. Neither one is flight.</text>
+  <line x1="36" y1="84" x2="924" y2="84" stroke="#e2e8f0"/>
+
+  <text x="56" y="118" font-size="14" font-weight="700" fill="#6d28d9">Suction system</text>
+  <rect x="56" y="140" width="380" height="12" rx="4" fill="#6d28d9" fill-opacity="0.16" stroke="#6d28d9"/>
+  <text x="60" y="134" font-size="11" fill="#64748b">the car's floor, sealed to the road</text>
+  <line x1="140" y1="158" x2="140" y2="276" stroke="#6d28d9" stroke-width="3" marker-end="url(#down)"/>
+  <line x1="246" y1="158" x2="246" y2="276" stroke="#6d28d9" stroke-width="3" marker-end="url(#down)"/>
+  <line x1="352" y1="158" x2="352" y2="276" stroke="#6d28d9" stroke-width="3" marker-end="url(#down)"/>
+  <rect x="56" y="286" width="380" height="8" rx="4" fill="#e2e8f0"/>
+  <text x="380" y="282" font-size="11" fill="#94a3b8">the road</text>
+  <text x="56" y="318" font-size="13" fill="#334155">Four fans, 20 kW each, derived from a 12 kW compressor motor</text>
+  <text x="56" y="338" font-size="13" fill="#334155">Up to 2 g of downforce, and it works at a standstill</text>
+
+  <text x="520" y="118" font-size="14" font-weight="700" fill="#0f172a">Cold-gas thrusters</text>
+  <line x1="600" y1="276" x2="600" y2="158" stroke="#0f172a" stroke-width="3" marker-end="url(#up)"/>
+  <line x1="710" y1="276" x2="710" y2="158" stroke="#0f172a" stroke-width="3" marker-end="url(#up)"/>
+  <line x1="820" y1="276" x2="820" y2="158" stroke="#0f172a" stroke-width="3" marker-end="url(#up)"/>
+  <rect x="520" y="286" width="380" height="8" rx="4" fill="#e2e8f0"/>
+  <text x="840" y="282" font-size="11" fill="#94a3b8">the car</text>
+  <text x="520" y="318" font-size="13" fill="#334155">Ten nozzles at the rear and perimeter, over 80 kN of thrust</text>
+  <text x="520" y="338" font-size="13" fill="#334155">Two carbon overwrapped vessels, 600 litres, 250 kg of air</text>
+
+  <line x1="36" y1="362" x2="924" y2="362" stroke="#e2e8f0"/>
+  <text x="36" y="398" font-size="13" fill="#334155">Air budget at full thrust</text>
+  <rect x="240" y="384" width="600" height="16" rx="8" fill="#e2e8f0"/>
+  <rect x="240" y="384" width="221" height="16" rx="8" fill="#6d28d9"/>
+  <text x="240" y="378" font-size="12" fill="#6d28d9" font-weight="700">1.84 s</text>
+  <text x="236" y="416" font-size="11" fill="#64748b">0</text>
+  <text x="790" y="416" font-size="11" fill="#64748b">5 s</text>
+</svg>
