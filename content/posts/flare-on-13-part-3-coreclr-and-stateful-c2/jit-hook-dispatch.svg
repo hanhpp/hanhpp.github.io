@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 545" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <rect x="1" y="1" width="958" height="543" rx="14" fill="#ffffff" stroke="#e5e5e7"/>
+
+  <text x="36" y="42" font-size="17" font-weight="600" fill="#1d1d1f">One JIT call, five hooked methods, one stream state</text>
+  <text x="36" y="64" font-size="12" fill="#555555">The native app host patches compileMethod; the implant dispatches on a 64-bit polynomial hash of the managed method name</text>
+
+  <!-- host -->
+  <rect x="30" y="92" width="290" height="96" rx="8" fill="#6d28d9" fill-opacity="0.08" stroke="#6d28d9"/>
+  <text x="48" y="118" font-size="12.5" font-weight="600" fill="#1d1d1f" font-family="ui-monospace, 'Source Code Pro', monospace">ThreatInvaders.exe</text>
+  <text x="48" y="140" font-size="10.5" fill="#555555">native app host: hostfxr and coreclr.dll</text>
+  <text x="48" y="157" font-size="10.5" fill="#555555">bundled managed assemblies (single file)</text>
+  <text x="48" y="174" font-size="10.5" fill="#86868b">the C# this host runs is clean</text>
+
+  <line x1="320" y1="140" x2="384" y2="140" stroke="#6d28d9" stroke-width="1.5"/>
+  <polygon points="384,136 392,140 384,144" fill="#6d28d9"/>
+
+  <!-- patched JIT -->
+  <rect x="392" y="92" width="330" height="96" rx="8" fill="#6d28d9" fill-opacity="0.14" stroke="#6d28d9"/>
+  <text x="410" y="118" font-size="12.5" font-weight="600" fill="#1d1d1f" font-family="ui-monospace, 'Source Code Pro', monospace">patched CoreCLR JIT</text>
+  <text x="410" y="140" font-size="10.5" fill="#555555" font-family="ui-monospace, 'Source Code Pro', monospace">ICorJitCompiler::compileMethod</text>
+  <text x="410" y="157" font-size="10.5" fill="#555555" font-family="ui-monospace, 'Source Code Pro', monospace">0x16c099 to 0xc6e30</text>
+  <text x="410" y="174" font-size="10.5" fill="#86868b">every managed method passes through here</text>
+
+  <line x1="722" y1="140" x2="746" y2="140" stroke="#6d28d9" stroke-width="1.5"/>
+  <polygon points="746,136 754,140 746,144" fill="#6d28d9"/>
+
+  <!-- dispatcher -->
+  <rect x="754" y="92" width="176" height="96" rx="8" fill="#6d28d9" fill-opacity="0.08" stroke="#6d28d9"/>
+  <text x="772" y="118" font-size="11.5" font-weight="600" fill="#1d1d1f">dispatcher</text>
+  <text x="772" y="140" font-size="10.5" fill="#555555">64-bit polynomial hash</text>
+  <text x="772" y="157" font-size="10.5" fill="#555555">over class and method</text>
+  <text x="772" y="174" font-size="10.5" fill="#86868b">five names match</text>
+
+  <!-- fan-out bus -->
+  <line x1="842" y1="188" x2="842" y2="216" stroke="#6d28d9" stroke-width="1.5"/>
+  <line x1="115" y1="216" x2="842" y2="216" stroke="#6d28d9" stroke-width="1.5"/>
+  <line x1="115" y1="216" x2="115" y2="246" stroke="#6d28d9" stroke-width="1.5"/>
+  <line x1="293" y1="216" x2="293" y2="246" stroke="#6d28d9" stroke-width="1.5"/>
+  <line x1="471" y1="216" x2="471" y2="246" stroke="#6d28d9" stroke-width="1.5"/>
+  <line x1="649" y1="216" x2="649" y2="246" stroke="#6d28d9" stroke-width="1.5"/>
+  <line x1="827" y1="216" x2="827" y2="246" stroke="#6d28d9" stroke-width="1.5"/>
+
+  <!-- five hooks -->
+  <rect x="30" y="246" width="170" height="86" rx="8" fill="#ffffff" stroke="#c4b5fd"/>
+  <text x="42" y="268" font-size="10.5" font-weight="600" fill="#1d1d1f" font-family="ui-monospace, 'Source Code Pro', monospace">ReplaceHighscores</text>
+  <text x="42" y="287" font-size="9.5" fill="#6d28d9" font-family="ui-monospace, 'Source Code Pro', monospace">name prefix match</text>
+  <text x="42" y="306" font-size="9.5" fill="#555555">decrypts C2 commands</text>
+  <text x="42" y="322" font-size="9.5" fill="#86868b">from highscore comments</text>
+
+  <rect x="208" y="246" width="170" height="86" rx="8" fill="#ffffff" stroke="#c4b5fd"/>
+  <text x="220" y="268" font-size="10.5" font-weight="600" fill="#1d1d1f" font-family="ui-monospace, 'Source Code Pro', monospace">LaunchUpdate</text>
+  <text x="220" y="287" font-size="9.5" fill="#6d28d9" font-family="ui-monospace, 'Source Code Pro', monospace">0x6f8ff9636eae6c5a</text>
+  <text x="220" y="306" font-size="9.5" fill="#555555">runs cmd.exe /c, then</text>
+  <text x="220" y="322" font-size="9.5" fill="#86868b">encrypts the stdout</text>
+
+  <rect x="386" y="246" width="170" height="86" rx="8" fill="#ffffff" stroke="#c4b5fd"/>
+  <text x="398" y="268" font-size="10.5" font-weight="600" fill="#1d1d1f" font-family="ui-monospace, 'Source Code Pro', monospace">HasFeedback</text>
+  <text x="398" y="287" font-size="9.5" fill="#6d28d9" font-family="ui-monospace, 'Source Code Pro', monospace">0x5f6e18db1be45dc7</text>
+  <text x="398" y="306" font-size="9.5" fill="#555555">tells the telemetry path</text>
+  <text x="398" y="322" font-size="9.5" fill="#86868b">that output is queued</text>
+
+  <rect x="564" y="246" width="170" height="86" rx="8" fill="#ffffff" stroke="#c4b5fd"/>
+  <text x="576" y="268" font-size="10.5" font-weight="600" fill="#1d1d1f" font-family="ui-monospace, 'Source Code Pro', monospace">EncodeFeedbackBuffer</text>
+  <text x="576" y="287" font-size="9.5" fill="#6d28d9" font-family="ui-monospace, 'Source Code Pro', monospace">0x6397c52d5293345e</text>
+  <text x="576" y="306" font-size="9.5" fill="#555555">key exchange: XORs the</text>
+  <text x="576" y="322" font-size="9.5" fill="#86868b">reversed Guid with a seed</text>
+
+  <rect x="742" y="246" width="170" height="86" rx="8" fill="#ffffff" stroke="#c4b5fd"/>
+  <text x="754" y="268" font-size="10.5" font-weight="600" fill="#1d1d1f" font-family="ui-monospace, 'Source Code Pro', monospace">GetSessionID</text>
+  <text x="754" y="287" font-size="9.5" fill="#6d28d9" font-family="ui-monospace, 'Source Code Pro', monospace">0xa3a845aec791499a</text>
+  <text x="754" y="306" font-size="9.5" fill="#555555">captures the client's</text>
+  <text x="754" y="322" font-size="9.5" fill="#86868b">16-byte .NET Guid</text>
+
+  <!-- fan-in bus -->
+  <line x1="115" y1="332" x2="115" y2="360" stroke="#6d28d9" stroke-width="1.5"/>
+  <line x1="293" y1="332" x2="293" y2="360" stroke="#6d28d9" stroke-width="1.5"/>
+  <line x1="471" y1="332" x2="471" y2="360" stroke="#6d28d9" stroke-width="1.5"/>
+  <line x1="649" y1="332" x2="649" y2="360" stroke="#6d28d9" stroke-width="1.5"/>
+  <line x1="827" y1="332" x2="827" y2="360" stroke="#6d28d9" stroke-width="1.5"/>
+  <line x1="115" y1="360" x2="827" y2="360" stroke="#6d28d9" stroke-width="1.5"/>
+  <line x1="471" y1="360" x2="471" y2="386" stroke="#6d28d9" stroke-width="1.5"/>
+  <polygon points="467,386 471,394 475,386" fill="#6d28d9"/>
+
+  <!-- shared state -->
+  <rect x="180" y="394" width="600" height="118" rx="8" fill="#6d28d9" fill-opacity="0.12" stroke="#6d28d9"/>
+  <text x="198" y="420" font-size="12.5" font-weight="600" fill="#1d1d1f">one 64-bit stream state, held for the life of the process</text>
+  <text x="198" y="444" font-size="10.5" fill="#1d1d1f" font-family="ui-monospace, 'Source Code Pro', monospace">state = state * 0x5851F42D4C957F2D + 0x14057B7EF767814F  (mod 2^64)</text>
+  <text x="198" y="463" font-size="10.5" fill="#1d1d1f" font-family="ui-monospace, 'Source Code Pro', monospace">keystream byte = top byte of the new state</text>
+  <text x="198" y="486" font-size="10.5" fill="#555555">Five entry points, one state: nothing is re-keyed per request, so every byte</text>
+  <text x="198" y="503" font-size="10.5" fill="#555555">any hook reads or writes decides the keystream of every later request.</text>
+</svg>

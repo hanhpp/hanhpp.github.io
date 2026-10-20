@@ -1,0 +1,11 @@
+# Fingerprints for values that gitleaks flags as generic-api-key but that are Flare-On challenge
+# material rather than credentials: keys printed by the challenge solver and a joke password string
+# stored inside the challenge binary. Each post explains how the value is derived, so publishing it
+# is the point of the writeup.
+#
+# Fingerprints are line-anchored on purpose. If a post is edited and the line moves, the fingerprint
+# stops matching and gitleaks blocks the commit again, which is the re-review we want.
+content/posts/flare-on-13-part-4-asn1-labyrinth/index.md:generic-api-key:176
+content/posts/flare-on-13-part-5-crux-and-beyond/index.md:generic-api-key:44
+content/posts/flare-on-13-part-2-cryptanalysis-and-compression/index.md:generic-api-key:23
+content/posts/flare-on-13-part-2-cryptanalysis-and-compression/index.md:generic-api-key:111

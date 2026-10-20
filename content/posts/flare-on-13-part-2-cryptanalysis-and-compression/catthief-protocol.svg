@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 760" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <defs>
+    <marker id="req" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6d28d9"/>
+    </marker>
+    <marker id="resp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <rect x="1" y="1" width="958" height="758" rx="14" fill="#ffffff" stroke="#e2e8f0"/>
+  <text x="36" y="38" font-size="18" font-weight="700" fill="#0f172a">catthief: six POSTs, one RC4 key</text>
+  <text x="36" y="58" font-size="12" fill="#64748b">Every request and every reply builds a fresh RC4 state from the same 25-byte key, so the keystream restarts at byte 0 each time.</text>
+
+  <rect x="60" y="84" width="280" height="40" rx="8" fill="#f3e8ff" stroke="#d8b4fe"/>
+  <text x="200" y="109" font-size="12" font-weight="700" fill="#581c87" text-anchor="middle">catthief.exe (victim)</text>
+  <rect x="620" y="84" width="280" height="40" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="760" y="109" font-size="12" font-weight="700" fill="#334155" text-anchor="middle">C2 listener, :8080 /exfil</text>
+
+  <line x1="200" y1="124" x2="200" y2="716" stroke="#cbd5e1" stroke-dasharray="4 4"/>
+  <line x1="760" y1="124" x2="760" y2="716" stroke="#cbd5e1" stroke-dasharray="4 4"/>
+
+  <!-- exchange 0 -->
+  <line x1="200" y1="176" x2="760" y2="176" stroke="#6d28d9" stroke-width="2" marker-end="url(#req)"/>
+  <text x="214" y="168" font-size="12" font-family="ui-monospace, 'Source Code Pro', monospace" fill="#4c1d95">POST /exfil   "READY" + 0x00 padding</text>
+  <text x="214" y="192" font-size="11" fill="#6d28d9">known plaintext, so the first 264 reply bytes decrypt for free</text>
+  <line x1="760" y1="222" x2="200" y2="222" stroke="#64748b" stroke-width="2" marker-end="url(#resp)"/>
+  <text x="746" y="214" font-size="12" text-anchor="end" fill="#334155">important.jpg</text>
+
+  <!-- exchange 1 -->
+  <line x1="200" y1="276" x2="760" y2="276" stroke="#6d28d9" stroke-width="2" marker-end="url(#req)"/>
+  <text x="214" y="268" font-size="12" font-family="ui-monospace, 'Source Code Pro', monospace" fill="#4c1d95">POST /exfil   important.jpg, Huffman then RC4</text>
+  <line x1="760" y1="322" x2="200" y2="322" stroke="#64748b" stroke-width="2" marker-end="url(#resp)"/>
+  <text x="746" y="314" font-size="12" text-anchor="end" fill="#334155">anothercat.jpg</text>
+
+  <!-- exchange 2 -->
+  <line x1="200" y1="376" x2="760" y2="376" stroke="#6d28d9" stroke-width="2" marker-end="url(#req)"/>
+  <text x="214" y="368" font-size="12" font-family="ui-monospace, 'Source Code Pro', monospace" fill="#4c1d95">POST /exfil   anothercat.jpg</text>
+  <line x1="760" y1="422" x2="200" y2="422" stroke="#64748b" stroke-width="2" marker-end="url(#resp)"/>
+  <text x="746" y="414" font-size="12" text-anchor="end" fill="#334155">yetanothercat.jpg</text>
+
+  <!-- exchange 3 -->
+  <line x1="200" y1="476" x2="760" y2="476" stroke="#6d28d9" stroke-width="2" marker-end="url(#req)"/>
+  <text x="214" y="468" font-size="12" font-family="ui-monospace, 'Source Code Pro', monospace" fill="#4c1d95">POST /exfil   yetanothercat.jpg</text>
+  <line x1="760" y1="522" x2="200" y2="522" stroke="#64748b" stroke-width="2" marker-end="url(#resp)"/>
+  <text x="746" y="514" font-size="12" font-weight="700" text-anchor="end" fill="#6d28d9">catcatcat.jpg</text>
+  <text x="214" y="546" font-size="11" fill="#6d28d9">the flag is painted into the pixels of this one, not stored as text</text>
+
+  <!-- exchange 4 -->
+  <line x1="200" y1="596" x2="760" y2="596" stroke="#6d28d9" stroke-width="2" marker-end="url(#req)"/>
+  <text x="214" y="588" font-size="12" font-weight="700" font-family="ui-monospace, 'Source Code Pro', monospace" fill="#6d28d9">POST /exfil   catcatcat.jpg</text>
+  <line x1="760" y1="642" x2="200" y2="642" stroke="#64748b" stroke-width="2" marker-end="url(#resp)"/>
+  <text x="746" y="634" font-size="12" text-anchor="end" fill="#334155">myfavoritecat.jpg</text>
+
+  <!-- exchange 5 -->
+  <line x1="200" y1="696" x2="760" y2="696" stroke="#6d28d9" stroke-width="2" marker-end="url(#req)"/>
+  <text x="214" y="688" font-size="12" font-family="ui-monospace, 'Source Code Pro', monospace" fill="#4c1d95">POST /exfil   myfavoritecat.jpg</text>
+
+  <text x="36" y="742" font-size="11" fill="#64748b">Six POST bodies in a single TCP conversation. Each body re-keys RC4 from scratch, and the server answers each one with the next filename in its queue.</text>
+</svg>

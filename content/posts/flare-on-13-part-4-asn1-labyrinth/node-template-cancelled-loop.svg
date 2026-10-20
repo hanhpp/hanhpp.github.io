@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="300" viewBox="0 0 940 300" role="img" aria-label="Execution flow of one labyrinth node, showing the stall loop cancelling to zero">
+  <title>One node of the ASN.1 labyrinth, with the stall loop cancelled</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#6d28d9"/>
+    </marker>
+  </defs>
+
+  <rect x="0.5" y="0.5" width="939" height="299" rx="10" fill="#ffffff" stroke="#e5e5e7"/>
+  <text x="20" y="38" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" font-weight="700" fill="#1d1d1f">One node of the labyrinth</text>
+  <text x="20" y="56" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#86868b">identical template for roughly 700 of the 1,034 decrypted entries</text>
+
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" text-anchor="middle">
+    <rect x="20" y="76" width="140" height="96" rx="8" fill="#f3e8ff" stroke="#d8b4fe"/>
+    <text x="90" y="102" font-size="12" font-weight="700" fill="#6d28d9">call</text>
+    <text x="90" y="124" font-size="11" fill="#1d1d1f">cl = candidate</text>
+    <text x="90" y="140" font-size="11" fill="#1d1d1f">byte</text>
+    <text x="90" y="160" font-size="11" fill="#555">rdx = state[32]</text>
+
+    <rect x="174" y="76" width="140" height="96" rx="8" fill="#f3e8ff" stroke="#d8b4fe"/>
+    <text x="244" y="102" font-size="12" font-weight="700" fill="#6d28d9">mutate</text>
+    <text x="244" y="124" font-size="11" fill="#1d1d1f">write 3 byte</text>
+    <text x="244" y="140" font-size="11" fill="#1d1d1f">offsets in state</text>
+    <text x="244" y="160" font-size="11" fill="#555">shared buffer</text>
+
+    <rect x="328" y="76" width="140" height="96" rx="8" fill="#fdf4ff" stroke="#6d28d9" stroke-width="2"/>
+    <text x="398" y="102" font-size="12" font-weight="700" fill="#6d28d9">stall</text>
+    <text x="398" y="122" font-size="11" fill="#1d1d1f">adds 1 .. 999,999</text>
+    <text x="398" y="138" font-size="11" fill="#1d1d1f">cmp 0xF4240</text>
+    <text x="398" y="160" font-size="11" fill="#555">acc = 0x6A4AE6E0</text>
+
+    <rect x="482" y="76" width="140" height="96" rx="8" fill="#fdf4ff" stroke="#6d28d9" stroke-width="2"/>
+    <text x="552" y="102" font-size="12" font-weight="700" fill="#6d28d9">cancel</text>
+    <text x="552" y="126" font-size="11" fill="#1d1d1f">sub eax,</text>
+    <text x="552" y="142" font-size="11" fill="#1d1d1f">0x6A4AE6E0</text>
+    <text x="552" y="160" font-size="11" fill="#555">net effect: 0</text>
+
+    <rect x="636" y="76" width="140" height="96" rx="8" fill="#f3e8ff" stroke="#d8b4fe"/>
+    <text x="706" y="102" font-size="12" font-weight="700" fill="#6d28d9">mix</text>
+    <text x="706" y="124" font-size="11" fill="#1d1d1f">hash state</text>
+    <text x="706" y="140" font-size="11" fill="#1d1d1f">with the byte</text>
+    <text x="706" y="160" font-size="11" fill="#555">transition fn</text>
+
+    <rect x="790" y="76" width="130" height="96" rx="8" fill="#f3e8ff" stroke="#d8b4fe"/>
+    <text x="855" y="102" font-size="12" font-weight="700" fill="#6d28d9">ret</text>
+    <text x="855" y="126" font-size="11" fill="#1d1d1f">eax = next</text>
+    <text x="855" y="142" font-size="11" fill="#1d1d1f">node id</text>
+    <text x="855" y="162" font-size="11" fill="#555">valid id only</text>
+  </g>
+
+  <g stroke="#6d28d9" stroke-width="1.6" marker-end="url(#arrow)">
+    <line x1="162" y1="124" x2="170" y2="124"/>
+    <line x1="316" y1="124" x2="324" y2="124"/>
+    <line x1="470" y1="124" x2="478" y2="124"/>
+    <line x1="624" y1="124" x2="632" y2="124"/>
+    <line x1="778" y1="124" x2="786" y2="124"/>
+  </g>
+
+  <rect x="320" y="202" width="310" height="70" rx="8" fill="#ffffff" stroke="#6d28d9" stroke-dasharray="5 4"/>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" text-anchor="middle" fill="#1d1d1f">
+    <text x="475" y="226" font-size="11" font-weight="700" fill="#6d28d9">the stall is a no-op</text>
+    <text x="475" y="245" font-size="11">999,999 terms, low 32 bits = 0x6A4AE6E0</text>
+    <text x="475" y="262" font-size="11">one instruction later it is subtracted away</text>
+  </g>
+
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="#86868b">
+    <text x="20" y="230" font-size="11">patch the stub: skip the branch,</text>
+    <text x="20" y="247" font-size="11">preload [rsp+0x10] = 0x6A4AE6E0,</text>
+    <text x="20" y="264" font-size="11">run the node in under 5 us</text>
+  </g>
+</svg>
