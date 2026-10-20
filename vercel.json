@@ -5,5 +5,27 @@
     "env": {
       "HUGO_VERSION": "0.164.0"
     }
-  }
+  },
+  "redirects": [
+    {
+      "source": "/posts/welcome-to-my-blog",
+      "destination": "/about/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/welcome-to-my-blog/",
+      "destination": "/about/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/using-images-and-shortcodes",
+      "destination": "/posts/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/using-images-and-shortcodes/",
+      "destination": "/posts/",
+      "permanent": true
+    }
+  ]
 }
