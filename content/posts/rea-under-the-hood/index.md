@@ -50,6 +50,36 @@ claims:
     confidence: "high"
     authority: "Our own measurement: exit 134, an empty output file, and a heap-out-of-memory line in stderr at 3.8 to 4.0 GB."
     limitations: "One artifact on one machine with default flags. Raising the heap was started but not finished, so this is a ceiling we hit, not a proven maximum."
+title: "Under the Hood of REA: Evidence Ids, Refusals, and a Four-Gigabyte Ceiling"
+date: 2026-10-15T09:00:00+07:00
+draft: false
+tags: ["reverse-engineering", "architecture", "deep-dive"]
+summary: "The refusal was more useful than the analysis would have been. Inside REA: how an evidence id is computed so two machines agree, why a zero can mean the question was never asked, and the 3 MB file that exhausted Node's default heap."
+exercises:
+  - number: 1
+    question: "How is an evidence id computed, and what is deliberately left out of it?"
+    command: "P=\"$(dirname \"$(command -v rea)\")/../lib/node_modules/rea-agents\"; grep -n -B1 'computeEvidenceId = ' \"$P/dist/domain/evidence.js\""
+    expect: "a comment saying the identifier is recomputed excluding paths and raw payload bytes, and a one-line id built as ev_ plus a canonical digest"
+    accept: "Read the projection function above it. The set of fields that go into the hash is the tool's definition of what a result means."
+    wrong_answer: "Assuming the id hashes the file. It hashes the record about the file, and the record deliberately excludes where the file sat on your disk."
+  - number: 2
+    question: "Can an evidence record be edited after the fact?"
+    command: "P=\"$(dirname \"$(command -v rea)\")/../lib/node_modules/rea-agents\"; grep -n 'does not match its record' \"$P/dist/domain/evidence.js\""
+    expect: "a thrown TypeError from the parse path, raised when the recomputed id disagrees with the stored one"
+    accept: "The id is re-derived on load, which means a hand-edited bundle fails loudly instead of being trusted."
+    wrong_answer: "Treating the id as an opaque primary key rather than a checksum over meaning."
+  - number: 3
+    question: "How many distinct ways can provider selection refuse to run?"
+    command: "P=\"$(dirname \"$(command -v rea)\")/../lib/node_modules/rea-agents\"; sed -n '/REJECTION/,/];/p' \"$P/dist/contracts/providerSelection.js\" | grep -cE '\"[a-z_]+\"'"
+    expect: "12"
+    accept: "architecture_unsupported is the one a fat Mach-O produces; target_role_unsupported is the one that fires when a reduced tree has no main process to classify."
+    wrong_answer: "Reading the refusal as a system error, when each code names a condition you can change."
+  - number: 4
+    question: "Is the managed-code path a parser or a wrapper around a runtime?"
+    command: "P=\"$(dirname \"$(command -v rea)\")/../lib/node_modules/rea-agents\"; ls \"$P/dist/dotnet/\" | wc -l; grep -rl 'child_process' \"$P/dist/dotnet/\" | wc -l"
+    expect: "17 modules, and 0 files that start a subprocess"
+    accept: "PE headers and CLI metadata rows are decoded in JavaScript, so the answer does not depend on a .NET runtime being installed."
+    wrong_answer: "Assuming a .NET artifact requires .NET to inspect, which is the assumption the design is built to avoid."
 ---
 
 A universal Mach-O is a file with several architectures concatenated, and I pointed the tool at one anyway. It refused, which took under a second, and the refusal was the best thing it produced all day:

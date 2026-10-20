@@ -1,6 +1,6 @@
 {{- /* Renders one exercise from the page's `exercises` front matter.
-       One source per exercise: the human view and the agent view are both built from the same data,
-       so a command cannot drift between the two readings.
+       One source per exercise: the figure, its caption and its command all come from the same entry,
+       so a command cannot drift from the question it answers.
 
        The key is `number` and not `n` on purpose: YAML treats a bare `n` as the boolean false, so a key
        named `n` arrives as `"false"` and every lookup for it silently finds nothing. */ -}}

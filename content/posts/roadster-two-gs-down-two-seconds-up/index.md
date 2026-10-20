@@ -48,6 +48,65 @@ claims:
     confidence: "high"
     authority: "SpaceX's own investigation conclusion, and NASA's 2026 work on stress rupture in carbon fibre overwrapped vessels."
     limitations: "The class is the same, the duty cycle is nothing like a rocket's, and no failure mechanism transfers automatically. It is a reason to ask what the qualification standard is, not a prediction."
+title: "The Roadster Does Not Fly: Two Gs Down and Two Seconds Up"
+date: 2026-10-19T14:00:00+07:00
+draft: false
+tags: ["tech-news", "hardware", "performance", "math"]
+summary: "Tesla put a 56-year-old suction fan and a spacecraft attitude-control system in a road car, and the disclosed numbers say the entire air supply buys under two seconds of thrust."
+exercises:
+  - number: 1
+    question: "Tesla disclosed 250 kg of air and over 80 kN of thrust. How many seconds of full thrust is that?"
+    command: "python3 -c 'm=250; F=80e3; ve=60*9.81; print(round(m/(F/ve), 2))'"
+    expect: "1.84, seconds, at a cold-gas specific impulse of 60 s."
+    accept: "Try 100 instead of 60 and it becomes 3.07 s. The whole air supply is a couple of seconds either way, which is why the demo was a hop and a barrel roll rather than flight."
+    wrong_answer: "Reading 600 litres as a large amount of energy. Volume is not the budget, mass flow is, and 80 kN spends mass fast."
+  - number: 2
+    question: "Nobody at Tesla said the tank pressure. Can the two disclosed numbers pin it?"
+    command: "python3 -c 'V=0.6; m=250; R=8.314; T=288; M=0.02896; print(round(m/M*R*T/V/1e5, 1))'"
+    expect: "344.5 bar, or about 5,000 psi, from the ideal gas law at 15 C."
+    accept: "Real air at that pressure has a compressibility factor above one, so the true figure is higher, and it rises further as the tanks cool while venting. Treat 345 bar as the floor, not the answer."
+    wrong_answer: "Assuming the tanks are the constraint. At 345 bar the density is 340 times sea-level air, which is ordinary for a COPV and the reason they can fit in a car at all."
+  - number: 3
+    question: "Tesla says the tires alone give 1.26 g and the fan adds up to 2 g. What does each ceiling permit on a 1,678 kg car?"
+    command: "python3 -c 'v=26.82; g=9.81; print(round(v/(1.26*g), 2), round(v/(2.0*g), 2))'"
+    expect: "2.17 1.37, seconds to 60 mph at each traction ceiling."
+    accept: "Neither reaches the claimed 0.81 s, which needs 3.38 g and about 56 kN. So the fan and the thrusters are not alternatives: the fan raises the traction ceiling and the thrusters supply force above it."
+    wrong_answer: "Crediting the sub-one-second run to the thrusters alone. Rear-mounted thrusters on a 1,678 kg car still have to put the force through something, and at 0.81 s the tires are working at the edge of what the suction gives them."
+title: "The Roadster Does Not Fly: Two Gs Down and Two Seconds Up"
+date: 2026-10-19T14:00:00+07:00
+draft: false
+tags: ["tech-news", "hardware", "performance", "math"]
+summary: "Tesla put a 56-year-old suction fan and a spacecraft attitude-control system in a road car, and the disclosed numbers say the entire air supply buys under two seconds of thrust."
+claims:
+  - claim: "Tesla revealed the second-generation Roadster on 15 October 2026 at SpaceX's McGregor, Texas site."
+    confidence: "high"
+    authority: "Two independent trade reports filed the same evening, with photographs and a livestream recording."
+    limitations: "The event was produced by Tesla and attended by invited media, so every specification in it is a company claim, not a measurement."
+  - claim: "The suction system produces up to 2 g of downforce, and holds over 2 g in a corner below 50 mph."
+    confidence: "medium"
+    authority: "Tesla's engineering VP on the record, plus Tesla's own figure of 2 g at 200 mph."
+    limitations: "The two statements are about different speeds and different things: 2 g at 200 mph is aerodynamic, while the low-speed figure is the fan. Neither has been measured by anyone outside Tesla."
+  - claim: "Ten cold-gas thrusters, two carbon overwrapped pressure vessels totalling 600 litres, 250 kg of air, recharged on board."
+    confidence: "high"
+    authority: "Stated at the event and repeated in the same trade report with the trim breakdown."
+    limitations: "The recharge rate is not disclosed, so the duty cycle between stunts is unknown."
+  - claim: "The thrusters produce over 80 kilonewtons."
+    confidence: "medium"
+    authority: "Said on stage during the demonstration."
+    limitations: "No thrust curve, no duration, and no statement of whether that is all ten nozzles or the forward-facing subset. The arithmetic in exercise 3 shows the claimed 0.81 s does not need all of it, which suggests it is a total."
+  - claim: "Production starts in 2028."
+    confidence: "low"
+    authority: "Musk, on stage, adding the word actually with a laugh."
+    limitations: "This is the same car that was revealed in 2017 for delivery in a few years, with customer deposits taken since. Nine years of slippage is the base rate to price against."
+  - claim: "The pressure vessels are the same class that failed on a Falcon 9 in 2016."
+    confidence: "high"
+    authority: "SpaceX's own investigation conclusion, and NASA's 2026 work on stress rupture in carbon fibre overwrapped vessels."
+    limitations: "The class is the same, the duty cycle is nothing like a rocket's, and no failure mechanism transfers automatically. It is a reason to ask what the qualification standard is, not a prediction."
+title: "The Roadster Does Not Fly: Two Gs Down and Two Seconds Up"
+date: 2026-10-19T14:00:00+07:00
+draft: false
+tags: ["tech-news", "hardware", "performance", "math"]
+summary: "Tesla put a 56-year-old suction fan and a spacecraft attitude-control system in a road car, and the disclosed numbers say the entire air supply buys under two seconds of thrust."
 ---
 
 Tesla revealed the second-generation Roadster on 15 October 2026 at SpaceX's test site in McGregor, Texas, and the coverage settled on one word: flying [1][2]. It is the wrong word twice over. The fan system the car is built around produces downforce, which is force toward the ground, and the thrusters that lifted it are cold gas, which is compressed air and not combustion.

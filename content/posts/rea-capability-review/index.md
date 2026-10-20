@@ -58,6 +58,36 @@ claims:
     confidence: "medium"
     authority: "The shipped tool contract for the browser provider."
     limitations: "Read from the contract text and the target-selection path, not probed against a remote host."
+title: "REA: An Introduction, and the Game-Reversing Scene It Arrived In"
+date: 2026-10-15T15:00:00+07:00
+draft: false
+tags: ["reverse-engineering", "ai", "architecture"]
+summary: "Every result the tool returns carries its own confidence, its authority, and its limits, which is the discipline a claim about a shipped game needs. What REA is, and what people are using it for, from a PC-98 bullet pattern to PS5 executables relinked into native ports."
+exercises:
+  - number: 1
+    question: "How many commands does the CLI actually register?"
+    command: "rea --help | grep -cE '^ +[a-z][a-z0-9-]+ +[A-Z]'"
+    expect: "90"
+    accept: "The frozen inventory in dist/cliCommandNames.js holds 88. The two the help lists without registering are mcp and completions, which scripts/rea.mjs answers before the CLI sees the arguments."
+    wrong_answer: "Reading 90 as the number of registered commands, so that a later diff against the source looks like drift instead of a dispatcher."
+  - number: 2
+    question: "What vocabulary does a result use to describe how well it knows what it told you?"
+    command: "P=\"$(dirname \"$(command -v rea)\")/../lib/node_modules/rea-agents\"; grep -oE '\"(shipped-artifact|controlled-replay|historical-reference|external-service|analyst-inference)\"' \"$P/dist/domain/evidence.js\" | sort -u"
+    expect: "five lines, one per authority tier"
+    accept: "This field decides whether an answer rests on the artifact itself, on a replay you controlled, on a reference tree, on a service you called, or on nothing but your own reasoning."
+    wrong_answer: "Treating every result as equally grounded because each one carries a hash."
+  - number: 4
+    question: "What does a provider refusal actually look like?"
+    command: "P=\"$(dirname \"$(command -v rea)\")/../lib/node_modules/rea-agents\"; grep -n 'cannot enforce the selected architecture' \"$P/dist/ghidra/GhidraProvider.js\""
+    expect: "a reason string naming the universal Mach-O and telling you to analyze a thinned slice instead"
+    accept: "A refusal with a code and a sentence attached is a result, not a crash. It says the boundary belongs to the provider, and that one lipo command moves it."
+    wrong_answer: "Concluding that the tool cannot read Mach-O at all, when it read the header, understood it, and declined on the provider's behalf."
+  - number: 3
+    question: "Which projects does the tool's own documentation lead with, and what kind of work are they?"
+    command: "curl -s https://cdn.jsdelivr.net/gh/morluto/rea@main/README.md | grep -oE '[]][(]https://github[.]com/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+[)]' | sed 's/^](//; s/)$//' | sort -u; curl -s https://cdn.jsdelivr.net/gh/morluto/rea@main/README.md | grep -o 'rea[.]tools/showcase/[a-z0-9-]*/' | sort -u"
+    expect: "the project's own repository, two reconstruction repositories under another author's account (dx-ball and th04), and three showcase pages: dx-ball, notion and th04"
+    accept: "Two of the three case studies are games, and the third is a desktop app. The tool is being introduced through reconstruction work rather than through malware analysis, which is a statement about who adopted it first."
+    wrong_answer: "Assuming a general-purpose reversing tool would lead with security research. It leads with a sound-pan calculation and a bullet pattern."
 ---
 
 I asked a reversing agent whether an Electron application registers IPC handlers. It answered zero.

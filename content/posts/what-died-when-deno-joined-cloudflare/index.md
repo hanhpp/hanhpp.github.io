@@ -75,6 +75,90 @@ claims:
     confidence: "high"
     authority: "The GitHub API for denoland/deno, read directly."
     limitations: "Activity is not the same as maintenance. The star count measures eight years of interest, and the last release before the announcement was weeks old."
+title: "What Actually Died When Deno Joined Cloudflare"
+date: 2026-10-20T09:00:00+07:00
+tags: ["tech-news", "distributed-systems", "architecture", "devops"]
+summary: "Deno's runtime got a twelve month clock and Deno Deploy got six months, but Deploy had already been shut down once in July, and the part of Deno that survived is the part nobody was arguing about."
+exercises:
+  - number: 1
+    question: "How much of this is comment section noise? Start with how many people actually turned up."
+    command: "curl -s https://hacker-news.firebaseio.com/v0/item/50019911.json | python3 -c 'import json,sys; d=json.load(sys.stdin); print(d[\"title\"], d[\"score\"], d[\"descendants\"])'"
+    expect: "Cloudflare acquires Deno, then a score of 1387 or more and 726 comments or more. Both numbers only grow."
+    accept: "Read the count as a measure of surprise rather than of correctness. The thread is mostly people who already had opinions about the runtime they had chosen."
+    wrong_answer: "Treating the thread as a verdict. It is 726 arguments, and the useful part is that they disagree about the reason rather than the outcome."
+  - number: 2
+    question: "Did the founder really blame Node compatibility, or is that a paraphrase doing the rounds?"
+    command: "curl -s https://hacker-news.firebaseio.com/v0/item/50023277.json | python3 -c 'import json,sys,html,re; t=json.load(sys.stdin)[\"text\"]; print(html.unescape(re.sub(r\"<[^>]+>\",\"\",t)))' | grep -c 'gravity well of node compatibility'"
+    expect: "1."
+    accept: "Read the whole comment with the tags stripped, as the command does. The same comment says Deno stays MIT licensed, which is the sentence with the longest consequences."
+    wrong_answer: "Assuming the quote is from the announcement. It is a comment three hours later, and the announcement itself is considerably politer about Deno's prospects."
+  - number: 3
+    question: "The announcement says Deno Deploy has six months. Had it already been shut down once?"
+    command: "curl -s https://docs.deno.com/deploy/classic/ | grep -c 'July 20, 2026'"
+    expect: "2, a banner and a sentence, both about Deploy Classic."
+    accept: "Note what this means: the platform being given six months was itself the replacement for a platform already past its sunset date. Deno's hosting story had been in transition for months before anyone acquired it."
+    wrong_answer: "Reading Deploy Classic as a different product that does not matter. It is the platform Deploy's current customers were told to migrate to."
+  - number: 4
+    question: "What does the self-hosted alternative actually cost, by its own numbers?"
+    command: "curl -s https://celld.dev/ | grep -oE '\\$4\\.15 per resident cell-month|~\\$0\\.02' | sort -u"
+    expect: "Two figures: Durable Objects at $4.15 per resident cell-month on the paid plan, and celld at about $0.02."
+    accept: "Divide and you get roughly 208 to 1. Then read the caveat the page prints under its own benchmark table, that the speed and density numbers come from an Apple laptop over loopback, and that the measured 2 vCPU node activated a cell in 35.9 ms instead."
+    wrong_answer: "Quoting 208x as a like-for-like comparison. One of those prices includes a network in hundreds of cities and a team that carries a pager for it."
+  - number: 5
+    question: "Cloudflare says workerd had a gap in production readiness. Is that true, and how fast is the runtime actually moving?"
+    command: "curl -s https://blog.cloudflare.com/deno-joins-cloudflare/ | grep -c 'single-instance way'; curl -s 'https://api.github.com/repos/cloudflare/workerd/releases?per_page=100' | python3 -c 'import json,sys; r=json.load(sys.stdin); print(len(r), max(r, key=lambda x: x[\"published_at\"])[\"published_at\"][:10])'"
+    expect: "1 for the sentence, then a full page of 100 releases with the newest dated within days of when you run this."
+    accept: "A page that comes back full means there are at least 100 releases, and the rate works out near one a day on a runtime whose repository was opened in September 2022. Whatever else is unsettled, workerd is not stalled."
+    wrong_answer: "Assuming the admission means workerd is unusable. It runs Cloudflare's production traffic; what it lacks is a self-hostable way to scale Durable Objects."
+  - number: 6
+    question: "Is Deno dead, as the coverage says?"
+    command: "curl -s https://api.github.com/repos/denoland/deno | python3 -c 'import json,sys; d=json.load(sys.stdin); print(d[\"license\"][\"spdx_id\"], d[\"archived\"], d[\"stargazers_count\"])'"
+    expect: "MIT False and a star count above 100000."
+    accept: "Read the pair of answers together. The repository is not archived and the licence is permissive, so the code is not closed and not taken away, but nobody is paid to move it forward after the year runs out."
+    wrong_answer: "Equating a wind-down with a deletion. The failure here is commercial, and the exact shape of it matters to anyone still running the thing in production."
+  - number: 7
+    question: "Was celld a real project before the acquisition, or a shell put together to sell a company?"
+    command: "curl -s https://hacker-news.firebaseio.com/v0/item/49185430.json | python3 -c 'import json,sys,datetime; d=json.load(sys.stdin); print(d[\"title\"], datetime.datetime.fromtimestamp(d[\"time\"], datetime.UTC).strftime(\"%Y-%m-%d\"), d[\"score\"], d[\"descendants\"])'"
+    expect: "Celld: Self-hosted, distributed Durable Objects, 2026-08-05, and a score around 286 with 54 comments."
+    accept: "The submission date is the same day v0.1.0 was tagged, which places the project's public debut two months before anyone announced an acquisition. It also means the community had already had an argument about it."
+    wrong_answer: "Reading the acquisition as an acquihire that happened first. The primitive existed, shipped, and was discussed before there was a deal to announce."
+title: "What Actually Died When Deno Joined Cloudflare"
+date: 2026-10-20T09:00:00+07:00
+tags: ["tech-news", "distributed-systems", "architecture", "devops"]
+summary: "Deno's runtime got a twelve month clock and Deno Deploy got six months, but Deploy had already been shut down once in July, and the part of Deno that survived is the part nobody was arguing about."
+claims:
+  - claim: "Deno's runtime gets monthly releases for a year, then Cloudflare ends development of it."
+    confidence: "high"
+    authority: "Deno's own announcement, and Ryan Dahl's comment on Hacker News repeating it."
+    limitations: "A commitment, not a contract, and it covers bug fixes and security updates rather than features. Nobody has said what happens to open security reports in month thirteen."
+  - claim: "Deno Deploy Classic was already scheduled to shut down on 2026-07-20, five months before the acquisition."
+    confidence: "high"
+    authority: "Deno's own documentation, which still carries the banner."
+    limitations: "Classic is the legacy product; the new Deno Deploy is the one the last customers were told to move to, and it is the one now closing."
+  - claim: "celld's headline performance and cost figures come from a laptop-class benchmark, disclosed as such."
+    confidence: "high"
+    authority: "celld.dev's own footnote under the table, which also reports a slower 35.9 ms activation on a 2 vCPU fleet node."
+    limitations: "The project publishes a testing page but the numbers here are single-node and near-trivial cells. Treat the ratios as orders of magnitude, not as capacity planning."
+  - claim: "workerd has only ever supported Durable Objects at single-instance scale for self-hosters."
+    confidence: "high"
+    authority: "Kenton Varda, in the Cloudflare announcement, including that TODO comments predate it and one earlier attempt failed."
+    limitations: "This is the vendor describing its own gap, which is the most reliable kind of admission and still a vendor's framing of which gap matters."
+  - claim: "Node adopted Deno's permissions idea but still cannot allow-list individual network hosts."
+    confidence: "medium"
+    authority: "Node's 20.0.0 release notes announce the permission model as experimental; the host allow-listing gap is Simon Willison's reading rather than a documented limitation."
+    limitations: "The flag name alone does not settle what the model covers today, and Node has shipped a great deal since 2023."
+  - claim: "A production platform, Supabase, runs Deno on its own infrastructure and is not affected by the hosted shutdown."
+    confidence: "low"
+    authority: "A single commenter identifying themselves as a Supabase employee, in the acquisition thread."
+    limitations: "Not a published company statement, and no scope given for how their next multi-runtime offering will treat Deno. Treat it as an example of the pattern rather than as a fact about Supabase's roadmap."
+  - claim: "Deno the project is unfunded rather than dead: MIT licensed, unarchived, past 100k stars."
+    confidence: "high"
+    authority: "The GitHub API for denoland/deno, read directly."
+    limitations: "Activity is not the same as maintenance. The star count measures eight years of interest, and the last release before the announcement was weeks old."
+title: "What Actually Died When Deno Joined Cloudflare"
+date: 2026-10-20T09:00:00+07:00
+tags: ["tech-news", "distributed-systems", "architecture", "devops"]
+summary: "Deno's runtime got a twelve month clock and Deno Deploy got six months, but Deploy had already been shut down once in July, and the part of Deno that survived is the part nobody was arguing about."
 ---
 
 Fireship's episode on this is titled "The runtime wars are over... and Node won", and its transcript is not retrievable, so I can cite the title and nothing else from it [12]. The title is still worth arguing with, because the record of what happened on 9 October 2026 is more specific than either side of the argument has been willing to be: Deno's runtime gets monthly releases for another year and then no development at all, Deno Deploy gets six months, and the piece everybody skipped past is that Deploy had already been shut down once before anyone acquired anything [2].

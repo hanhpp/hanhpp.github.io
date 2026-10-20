@@ -44,6 +44,30 @@ claims:
     confidence: "high"
     authority: "checkra1n's FAQ on passcode decryption; the shipped SEP exploit's A8, A9, A10 and T2 coverage"
     limitations: "The A11 detail, that the exploit cannot reach enclave memory at all, is community-sourced."
+title: "The Patch That Isn't There: palera1n and the Rootless Era"
+date: 2026-10-17T09:00:00+07:00
+draft: false
+tags: ["ios", "apple", "security", "jailbreak", "bootrom"]
+summary: "The modern checkm8 continuation patches code signing, mount policy and task ports, and has no page-protection patch at all. What the gap in its own patch set says about the boundary everyone assumes is being crossed."
+exercises:
+  - number: 2
+    question: "The post's central claim is a negative: no page-protection patch exists in palera1n's pre-boot environment. Check it yourself rather than taking it from the post."
+    command: "git clone --depth 1 https://github.com/palera1n/PongoOS && cd PongoOS && grep -rnw 'PPL\\|ppl' --include='*.c' --include='*.h' . | grep -v apple-include; ls checkra1n/kpf/"
+    expect: "No hits for the term outside Apple's vendored headers, and a patch component list that names trustcache, vm_prot, mach_port, vfs, dyld and ramdisk but no page-protection component."
+    accept: "You found both the absence and the disabled APRR artifact: `grep -n -B3 -A6 kpf_aprr_patch checkra1n/kpf/vm_prot.c` shows the callback inside an `#if 0` block whose comment reads *doesn't work like this, needs new strat*, with the call site commented out further down the file."
+    wrong_answer: "Concluding that page protection is covered because `vm_prot.c` exists and mentions APRR. The file exists and the patch in it is switched off."
+  - number: 1
+    question: "The post says the project's documentation contradicts itself on the supported version range. How many distinct claims can you find, and which is the narrowest?"
+    command: "curl -s https://raw.githubusercontent.com/palera1n/palera1n/main/README.md | head -8; curl -s https://raw.githubusercontent.com/palera1n/palera1n/main/docs/palera1n.1 | grep -A2 '^\\.Sh NAME\\|^\\.Sh SUPPORTED'"
+    expect: "Three distinct claims at least: the README's \"15.0 ... and higher\", the man page name line's \"15-26\", and the supported-devices section's \"15.0-18.0\"."
+    accept: "You identified the supported-devices list as the narrowest and therefore the one to trust, and noted that the tvOS reconciliation is an inference rather than a published claim."
+    wrong_answer: "Reporting the range as 15-26 because the man page's name line says so. That line is contradicted two lines below it by the same document."
+  - number: 3
+    question: "Are the two CoreTrust bugs memory-safety bugs or something else? Query the records instead of the commentary."
+    command: "for c in CVE-2022-26766 CVE-2023-41991; do curl -s \"https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=$c\" | python3 -c \"import json,sys; v=json.load(sys.stdin)['vulnerabilities'].pop()['cve']; print(v['id'], v['descriptions'].pop()['value'][:160])\"; sleep 7; done"
+    expect: "Both described as certificate issues, one parsing and one validation, fixed in iOS 15.5 and 16.7. Neither is a use-after-free or an overflow. NVD returns the text in your locale, so the wording may arrive in another language."
+    accept: "You can state the consequence the post draws: because the flaw is in chain validation rather than memory handling, exploiting it needs no kernel primitive, which is why it matters outside jailbreaking."
+    wrong_answer: "Assuming a code-signing bypass must involve memory corruption. These two do not."
 ---
 
 I went looking for the page-protection patch. Every mental model of a modern jailbreak on these chips includes one: the kernel's page-table permissions are enforced by a mechanism the jailbreak has to get around, and on A11 that mechanism is specifically the interesting case.

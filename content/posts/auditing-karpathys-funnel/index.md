@@ -55,6 +55,70 @@ claims:
     confidence: "high"
     authority: "World Bank indicator SP.POP.0014.TO.ZS for 2025, 24.4 per cent."
     limitations: "The objection is about the denominator, not the tiers. It does not tell you whether 20 million is right."
+title: "Karpathy's Funnel: The Arithmetic Holds and the Denominator Is a Choice"
+date: 2026-10-18T09:00:00+07:00
+tags: ["ai", "math", "analysis", "deep-dive"]
+summary: "Every write-up of Karpathy's four tier funnel repeats his four counts and none of them re-divides them. Against the population that could plausibly use a model, the bottom tier is not 75 per cent of the world, it is 99 per cent of everyone still standing."
+exercises:
+  - number: 1
+    question: "Does his first tier hold together as arithmetic? He writes about 6 billion people and about 75 per cent of the population. Both cannot be exact at the same time."
+    command: "curl -s 'https://api.worldbank.org/v2/country/WLD/indicator/SP.POP.TOTL?format=json&date=2025' | python3 -c 'import json,sys; print(json.load(sys.stdin).pop().pop()[\"value\"])'"
+    expect: "8215424893, the World Bank's world population for 2025."
+    accept: "Divide 6e9 by that number in your head, or ask python, and compare with his 75 per cent. The absolute count and the share are about two points apart, which is the tell that the count is the claim and the share is decoration."
+    wrong_answer: "Treating 75 per cent as measured. It is a rounded share attached to a rounded count, so it inherits both roundings."
+  - number: 2
+    question: "Who is actually in the denominator? A quarter of the world is under 15, and about a quarter of it is not online, and both groups are counted in every share he gives."
+    command: "for i in SP.POP.0014.TO.ZS SP.POP.1564.TO.ZS SP.POP.65UP.TO.ZS IT.NET.USER.ZS; do curl -s \"https://api.worldbank.org/v2/country/WLD/indicator/$i?format=json&date=2025\" | python3 -c 'import json,sys; print(json.load(sys.stdin).pop().pop()[\"value\"])'; done"
+    expect: "24.409..., 65.188..., 10.402... and 73.6, being the under-15 share, the 15-to-64 share, the over-64 share and the share of individuals using the internet."
+    accept: "Multiply the population by 0.7559 and by 0.736 and you have the two populations that make the funnel look different: 6.2 billion aged 15 or over, 6.0 billion online. Recompute his shares against those and the bottom tier goes from 73 per cent to 96.6 per cent to 99.2 per cent."
+    wrong_answer: "Assuming the tiers divide the world into people who could use a model. They divide everyone, including 2 billion children and 2.2 billion people who are not online."
+  - number: 3
+    question: "Is there a survey behind any of this, with a method attached?"
+    command: "curl -s 'https://www.pewresearch.org/chart/about-a-quarter-of-u-s-adults-use-chatbots-daily/' | grep -o 'NET Daily' | head -1; curl -s 'https://www.pewresearch.org/chart/about-half-of-u-s-adults-now-use-ai-chatbots-up-from-a-third-in-2024/' | grep -o 'Feb. 17-23, 2026' | head -1"
+    expect: "NET Daily, then Feb. 17-23, 2026, so the chart carries both a frequency breakdown and the field dates of the survey behind it."
+    accept: "The breakdown is 51 per cent who do not use chatbots, 25 per cent several times a week or less, 8 per cent about once a day, 12 per cent several times a day, 4 per cent almost constantly, and 24 per cent net daily. That supports the word casual for the tier and it is measured, in one country."
+    wrong_answer: "Reading it as a worldwide figure. It is a panel of United States adults, which is about 4 per cent of the world and the only place the tier has been measured this way."
+  - number: 4
+    question: "Can the vendors' own numbers be checked from a shell, the way the World Bank's can?"
+    command: "curl -s https://openai.com/index/devday-2026-recap/ | wc -c; curl -s https://openai.com/index/devday-2026-recap/ | grep -c weekly; curl -s -o /dev/null -w '%{http_code}\\n' https://openai.com/index/devday-2026-recap/index.md"
+    expect: "About 9720 bytes, then 0, then 403."
+    accept: "The page that contains the most-quoted number in the whole discussion serves a shell with none of its own text, and its markdown alternate refuses. The sentence exists, it is just not addressable, which is why every citation of it cites a copy."
+    wrong_answer: "Concluding the figure is false because it is un-fetchable. A browser reads the page fine. The check that fails is the machine one, not the claim."
+  - number: 5
+    question: "The engagement numbers move. The sceptical write-up says the Hacker News thread had 671 points and 976 comments."
+    command: "curl -s https://hacker-news.firebaseio.com/v0/item/50047422.json | python3 -c 'import json,sys; d=json.load(sys.stdin); print(d[\"score\"], d[\"descendants\"])'"
+    expect: "725 1064, or larger, since these only climb."
+    accept: "Two days after that write-up the thread had gained 54 points and 88 comments, which is a small demonstration of the post's own subject: the numbers in the commentary are stale on arrival."
+    wrong_answer: "Citing the commentary's engagement figures as current."
+title: "Karpathy's Funnel: The Arithmetic Holds and the Denominator Is a Choice"
+date: 2026-10-18T09:00:00+07:00
+tags: ["ai", "math", "analysis", "deep-dive"]
+summary: "Every write-up of Karpathy's four tier funnel repeats his four counts and none of them re-divides them. Against the population that could plausibly use a model, the bottom tier is not 75 per cent of the world, it is 99 per cent of everyone still standing."
+claims:
+  - claim: "Karpathy's four counts and three drivers are as transcribed here."
+    confidence: "medium"
+    authority: "Three independent secondary sources: Business Insider's report, a vendor write-up, and an aggregator essay, all quoting the same X post, plus the video's description. Reproduce them on the World Bank's population figures and his percentages land where he says."
+    limitations: "The X post itself is not machine-readable from here, so every quotation is a second-hand transcription of a post that X marks as edited. Two of the three sources have something to sell."
+  - claim: "His arithmetic is consistent with a total-population denominator."
+    confidence: "high"
+    authority: "Our own computation against World Bank indicator SP.POP.TOTL for 2025."
+    limitations: "Consistency is not accuracy. It shows which denominator he used, not that the tier sizes are right."
+  - claim: "Roughly 5,000 people inside the labs cannot be verified from outside."
+    confidence: "high"
+    authority: "No published figure exists, and the labs publish no internal usage data."
+    limitations: "It can be bounded in order of magnitude by lab headcount, which is reported in the thousands per lab and which different trackers disagree about by thousands of people."
+  - claim: "Vendor user counts measure a different quantity from the funnel's tiers."
+    confidence: "high"
+    authority: "The vendors' own language: weekly actives, monthly actives, seats and licences, against a tier defined by work finished by agents."
+    limitations: "They still bound the second tier, where the question is contact rather than capability."
+  - claim: "About a quarter of the world's population is under 15 and this changes every share in the funnel."
+    confidence: "high"
+    authority: "World Bank indicator SP.POP.0014.TO.ZS for 2025, 24.4 per cent."
+    limitations: "The objection is about the denominator, not the tiers. It does not tell you whether 20 million is right."
+title: "Karpathy's Funnel: The Arithmetic Holds and the Denominator Is a Choice"
+date: 2026-10-18T09:00:00+07:00
+tags: ["ai", "math", "analysis", "deep-dive"]
+summary: "Every write-up of Karpathy's four tier funnel repeats his four counts and none of them re-divides them. Against the population that could plausibly use a model, the bottom tier is not 75 per cent of the world, it is 99 per cent of everyone still standing."
 ---
 
 Two days after Andrej Karpathy posted four numbers on X, the internet had produced a video breakdown, a vendor write-up, a sceptical essay and a Hacker News thread a thousand comments deep, and every one of them repeated the four numbers without re-dividing them. The numbers are the interesting part, because they are all shares of a population, and the population is a choice.
