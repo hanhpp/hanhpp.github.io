@@ -1,0 +1,202 @@
+/* ── Paper mode: the felixrieseberg.com type and palette, adapted ──────────────
+   Extracted from that site's raw CSS on 2026-10-20 (see
+   knowledge/personal/site-design-felixrieseberg.md). The idea is one type system
+   with two moods: light pages read as paper (Literata, hairlines, no cards), and
+   code stays dark glass in both themes, which is what its screen mode does and
+   what the Chroma palette here already assumes. */
+:root {
+    --theme: #f0efe9;
+    --entry: #f0efe9;
+    --primary: #17160f;
+    --secondary: #6a675c;
+    --tertiary:rgba(23,22,15,.13);
+    --content: #403e35;
+    --border: rgba(23,22,15,.13);
+    --code-bg: #efece3;
+    --accent: #b32b19;
+    --accent-hover: #8f2214;
+    --accent-bg: rgba(179,43,25,.07);
+    --accent-border: rgba(179,43,25,.25);
+    --font-display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+    --font-read: "Literata", "Iowan Old Style", Georgia, serif;
+    --font-mono: "Fira Code", ui-monospace, Menlo, monospace;
+}
+:root[data-theme="dark"] {
+    --theme: #1c1b22;
+    --entry: #1c1b22;
+    --primary: #ebe7dc;
+    --secondary: #9d988c;
+    --tertiary: rgba(236,232,221,.13);
+    --content: #cfc9bc;
+    --border: rgba(236,232,221,.13);
+    --code-bg: #14151d;
+    --accent: #ff7a5c;
+    --accent-hover: #ff9c84;
+    --accent-bg: rgba(255,122,92,.08);
+    --accent-border: rgba(255,122,92,.28);
+}
+
+body {
+    font-family: var(--font-read);
+    font-size: 18px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* The site name is the one place the display face shows at full width. */
+.logo a,
+#menu a,
+.nav,
+.breadcrumbs,
+.post-meta,
+.entry-footer,
+.paginav span,
+.footer {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    font-size: 12px;
+}
+.logo a {
+    font-weight: 850;
+    font-stretch: 125%;
+    letter-spacing: .03em;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+/* Titles: the paper reading, Literata at weight 700 and a negative track. */
+.post-title,
+.entry-header h2,
+.first-entry .entry-header h1,
+.md-content h1 {
+    font-family: var(--font-read);
+    font-weight: 700;
+    font-stretch: 100%;
+    text-transform: none;
+    letter-spacing: -.015em;
+    line-height: 1.06;
+}
+.post-title { font-size: clamp(34px, 4.6vw, 56px); }
+.first-entry .entry-header h1,
+.list-header h1 { font-size: clamp(30px, 4.2vw, 46px); letter-spacing: -.012em; line-height: 1.12; }
+
+.md-content h2,
+.md-content h3,
+.md-content h4 {
+    font-family: var(--font-read);
+    font-weight: 700;
+    letter-spacing: -.01em;
+}
+.md-content h2 { border-bottom: 1px solid var(--border); padding-bottom: .3em; }
+
+.post-content,
+.md-content { font-family: var(--font-read); }
+.post-content p,
+.md-content p { hanging-punctuation: first; }
+
+/* Rules, not cards: separation is a hairline. */
+.first-entry,
+.post-entry {
+    border: 0;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0;
+    margin: 0;
+    padding-block: 22px;
+    background: none;
+}
+.post-entry:hover { background: color-mix(in srgb, var(--primary) 4%, transparent); }
+
+/* Code: dark glass in both themes, Fira Code, accent language label, 6px. */
+.post-content pre,
+.md-content pre,
+.highlight {
+    background: #14151d !important;
+    border: 0;
+    border-radius: 6px;
+    box-shadow: none;
+}
+.post-content pre code,
+.md-content pre code,
+.highlight code {
+    font-family: var(--font-mono);
+    font-size: .84em;
+    background: none;
+}
+.post-content code,
+.md-content code {
+    font-family: var(--font-mono);
+    font-size: .86em;
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--primary) 6%, transparent);
+    padding: .12em .35em;
+}
+
+/* Links: accent, underlined thin, offset so descenders stay legible. */
+.post-content a,
+.md-content a,
+.post-meta a,
+.entry-footer a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+}
+.post-content a:hover,
+.md-content a:hover { color: var(--accent-hover); text-decoration-thickness: 2px; }
+
+/* The hero quote keeps its place but takes the reading face. */
+.home-info .entry-content p,
+.home-info .entry-content {
+    font-family: var(--font-read);
+    font-style: italic;
+}
+
+/* Header and footer: one hairline, nothing boxed. */
+.header { border-bottom: 1px solid var(--border); }
+.footer { border-top: 1px solid var(--border); }
+
+/* Tags as plain labels. The reference site has no pills at all: topics sit in the
+   meta row as text. Keeping the links but dropping the fill, the emoji and the
+   per-tag rainbow leaves one label style for all of them. */
+.post-tags a,
+.terms-tags a,
+html.view-workstation .post-tags a,
+html.view-workstation .terms-tags a {
+    background: none !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 3px !important;
+    box-shadow: none !important;
+    color: var(--secondary) !important;
+    font-family: var(--font-display) !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    padding: 2px 7px !important;
+}
+.post-tags a::before,
+.terms-tags a::before,
+html.view-workstation .post-tags a::before,
+html.view-workstation .terms-tags a::before { content: none !important; }
+.post-tags a:hover,
+.terms-tags a:hover,
+html.view-workstation .post-tags a:hover,
+html.view-workstation .terms-tags a:hover {
+    border-color: var(--accent) !important;
+    color: var(--accent) !important;
+}
+
+/* Blockquotes: a rule and the reading face, no fill. */
+.post-content blockquote,
+.md-content blockquote {
+    background: none;
+    border: 0;
+    border-left: 2px solid var(--accent);
+    border-radius: 0;
+    padding-left: 1.1em;
+    margin-left: 0;
+    color: var(--soft);
+    font-family: var(--font-read);
+    font-style: italic;
+}
