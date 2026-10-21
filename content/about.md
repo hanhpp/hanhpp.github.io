@@ -9,6 +9,8 @@ I build things with code, and then break them on purpose to find out how they wo
 
 Every program is open source if you are patient enough.
 
-There is always another layer under the one you just understood, and that is the part I like. Learning does not stop at the answer that works. It stops at the answer you can explain.
+- **Never stop learning.** The answer that works is a checkpoint, not a finish line.
+- **Go deeper.** There is always another layer under the one you just understood, and that is the part I like.
+- **Have a different perspective.** Most hard problems stop being hard once someone moves.
 
 Open to contract, consulting, and engineering work in distributed systems, backend architecture, and security: reach me at [hanhphamit@gmail.com](mailto:hanhphamit@gmail.com).
