@@ -14,7 +14,7 @@ Let's talk.
 <div class="contact-form-wrap">
   <h3>Send a message</h3>
   <p>Open for contract, consulting, and engineering work. Drop a note below or reach out directly at <a href="mailto:hanhphamit@gmail.com">hanhphamit@gmail.com</a>. Submitting opens a pre-addressed email draft in your local mail client: zero server endpoints, zero trackers.</p>
-  <form class="contact-form" id="contact-form" onsubmit="return handleContactSubmit(event)">
+  <form class="contact-form" id="contact-form">
     <div class="contact-field">
       <label for="contact-name">Your Name</label>
       <input type="text" id="contact-name" name="name" placeholder="Optional" maxlength="80" autocomplete="name">
@@ -37,7 +37,7 @@ Let's talk.
   </form>
 </div>
 
-<script>
+<script> <!-- security-lint:allow raw-html -->
 function handleContactSubmit(e) {
     e.preventDefault();
     var name = document.getElementById("contact-name").value.trim();
@@ -65,6 +65,10 @@ function handleContactSubmit(e) {
     window.location.href = mailto;
     return false;
 }
+
+// Wired here rather than inline on the form: an onsubmit attribute is a handler the browser has to
+// evaluate, which a content security policy blocks, and it is the pattern the lint refuses.
+document.getElementById("contact-form").addEventListener("submit", handleContactSubmit);
 </script>
 
 ### Or connect directly:
@@ -83,7 +87,7 @@ function handleContactSubmit(e) {
   </li>
 </ul>
 
-<script>
+<script> <!-- security-lint:allow raw-html -->
 /* A sky for the whole viewport rather than a box in the page.
  *
  * Three depth layers of stars drift through a slowly turning field, a tilted dense band carries the

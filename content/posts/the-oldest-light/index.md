@@ -199,7 +199,7 @@ Drag the slider below to expand space from Recombination (\(a = 1.0\times\)) to 
 }
 </style>
 
-<script>
+<script> <!-- security-lint:allow raw-html -->
 (function() {
   var slider = document.getElementById("z-slider");
   if (!slider) return;
