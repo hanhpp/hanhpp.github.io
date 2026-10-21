@@ -2,292 +2,333 @@
 title: "The room"
 date: 2026-10-21T08:00:00+07:00
 draft: false
-description: "A night desk drawn on a canvas: rain on the window, a city outside, and a CRT that boots with the site's own line. Click the screen."
+description: "A night desk as a real-time 3D scene: a window with rain over a city, a lamp that actually lights the wood, and a CRT whose screen is a canvas texture that boots. Click the screen."
 ---
 
-The page you may have come from draws its room as a canvas illustration that boots. This is an original
-vignette in that genre rather than a copy of its artwork: the composition, the colour and the boot sequence
-are written here, the drawing is code, and there are no image assets.
-
-Click the monitor to change the line on the screen.
+The reference site draws its room as a Three.js scene with photographic textures. This is the same
+technique with textures generated in code: real geometry, a real light, and a monitor whose screen is a
+canvas redrawn every frame. Click the monitor to change the line.
 
 <div class="room-lab">
-  <canvas id="room-canvas" role="img"
-          aria-label="A night desk: rain on a window over a city, a lamp, a plant, a stack of cassettes and a CRT that boots."></canvas>
-  <p class="room-hint">click the screen &middot; motion respects your reduced-motion setting</p>
+  <canvas id="room-gl" role="img"
+          aria-label="A 3D night desk: rain on a window over a city, a lamp lighting the wood, a stack of cassettes and a CRT that boots."></canvas>
+  <p class="room-hint">click the screen &middot; move the pointer to look &middot; motion respects your reduced-motion setting</p>
 </div>
 
 <style>
 .room-lab { width: min(1180px, 94vw); margin: 1.6em 0 0;
   position: relative; left: 50%; transform: translateX(-50%); }
 .room-lab canvas { display: block; width: 100%; height: auto; border-radius: 6px;
-  background: #120f0d; box-shadow: 0 18px 40px rgba(0,0,0,.28); cursor: pointer; }
+  background: #0a0908; box-shadow: 0 18px 40px rgba(0,0,0,.35); cursor: pointer; }
 .room-hint { font-family: var(--font-display, sans-serif); font-size: 11px; letter-spacing: .07em;
   text-transform: uppercase; color: var(--secondary, #6a675c); margin-top: 10px; text-align: right; }
 </style>
 
-<script>
-(function () {
-  var cv = document.getElementById("room-canvas");
-  if (!cv) return;
-  var ctx = cv.getContext("2d");
-  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-  var W = 1280, H = 720;
-  var dpr = Math.min(window.devicePixelRatio || 1, 2);
-  cv.width = W * dpr; cv.height = H * dpr;
-  cv.style.aspectRatio = W + " / " + H;
-  ctx.scale(dpr, dpr);
+<script type="module">
+import * as THREE from "/js/three.module.min.js";
 
-  var LINES = [
-    "ALWAYS A MORE BEAUTIFUL ANSWER",
-    "ALWAYS A MORE OBVIOUS ONE",
-    "WE SIMPLY HAD THE WRONG PERSPECTIVE"
-  ];
-  var line = 0, pct = 0, phase = "load", last = 0, raf = null;
+const canvas = document.getElementById("room-gl");
+const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+const LINES = [
+  "ALWAYS A MORE BEAUTIFUL ANSWER",
+  "ALWAYS A MORE OBVIOUS ONE",
+  "WE SIMPLY HAD THE WRONG PERSPECTIVE",
+];
 
-  // Seeded so the rain and the city do not reshuffle on every reload.
-  var seed = 20261021;
-  function rnd() { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; }
+// ---------------------------------------------------------------- renderer
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.5;
 
-  var drops = [];
-  for (var i = 0; i < 90; i++) {
-    drops.push({ x: 0.08 + rnd() * 0.54, y: rnd(), len: 0.02 + rnd() * 0.05, sp: 0.25 + rnd() * 0.5 });
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0a0908);
+scene.fog = new THREE.Fog(0x0a0908, 6, 14);
+
+const camera = new THREE.PerspectiveCamera(50, 16 / 9, 0.1, 60);
+
+// ------------------------------------------------------------- the window
+// A canvas texture: sky, skyline, rain. Redrawn each frame so the rain moves.
+const cityCanvas = document.createElement("canvas");
+cityCanvas.width = 640; cityCanvas.height = 400;
+const cityCtx = cityCanvas.getContext("2d");
+const cityTex = new THREE.CanvasTexture(cityCanvas);
+cityTex.colorSpace = THREE.SRGBColorSpace;
+
+const drops = Array.from({ length: 120 }, () => ({
+  x: Math.random(), y: Math.random(), len: 0.02 + Math.random() * 0.05, sp: 0.3 + Math.random() * 0.6,
+}));
+const towers = Array.from({ length: 26 }, (_, i) => ({
+  x: i / 26, w: 0.02 + Math.random() * 0.02, h: 0.1 + Math.random() * 0.3, lit: 0.2 + Math.random() * 0.8,
+}));
+
+function drawCity(t) {
+  const w = cityCanvas.width, h = cityCanvas.height, g = cityCtx;
+  const sky = g.createLinearGradient(0, 0, 0, h);
+  sky.addColorStop(0, "#0b1526"); sky.addColorStop(0.6, "#16233a"); sky.addColorStop(1, "#2a3644");
+  g.fillStyle = sky; g.fillRect(0, 0, w, h);
+
+  const baseY = h * 0.86;
+  for (const b of towers) {
+    const bx = b.x * w, bw = b.w * w, bh = b.h * h;
+    g.fillStyle = "#080c12"; g.fillRect(bx, baseY - bh, bw, bh);
+    g.fillStyle = `rgba(255,214,150,${0.08 + b.lit * 0.3})`;
+    for (let y = baseY - bh + 6; y < baseY - 4; y += 10)
+      for (let x = bx + 3; x < bx + bw - 4; x += 8)
+        if ((x + y) % 7 < 3) g.fillRect(x, y, 2, 3);
   }
-  var city = [];
-  for (var b = 0; b < 22; b++) {
-    city.push({ x: 0.08 + b * 0.0245, w: 0.017 + rnd() * 0.012, h: 0.06 + rnd() * 0.14, lit: 0.3 + rnd() * 0.7 });
+  g.fillStyle = "rgba(255,236,190,.85)";
+  g.font = "700 22px ui-monospace, monospace";
+  g.fillText("METRO", w * 0.63, baseY - h * 0.13);
+  g.fillStyle = "rgba(255,236,190,.08)";
+  g.fillRect(w * 0.61, baseY - h * 0.10, w * 0.18, h * 0.10);
+
+  g.strokeStyle = "rgba(190,215,255,.30)"; g.lineWidth = 1;
+  for (const d of drops) {
+    const y = (d.y + t * d.sp) % 1;
+    const x = d.x * w;
+    g.beginPath(); g.moveTo(x, y * h); g.lineTo(x + 1.5, (y + d.len) * h); g.stroke();
   }
+  cityTex.needsUpdate = true;
+}
 
-  function wall() {
-    var g = ctx.createLinearGradient(0, 0, 0, H * 0.64);
-    g.addColorStop(0, "#3a2a22"); g.addColorStop(1, "#241a15");
-    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H * 0.64);
+// ------------------------------------------------------------------ screen
+// The monitor's screen is its own canvas, uploaded as a texture each frame.
+const screenCanvas = document.createElement("canvas");
+screenCanvas.width = 512; screenCanvas.height = 384;
+const sx = screenCanvas.getContext("2d");
+const screenTex = new THREE.CanvasTexture(screenCanvas);
+screenTex.colorSpace = THREE.SRGBColorSpace;
+
+let pct = 0, phase = "load", line = 0;
+
+function drawScreen() {
+  const w = screenCanvas.width, h = screenCanvas.height, g = sx;
+  const bg = g.createLinearGradient(0, 0, 0, h);
+  bg.addColorStop(0, "#1d2f7a"); bg.addColorStop(1, "#0f1a45");
+  g.fillStyle = bg; g.fillRect(0, 0, w, h);
+
+  g.fillStyle = "rgba(222,232,255,.95)";
+  g.font = "600 22px ui-monospace, monospace";
+  g.fillText(phase === "load" ? "LOADING" : "READY", 24, 44);
+  g.fillText("CH 00", w - 96, 44);
+
+  const cells = 26, cw = (w - 48) / cells;
+  for (let c = 0; c < cells; c++) {
+    const on = phase === "ready" || c / cells < pct / 100;
+    g.fillStyle = on ? "rgba(150,175,255,.92)" : "rgba(150,175,255,.16)";
+    g.fillRect(24 + c * cw, h * 0.58, cw - 3, 12);
   }
+  g.fillStyle = "rgba(200,215,255,.9)";
+  g.font = "600 16px ui-monospace, monospace";
+  g.fillText(phase === "ready" ? "100%" : Math.round(pct) + "%", w - 86, h * 0.58 + 12);
 
-  function windowView(t) {
-    var x = W * 0.08, y = H * 0.07, w = W * 0.54, h = H * 0.5;
-    var sky = ctx.createLinearGradient(0, y, 0, y + h);
-    sky.addColorStop(0, "#0d1524"); sky.addColorStop(0.55, "#16233a"); sky.addColorStop(1, "#25313f");
-    ctx.fillStyle = sky; ctx.fillRect(x, y, w, h);
-
-    // skyline
-    var baseY = y + h * 0.82;
-    for (var i = 0; i < city.length; i++) {
-      var c = city[i];
-      var bx = x + c.x * w, bw = c.w * w, bh = c.h * h;
-      ctx.fillStyle = "#0b1018";
-      ctx.fillRect(bx, baseY - bh, bw, bh);
-      ctx.fillStyle = "rgba(255,214,150," + (0.10 + c.lit * 0.35) + ")";
-      for (var wy = baseY - bh + 6; wy < baseY - 4; wy += 9) {
-        for (var wx = bx + 3; wx < bx + bw - 3; wx += 7) {
-          if ((wx + wy) % 5 < 2) ctx.fillRect(wx, wy, 2, 3);
-        }
-      }
+  if (phase === "ready") {
+    const words = LINES[line].split(" ");
+    const rows = []; let buf = "";
+    g.font = "700 20px ui-monospace, monospace";
+    for (const word of words) {
+      const test = buf ? buf + " " + word : word;
+      if (g.measureText(test).width > w - 52) { rows.push(buf); buf = word; } else buf = test;
     }
-
-    // a sign, and its reflection band on the wet glass
-    ctx.fillStyle = "rgba(255,236,190,.82)";
-    ctx.font = "700 18px ui-monospace, monospace";
-    ctx.fillText("METRO", x + w * 0.62, baseY - h * 0.12);
-    ctx.fillStyle = "rgba(255,236,190,.10)";
-    ctx.fillRect(x + w * 0.60, baseY - h * 0.10, w * 0.16, h * 0.10);
-
-    // rain
-    ctx.strokeStyle = "rgba(190,215,255,.28)"; ctx.lineWidth = 1;
-    for (var d = 0; d < drops.length; d++) {
-      var p = drops[d];
-      var dy = (p.y + t * p.sp) % 1;
-      var px = x + p.x * w + Math.sin((dy + d) * 6) * 2;
-      ctx.beginPath();
-      ctx.moveTo(px, y + dy * h);
-      ctx.lineTo(px + 1.5, y + (dy + p.len) * h);
-      ctx.stroke();
-    }
-
-    // frame and mullion
-    ctx.strokeStyle = "#171310"; ctx.lineWidth = 10;
-    ctx.strokeRect(x, y, w, h);
-    ctx.lineWidth = 7;
-    ctx.beginPath(); ctx.moveTo(x + w * 0.5, y); ctx.lineTo(x + w * 0.5, y + h); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(x, y + h * 0.36); ctx.lineTo(x + w, y + h * 0.36); ctx.stroke();
+    if (buf) rows.push(buf);
+    g.fillStyle = "rgba(232,240,255,.96)";
+    rows.forEach((r, i) => g.fillText(r, 24, 130 + i * 26));
   }
 
-  function desk() {
-    var g = ctx.createLinearGradient(0, H * 0.64, 0, H);
-    g.addColorStop(0, "#4a3425"); g.addColorStop(0.5, "#3b281b"); g.addColorStop(1, "#22160f");
-    ctx.fillStyle = g; ctx.fillRect(0, H * 0.64, W, H * 0.36);
-    ctx.fillStyle = "rgba(255,220,170,.06)"; ctx.fillRect(0, H * 0.64, W, 3);
+  g.fillStyle = "rgba(0,0,0,.18)";
+  for (let y = 0; y < h; y += 4) g.fillRect(0, y, w, 1);
+
+  screenTex.needsUpdate = true;
+}
+
+// ------------------------------------------------------------------- room
+const matWall = new THREE.MeshStandardMaterial({ color: 0x4a3529, roughness: 0.95 });
+const matWood = new THREE.MeshStandardMaterial({ color: 0x6b472e, roughness: 0.55, metalness: 0.05 });
+
+const room = new THREE.Group();
+scene.add(room);
+
+// walls and floor
+const back = new THREE.Mesh(new THREE.PlaneGeometry(9, 3.4), matWall);
+back.position.set(0, 1.7, -3.2); room.add(back);
+
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(9, 7), new THREE.MeshStandardMaterial({ color: 0x2a1d14, roughness: 1 }));
+floor.rotation.x = -Math.PI / 2; floor.position.y = 0; room.add(floor);
+
+// desk
+const desk = new THREE.Mesh(new THREE.BoxGeometry(6.4, 0.1, 1.9), matWood);
+desk.position.set(0, 0.74, 0.1); room.add(desk);
+
+// window: a lit plane behind a frame
+const windowPlane = new THREE.Mesh(new THREE.PlaneGeometry(3.4, 2.1), new THREE.MeshBasicMaterial({ map: cityTex }));
+windowPlane.position.set(-0.9, 1.75, -3.15); room.add(windowPlane);
+
+const frameMat = new THREE.MeshStandardMaterial({ color: 0x120e0b, roughness: 0.8 });
+for (const [w, h, x, y] of [[3.7, 0.09, -0.9, 2.83], [3.7, 0.09, -0.9, 0.67], [0.09, 2.2, -2.66, 1.75], [0.09, 2.2, 0.86, 1.75]]) {
+  const bar = new THREE.Mesh(new THREE.BoxGeometry(w, h, 0.12), frameMat);
+  bar.position.set(x, y, -3.12); room.add(bar);
+}
+const mullion = new THREE.Mesh(new THREE.BoxGeometry(0.06, 2.1, 0.1), frameMat);
+mullion.position.set(-0.9, 1.75, -3.12); room.add(mullion);
+
+// monitor, standing on the VCR
+const monitor = new THREE.Group();
+monitor.position.set(0.1, 1.12, -0.35);
+room.add(monitor);
+const shell = new THREE.Mesh(new THREE.BoxGeometry(1.06, 0.82, 0.62),
+  new THREE.MeshStandardMaterial({ color: 0x121110, roughness: 0.55 }));
+monitor.add(shell);
+const screenMesh = new THREE.Mesh(new THREE.PlaneGeometry(0.88, 0.64),
+  new THREE.MeshBasicMaterial({ map: screenTex }));
+screenMesh.position.set(0, 0.02, 0.315);
+monitor.add(screenMesh);
+// the screen's own spill light
+const screenLight = new THREE.PointLight(0x7d97ff, 3.2, 5, 2);
+screenLight.position.set(0.1, 1.2, 0.25);
+room.add(screenLight);
+
+// VCR
+const vcr = new THREE.Mesh(new THREE.BoxGeometry(1.3, 0.17, 0.46),
+  new THREE.MeshStandardMaterial({ color: 0x171513, roughness: 0.7 }));
+vcr.position.set(0.1, 0.88, -0.2); room.add(vcr);
+const led = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.012, 0.01),
+  new THREE.MeshBasicMaterial({ color: 0x4ce08a }));
+led.position.set(0.55, 0.90, 0.03); room.add(led);
+
+// lamp, with the light it actually casts
+const lamp = new THREE.Group();
+lamp.position.set(-2.05, 0.79, 0.30);
+room.add(lamp);
+lamp.add(new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.2, 0.04, 24), new THREE.MeshStandardMaterial({ color: 0x1b1512 })));
+const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.62, 12), new THREE.MeshStandardMaterial({ color: 0x2a211b, metalness: 0.4, roughness: 0.5 }));
+pole.position.y = 0.31; lamp.add(pole);
+const shade = new THREE.Mesh(new THREE.ConeGeometry(0.26, 0.24, 24, 1, true),
+  new THREE.MeshStandardMaterial({ color: 0xc4703f, roughness: 0.85, side: THREE.DoubleSide, emissive: 0x3a1608, emissiveIntensity: 0.25 }));
+shade.position.y = 0.68; shade.rotation.x = Math.PI; lamp.add(shade);
+const bulb = new THREE.PointLight(0xffbe7d, 26, 9, 2);
+bulb.position.set(0, 0.62, 0); lamp.add(bulb);
+
+// plant
+const plant = new THREE.Group();
+plant.position.set(-2.65, 0.79, 0.10);
+room.add(plant);
+plant.add(new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.11, 0.26, 20),
+  new THREE.MeshStandardMaterial({ color: 0x8d5a3c, roughness: 0.9 })));
+for (let i = 0; i < 9; i++) {
+  const leaf = new THREE.Mesh(new THREE.ConeGeometry(0.05, 0.42, 6),
+    new THREE.MeshStandardMaterial({ color: 0x24402b, roughness: 0.85 }));
+  const a = (i / 9) * Math.PI * 2;
+  leaf.position.set(Math.cos(a) * 0.11, 0.28 + (i % 3) * 0.06, Math.sin(a) * 0.11);
+  leaf.rotation.set(Math.sin(a) * 0.5, 0, -Math.cos(a) * 0.5);
+  plant.add(leaf);
+}
+
+// cassettes
+const tapeCols = [0x243a52, 0x5a2a2a, 0x2b4436, 0x3a2f52, 0x4a3a20];
+for (let i = 0; i < 9; i++) {
+  const tape = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.045, 0.26),
+    new THREE.MeshStandardMaterial({ color: tapeCols[i % tapeCols.length], roughness: 0.7 }));
+  tape.position.set(1.62 + (i % 2) * 0.02, 0.81 + i * 0.046, 0.05);
+  room.add(tape);
+}
+
+// mug
+const mug = new THREE.Group();
+mug.position.set(1.05, 0.79, 0.62);
+room.add(mug);
+const cup = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.065, 0.13, 20),
+  new THREE.MeshStandardMaterial({ color: 0xe7e1d4, roughness: 0.6 }));
+cup.position.y = 0.065; mug.add(cup);
+const handle = new THREE.Mesh(new THREE.TorusGeometry(0.045, 0.012, 8, 20),
+  new THREE.MeshStandardMaterial({ color: 0xe7e1d4, roughness: 0.6 }));
+handle.position.set(0.085, 0.065, 0); handle.rotation.y = Math.PI / 2; mug.add(handle);
+
+// ---------------------------------------------------------------- lighting
+scene.add(new THREE.HemisphereLight(0x4a5f85, 0x2a1c14, 1.1));
+const fill = new THREE.PointLight(0xffd9b0, 5, 14, 2);
+fill.position.set(1.2, 2.6, 3.4);
+scene.add(fill);
+
+const windowLight = new THREE.PointLight(0x9dbcff, 14, 12, 2);
+windowLight.position.set(-0.9, 1.9, -2.6);
+scene.add(windowLight);
+
+// ------------------------------------------------------------------ camera
+const START = { z: 6.0, fov: 52 }, END = { z: 4.75, fov: 48 };
+camera.position.set(0, 1.36, START.z);
+camera.lookAt(0, 1.12, -0.5);
+
+// subtle pointer parallax
+let px = 0, py = 0;
+canvas.addEventListener("pointermove", (e) => {
+  const r = canvas.getBoundingClientRect();
+  px = ((e.clientX - r.left) / r.width - 0.5) * 0.28;
+  py = ((e.clientY - r.top) / r.height - 0.5) * 0.16;
+});
+
+// --------------------------------------------------------------- animation
+const clock = new THREE.Clock();
+let entry = 0;
+
+function resize() {
+  const w = canvas.clientWidth || 960;
+  const h = Math.round(w * 9 / 16);
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+window.addEventListener("resize", resize);
+
+function tick() {
+  const dt = Math.min(clock.getDelta(), 0.05);
+  const t = clock.elapsedTime;
+
+  if (phase === "load") {
+    pct = Math.min(100, pct + dt * 30);
+    if (pct >= 100) { phase = "ready"; }
+    drawScreen();
   }
+  drawCity(t);
 
-  function lamp() {
-    var bx = W * 0.16, by = H * 0.70;
-    ctx.fillStyle = "#1d1713";
-    ctx.beginPath(); ctx.ellipse(bx, by + 6, 44, 12, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.fillRect(bx - 3, by - 96, 6, 96);
-    ctx.fillStyle = "#b8623f";
-    ctx.beginPath();
-    ctx.moveTo(bx - 46, by - 96); ctx.lineTo(bx + 46, by - 96);
-    ctx.lineTo(bx + 28, by - 148); ctx.lineTo(bx - 28, by - 148); ctx.closePath(); ctx.fill();
-    var glow = ctx.createRadialGradient(bx, by - 88, 6, bx, by - 88, 210);
-    glow.addColorStop(0, "rgba(255,198,120,.30)"); glow.addColorStop(1, "rgba(255,198,120,0)");
-    ctx.fillStyle = glow; ctx.fillRect(bx - 220, by - 300, 440, 340);
+  if (entry < 1) {
+    entry = Math.min(1, entry + dt * 0.45);
+    const e = 1 - Math.pow(1 - entry, 3);
+    camera.position.z = START.z + (END.z - START.z) * e;
+    camera.fov = START.fov + (END.fov - START.fov) * e;
+    camera.updateProjectionMatrix();
   }
+  camera.position.x += (px - camera.position.x) * 0.06;
+  camera.position.y += (1.36 + py - camera.position.y) * 0.06;
+  camera.lookAt(0, 1.12, -0.5);
 
-  function plant() {
-    var px = W * 0.045;
-    ctx.fillStyle = "#8d5a3c";
-    ctx.beginPath(); ctx.moveTo(px, H * 0.72); ctx.lineTo(px + 74, H * 0.72);
-    ctx.lineTo(px + 62, H * 0.90); ctx.lineTo(px + 12, H * 0.90); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = "#24402b";
-    for (var i = 0; i < 9; i++) {
-      var a = -2.4 + i * 0.26, r = 60 + (i % 3) * 26;
-      ctx.beginPath();
-      ctx.ellipse(px + 37 + Math.cos(a) * 30, H * 0.70 + Math.sin(a) * r, 20, 9, a, 0, Math.PI * 2);
-      ctx.fill();
-    }
+  led.material.color.setHSL(0.38, 0.7, phase === "ready" ? 0.55 + 0.1 * Math.sin(t * 3) : 0.3);
+  screenLight.intensity = phase === "ready" ? 3.2 : 3.2 * (0.7 + 0.3 * Math.sin(t * 12));
+
+  renderer.render(scene, camera);
+  if (!reduce.matches) requestAnimationFrame(tick);
+}
+
+canvas.addEventListener("click", () => {
+  if (phase !== "ready") { phase = "ready"; pct = 100; }
+  else line = (line + 1) % LINES.length;
+  drawScreen();
+  if (reduce.matches) renderer.render(scene, camera);
+});
+
+function start() {
+  resize();
+  if (reduce.matches) {
+    phase = "ready"; pct = 100; entry = 1;
+    camera.position.z = END.z; camera.fov = END.fov; camera.updateProjectionMatrix();
+    drawScreen(); drawCity(0.4);
+    renderer.render(scene, camera);
+    return;
   }
+  clock.start();
+  requestAnimationFrame(tick);
+}
 
-  function cassettes() {
-    var x = W * 0.79, y = H * 0.60;
-    var cols = ["#243a52", "#5a2a2a", "#2b4436", "#3a2f52", "#4a3a20"];
-    for (var i = 0; i < 9; i++) {
-      ctx.fillStyle = cols[i % cols.length];
-      var w = 120 - (i % 3) * 6;
-      ctx.fillRect(x + (i % 2) * 4, y - i * 15, w, 13);
-      ctx.fillStyle = "rgba(240,235,220,.25)";
-      ctx.fillRect(x + 10 + (i % 2) * 4, y - i * 15 + 4, w * 0.5, 3);
-    }
-  }
-
-  function vcrAndScreen(t) {
-    // VCR body under the monitor
-    ctx.fillStyle = "#171513";
-    ctx.fillRect(W * 0.40, H * 0.60, W * 0.30, H * 0.10);
-    ctx.fillStyle = "#0e0d0c";
-    ctx.fillRect(W * 0.405, H * 0.605, W * 0.29, H * 0.02);
-    ctx.fillStyle = "#4ce08a";
-    ctx.fillRect(W * 0.66, H * 0.655, 26, 3);
-    if (phase === "ready") { ctx.fillStyle = "rgba(76,224,138," + (0.5 + 0.5 * Math.sin(t * 2)) + ")"; }
-    ctx.fillRect(W * 0.66, H * 0.655, 26, 3);
-
-    // monitor
-    var mx = W * 0.40, my = H * 0.20, mw = W * 0.30, mh = H * 0.40;
-    ctx.fillStyle = "#0b0a09";
-    ctx.beginPath(); ctx.roundRect(mx, my, mw, mh, 10); ctx.fill();
-    ctx.fillStyle = "#161310";
-    ctx.beginPath(); ctx.roundRect(mx + 8, my + 8, mw - 16, mh - 16, 6); ctx.fill();
-
-    // screen
-    var sx = mx + 22, sy = my + 26, sw = mw - 44, sh = mh - 62;
-    ctx.save();
-    ctx.beginPath(); ctx.roundRect(sx, sy, sw, sh, 4); ctx.clip();
-    var sg = ctx.createLinearGradient(0, sy, 0, sy + sh);
-    sg.addColorStop(0, "#1b2a6b"); sg.addColorStop(1, "#101a44");
-    ctx.fillStyle = sg; ctx.fillRect(sx, sy, sw, sh);
-
-    ctx.fillStyle = "rgba(220,230,255,.92)";
-    ctx.font = "600 17px ui-monospace, monospace";
-    ctx.fillText(phase === "load" ? "LOADING" : "READY", sx + 14, sy + 30);
-    ctx.fillStyle = "rgba(150,175,255,.85)";
-    ctx.fillText("CH 00", sx + sw - 62, sy + 30);
-
-    // segmented bar
-    var cells = 26, cw = (sw - 28) / cells;
-    for (var c = 0; c < cells; c++) {
-      var on = phase === "ready" || c / cells < pct / 100;
-      ctx.fillStyle = on ? "rgba(150,175,255,.9)" : "rgba(150,175,255,.15)";
-      ctx.fillRect(sx + 14 + c * cw, sy + sh * 0.55, cw - 2, 9);
-    }
-    ctx.fillStyle = "rgba(190,210,255,.9)";
-    ctx.font = "600 13px ui-monospace, monospace";
-    ctx.fillText(phase === "ready" ? "100%" : Math.round(pct) + "%", sx + sw - 54, sy + sh * 0.55 + 9);
-
-    if (phase === "ready") {
-      ctx.fillStyle = "rgba(230,238,255,.95)";
-      ctx.font = "700 15px ui-monospace, monospace";
-      var words = LINES[line].split(" ");
-      var rows = [], buf = "";
-      for (var wI = 0; wI < words.length; wI++) {
-        var test = buf ? buf + " " + words[wI] : words[wI];
-        if (ctx.measureText(test).width > sw - 28) { rows.push(buf); buf = words[wI]; } else buf = test;
-      }
-      if (buf) rows.push(buf);
-      rows.forEach(function (r, i) { ctx.fillText(r, sx + 14, sy + sh * 0.30 + i * 20); });
-    }
-
-    // scanlines and bloom
-    ctx.fillStyle = "rgba(0,0,0,.16)";
-    for (var y = sy; y < sy + sh; y += 3) ctx.fillRect(sx, y, sw, 1);
-    var bloom = ctx.createRadialGradient(sx + sw / 2, sy + sh / 2, 10, sx + sw / 2, sy + sh / 2, sw * 0.9);
-    bloom.addColorStop(0, "rgba(130,160,255,.12)"); bloom.addColorStop(1, "rgba(130,160,255,0)");
-    ctx.fillStyle = bloom; ctx.fillRect(sx, sy, sw, sh);
-    ctx.restore();
-
-    // power led
-    ctx.fillStyle = phase === "ready" ? "#7ef0a8" : "#3f6f57";
-    ctx.beginPath(); ctx.arc(mx + mw - 30, my + mh - 20, 4, 0, Math.PI * 2); ctx.fill();
-  }
-
-  function mug() {
-    var mx = W * 0.545, my = H * 0.735, mw = 52, mh = 40;
-    ctx.strokeStyle = "#dcd6c8"; ctx.lineWidth = 7; ctx.lineCap = "round";
-    ctx.beginPath(); ctx.arc(mx + mw - 4, my + mh / 2, 13, -1.1, 1.1); ctx.stroke();
-    var g = ctx.createLinearGradient(mx, my, mx + mw, my);
-    g.addColorStop(0, "#cfc8b8"); g.addColorStop(0.45, "#f0ebdf"); g.addColorStop(1, "#c4bcaa");
-    ctx.fillStyle = g;
-    ctx.beginPath(); ctx.roundRect(mx, my, mw, mh, 6); ctx.fill();
-    ctx.fillStyle = "rgba(92,58,38,.85)";
-    ctx.beginPath(); ctx.ellipse(mx + mw / 2, my + 3, mw / 2 - 4, 5, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = "rgba(255,245,230,.10)";
-    ctx.fillRect(mx + 6, my + 8, 6, mh - 14);
-  }
-
-  function draw(t) {
-    ctx.clearRect(0, 0, W, H);
-    wall();
-    windowView(t);
-    desk();
-    lamp();
-    plant();
-    cassettes();
-    vcrAndScreen(t);
-    mug();
-    var v = ctx.createRadialGradient(W * 0.5, H * 0.45, H * 0.35, W * 0.5, H * 0.5, H * 0.95);
-    v.addColorStop(0, "rgba(0,0,0,0)"); v.addColorStop(1, "rgba(0,0,0,.45)");
-    ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
-  }
-
-  function frame(ts) {
-    if (!last) last = ts;
-    var dt = (ts - last) / 1000; last = ts;
-    if (phase === "load") {
-      pct = Math.min(100, pct + dt * 26);
-      if (pct >= 100) { phase = "ready"; pct = 100; }
-    }
-    draw(ts / 1000);
-    raf = requestAnimationFrame(frame);
-  }
-
-  function start() {
-    if (reduce.matches) {
-      phase = "ready"; pct = 100; draw(0.4);
-      cv.classList.add("room-static");
-      return;
-    }
-    if (!raf) raf = requestAnimationFrame(frame);
-  }
-
-  cv.addEventListener("click", function () {
-    if (phase !== "ready") { phase = "ready"; pct = 100; }
-    else { line = (line + 1) % LINES.length; }
-    draw(performance.now() / 1000);
-  });
-
-  reduce.addEventListener && reduce.addEventListener("change", function () {
-    cancelAnimationFrame(raf); raf = null; last = 0;
-    start();
-  });
-
-  start();
-})();
+start();
 </script>
