@@ -1,4 +1,4 @@
-baseURL = 'https://hanhpham.vercel.app/'
+baseURL = 'https://hanh.me/'
 locale = 'en-us'
 title = "Hanh Pham's Blog"
 theme = 'PaperMod'

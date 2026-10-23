@@ -170,7 +170,7 @@
     container.appendChild(fragment);
 
     // Fetch readership metrics across all articles
-    fetch("https://hanhpham.vercel.app/api/views?all=1")
+    fetch("/api/views?all=1")
         .then(function (r) { return r.ok ? r.json() : null; })
         .then(function (data) {
             if (!data || !data.views) return;

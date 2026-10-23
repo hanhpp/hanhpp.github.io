@@ -80,7 +80,7 @@
     var seen = false;
     try { seen = sessionStorage.getItem(key) === "1"; } catch (e) {}
 
-    fetch("https://hanhpham.vercel.app/api/views?slug=" + encodeURIComponent(slug), {
+    fetch("/api/views?slug=" + encodeURIComponent(slug), {
         method: seen ? "GET" : "POST"
     })
         .then(function (r) { return r.ok ? r.json() : null; })

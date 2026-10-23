@@ -7,6 +7,8 @@
 // serves a redirect stub only, so it no longer calls this endpoint.
 
 const ALLOWED_ORIGINS = new Set([
+  "https://hanh.me",
+  "https://www.hanh.me",
   "https://hanhpham.vercel.app",
   "http://localhost:1313",
   "http://127.0.0.1:1313",
