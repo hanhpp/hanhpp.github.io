@@ -48,6 +48,11 @@
                 <span class="dock-separator" aria-hidden="true"></span>
 
                 {{- if (not site.Params.disableThemeToggle) }}
+                <button id="comet-rate" class="theme-toggle-btn comet-rate-btn" type="button"
+                    title="Comet frequency: click to change"
+                    aria-label="Comet frequency, click to change">
+                    <span aria-hidden="true">&#x2604;</span><span class="comet-rate-label">1&times;</span>
+                </button>
                 <button id="theme-toggle" class="theme-toggle-btn" accesskey="t" title="Toggle dark/light theme (Alt + T)" aria-label="Toggle theme">
                     <svg class="moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -158,4 +163,37 @@ document.addEventListener("DOMContentLoaded", function () {
 
     syncButtons();
 });
+</script>
+
+<script>
+/* The comet control: one button cycling the rates, because two buttons cost header width the phone
+   does not have. The value is written as a multiplier and the sky reads it, persists it, and applies
+   it on the next frame. Absent controls on engines with reduced motion, where the sky is static. */
+(function () {
+    var btn = document.getElementById("comet-rate");
+    if (!btn) return;
+    var RATES = [1, 2, 4, 0.5];
+    var label = btn.querySelector(".comet-rate-label");
+
+    function stored() {
+        var n = parseFloat(localStorage.getItem("pref-comet-rate"));
+        return n > 0 ? n : 1;
+    }
+
+    function show(rate) {
+        label.textContent = (rate % 1 === 0 ? rate : rate.toFixed(1)) + "\u00d7";
+        btn.setAttribute("aria-label", "Comet frequency " + label.textContent + ", click to change");
+    }
+
+    show(stored());
+
+    btn.addEventListener("click", function () {
+        var current = window.skyComets ? window.skyComets.rate() : stored();
+        var idx = RATES.indexOf(current);
+        var next = RATES[(idx + 1) % RATES.length];
+        if (window.skyComets) window.skyComets.setRate(next);
+        else { try { localStorage.setItem("pref-comet-rate", String(next)); } catch (e) {} }
+        show(next);
+    });
+})();
 </script>

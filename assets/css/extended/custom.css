@@ -872,6 +872,33 @@ html {
     background: var(--theme);
 }
 
+/* Comet control. Sized like the theme toggle it sits beside, and hidden where motion is reduced,
+   because the sky is static there and a frequency control would do nothing. */
+.comet-rate-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-variant-numeric: tabular-nums;
+}
+
+.comet-rate-label {
+    font-size: 0.72rem;
+    line-height: 1;
+    min-width: 1.6em;
+    text-align: left;
+}
+
+@media (max-width: 480px) {
+    .comet-rate-btn {
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+}
+
+html.reduced-motion .comet-rate-btn {
+    display: none;
+}
+
 /* Touch targets. A phone is not a narrow desktop: the same links need vertical room for a finger,
    and hover states are dead weight where there is no pointer. Set from a class rather than a media
    query because pointer capability is not a width. */

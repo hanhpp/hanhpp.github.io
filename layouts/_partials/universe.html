@@ -34,6 +34,14 @@
     var comets = [];
     var nextComet = 0.4;
     var MAX_COMETS = 3;
+    /* Comet frequency chosen by the reader. 1 is the default the page was designed around; the
+     * control writes the multiplier to storage so it survives every navigation, and the spawn gap
+     * is divided by it rather than the lifetime being changed, which keeps each comet readable. */
+    var cometRate = 1;
+    try {
+        var stored = parseFloat(localStorage.getItem("pref-comet-rate"));
+        if (stored > 0) cometRate = stored;
+    } catch (e) {}
     var TOUCH = ("ontouchstart" in window) || (navigator.maxTouchPoints || 0) > 0;
 
     /* A star's size, brightness and parallax depth are its layer's. Far stars are many, small and
@@ -317,9 +325,9 @@
 
         if (!motionQuery.matches) {
             nextComet -= dt;
-            if (nextComet <= 0 && comets.length < MAX_COMETS) {
+            if (nextComet <= 0 && comets.length < Math.max(MAX_COMETS, Math.round(3 * cometRate))) {
                 launchComet();
-                nextComet = rand(0.8, 1.8);
+                nextComet = rand(0.8, 1.8) / cometRate;
             }
         }
 
@@ -402,6 +410,18 @@
 
     /* A debug hook, only with ?debug=sky, so the comet count is observable without shipping
      * a counter into the page or guessing from a screenshot. */
+    window.skyComets = {
+        rate: function () { return cometRate; },
+        setRate: function (next) {
+            var n = parseFloat(next);
+            if (!(n > 0)) return cometRate;
+            cometRate = Math.min(6, Math.max(0.25, n));
+            nextComet = Math.min(nextComet, 0.35);   /* take effect on the next frame, not the next gap */
+            try { localStorage.setItem("pref-comet-rate", String(cometRate)); } catch (e) {}
+            return cometRate;
+        }
+    };
+
     if (location.search.indexOf("debug=sky") >= 0) {
         window.__sky = {
             comets: function () { return comets.map(function (c) { return Math.round(c.t * 100) / 100; }); },
