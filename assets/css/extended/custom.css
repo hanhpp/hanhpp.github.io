@@ -872,30 +872,103 @@ html {
     background: var(--theme);
 }
 
-/* Comet control. Sized like the theme toggle it sits beside, and hidden where motion is reduced,
-   because the sky is static there and a frequency control would do nothing. */
-.comet-rate-btn {
+/* Comet control: a slider, not a button, because the useful values are a continuous range and a
+   cycling button hides the scale. Kept narrow so the phone header still fits beside the theme toggle.
+   The track and thumb are styled for both engines; accent-color covers the rest. */
+.comet-rate-control {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    font-variant-numeric: tabular-nums;
+    gap: 6px;
+    padding: 0 4px;
+    color: var(--secondary);
+}
+
+.comet-rate-icon {
+    font-size: 0.8rem;
+    line-height: 1;
+}
+
+.comet-rate-slider {
+    width: 74px;
+    height: 16px;
+    margin: 0;
+    background: transparent;
+    cursor: pointer;
+    accent-color: var(--accent);
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.comet-rate-slider::-webkit-slider-runnable-track {
+    height: 3px;
+    border-radius: 2px;
+    background: var(--border);
+}
+
+.comet-rate-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 11px;
+    height: 11px;
+    margin-top: -4px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: none;
+}
+
+.comet-rate-slider::-moz-range-track {
+    height: 3px;
+    border-radius: 2px;
+    background: var(--border);
+}
+
+.comet-rate-slider::-moz-range-thumb {
+    width: 11px;
+    height: 11px;
+    border: none;
+    border-radius: 50%;
+    background: var(--accent);
+}
+
+.comet-rate-slider:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
 }
 
 .comet-rate-label {
     font-size: 0.72rem;
     line-height: 1;
-    min-width: 1.6em;
+    min-width: 1.9em;
     text-align: left;
+    font-variant-numeric: tabular-nums;
 }
 
 @media (max-width: 480px) {
-    .comet-rate-btn {
-        padding-left: 6px;
-        padding-right: 6px;
+    /* A 16px-tall range input is a 16px target for a thumb. The track stays thin, the input grows. */
+    .comet-rate-slider {
+        width: 58px;
+        height: 30px;
+    }
+
+    .comet-rate-slider::-webkit-slider-thumb {
+        width: 14px;
+        height: 14px;
+        margin-top: -5.5px;
+    }
+
+    .comet-rate-slider::-moz-range-thumb {
+        width: 14px;
+        height: 14px;
+    }
+
+    .comet-rate-control {
+        gap: 4px;
+        padding: 0 2px;
     }
 }
 
-html.reduced-motion .comet-rate-btn {
+html.reduced-motion .comet-rate-control {
     display: none;
 }
 
