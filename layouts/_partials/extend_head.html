@@ -28,6 +28,43 @@
 {{- end }}
 
 <script>
+/* Facts the stylesheet cannot work out on its own, set before first paint so nothing reflows.
+ *
+ * Viewport width is here only so JavaScript can branch on it; the layout itself still comes from
+ * media queries, which need none of this and keep working with JS off. The rest are capability
+ * checks, never user-agent strings: a UA is a claim about a browser and wrong often enough to break
+ * layouts on clients nobody tested. The classes exist for the rare selector that needs the fact.
+ */
+(function () {
+    var el = document.documentElement;
+    var timer = null;
+
+    function band() {
+        var w = window.innerWidth;
+        el.classList.remove("view-phone", "view-tablet", "view-desktop");
+        el.classList.add(w < 600 ? "view-phone" : w < 1024 ? "view-tablet" : "view-desktop");
+    }
+
+    function capabilities() {
+        if (window.CSS && CSS.supports) {
+            if (!CSS.supports("selector(:has(*))")) el.classList.add("no-has");
+            if (!CSS.supports("background", "color-mix(in srgb, red 50%, blue)")) el.classList.add("no-color-mix");
+        }
+        var mq = window.matchMedia;
+        if (mq && mq("(pointer: coarse)").matches) el.classList.add("touch");
+        if (mq && mq("(prefers-reduced-motion: reduce)").matches) el.classList.add("reduced-motion");
+    }
+
+    band();
+    capabilities();
+    window.addEventListener("resize", function () {
+        clearTimeout(timer);
+        timer = setTimeout(band, 120);
+    });
+})();
+</script>
+
+<script>
 (function() {
     var mode = localStorage.getItem("pref-view-mode");
     if (mode !== "minimal") {

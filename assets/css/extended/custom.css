@@ -872,6 +872,26 @@ html {
     background: var(--theme);
 }
 
+/* Touch targets. A phone is not a narrow desktop: the same links need vertical room for a finger,
+   and hover states are dead weight where there is no pointer. Set from a class rather than a media
+   query because pointer capability is not a width. */
+html.touch .menu li a {
+    display: inline-block;
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+
+html.touch .post-tags a:hover,
+html.touch .terms-tags a:hover {
+    transform: none;
+}
+
+/* No :has() before Safari 15.4, and no color-mix before 16.2. Both degrade to "the enhancement is
+   absent" rather than to a broken layout, which is the point of having the classes at all. */
+html.no-has .header-nav .menu:only-child {
+    margin-left: auto;
+}
+
 /* Phone navbar. The theme makes .menu a nowrap flex scroller with column-gap, so on a 360px phone
    Contact sits past the right edge with no scrollbar to reveal it, and iOS 12 has no flex gap at all
    so the items would touch. Spacing moves to margins, which work everywhere, and narrow screens wrap
