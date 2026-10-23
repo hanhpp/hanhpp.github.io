@@ -1,0 +1,34 @@
+name: Pages redirect stub
+
+# The site lives at hanh.me and is built elsewhere. This repository keeps Pages enabled only to send
+# old links onward: GitHub cannot issue a 301, so a meta refresh plus a path-preserving 404 is the
+# closest it gets. Deleting this workflow does not stop the host serving; renaming the repository does.
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .pages-redirect
+      - id: deployment
+        uses: actions/deploy-pages@v4
