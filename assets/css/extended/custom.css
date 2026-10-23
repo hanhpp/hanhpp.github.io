@@ -872,6 +872,51 @@ html {
     background: var(--theme);
 }
 
+/* Phone navbar. The theme makes .menu a nowrap flex scroller with column-gap, so on a 360px phone
+   Contact sits past the right edge with no scrollbar to reveal it, and iOS 12 has no flex gap at all
+   so the items would touch. Spacing moves to margins, which work everywhere, and narrow screens wrap
+   instead of scrolling. */
+.menu {
+    column-gap: 0;
+}
+
+.menu li + li {
+    margin-left: var(--gap);
+}
+
+@media (max-width: 480px) {
+    .menu {
+        flex-wrap: wrap;
+        overflow-x: visible;
+        row-gap: 0;
+    }
+
+    .menu li + li {
+        margin-left: 0;
+    }
+
+    /* Reclaim the header's side padding, which is 14px each side on a 360px phone: that alone is
+       the width the last item needs. padding-left/right, not padding-inline, for iOS 12.0. */
+    .header-nav {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .menu li {
+        margin-right: 6px;
+        margin-bottom: 2px;
+    }
+
+    .menu li:last-child {
+        margin-right: 0;
+    }
+
+    .menu li a {
+        font-size: 0.72rem;
+        letter-spacing: 0.01em;
+    }
+}
+
 /* The theme paints .list (home, archives, tags) opaque under [data-theme], which outranks a plain
    body.has-universe. The sky needs the page itself transparent, so this one rule wins on weight. */
 body.has-universe,
