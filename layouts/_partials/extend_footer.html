@@ -18,6 +18,9 @@
 <script defer src="/_vercel/insights/script.js"></script>
 {{- end }}
 
+{{- /* Ambient sky on every page. */ -}}
+{{- partial "universe.html" . }}
+
 {{- if .IsHome }}
 <script>
 (function () {

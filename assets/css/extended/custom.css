@@ -872,8 +872,12 @@ html {
     background: var(--theme);
 }
 
-body:has(.universe-canvas) {
-    background: transparent;
+/* The theme paints .list (home, archives, tags) opaque under [data-theme], which outranks a plain
+   body.has-universe. The sky needs the page itself transparent, so this one rule wins on weight. */
+body.has-universe,
+html body.list.has-universe,
+html body.home.has-universe {
+    background: transparent !important;
 }
 
 .universe-canvas {
@@ -891,12 +895,12 @@ body:has(.universe-canvas) {
    behind a glyph, which is the only place the contrast ratio moves. It is scoped to the text that
    sits directly on the page background: the form card, the table of contents and the submit button
    all carry a surface of their own, and there the page colour would show up as a glow. */
-body:has(.universe-canvas) .post-title,
-body:has(.universe-canvas) .post-meta,
-body:has(.universe-canvas) .post-content > p,
-body:has(.universe-canvas) .post-content > h3,
-body:has(.universe-canvas) .post-content > ul,
-body:has(.universe-canvas) .footer {
+body.has-universe .post-title,
+body.has-universe .post-meta,
+body.has-universe .post-content > p,
+body.has-universe .post-content > h3,
+body.has-universe .post-content > ul,
+body.has-universe .footer {
     text-shadow: 0 0 3px var(--theme), 0 0 3px var(--theme), 0 0 3px var(--theme), 0 0 7px var(--theme);
 }
 
