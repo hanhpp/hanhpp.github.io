@@ -82,5 +82,3 @@ document.getElementById("contact-form").addEventListener("submit", handleContact
     <a href="https://github.com/hanhpp" target="_blank" rel="noopener">hanhpp</a>
   </li>
 </ul>
-
-<script> <!-- security-lint:allow raw-html -->
